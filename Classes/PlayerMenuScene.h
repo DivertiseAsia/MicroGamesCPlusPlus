@@ -12,7 +12,7 @@ public:
 
 	// a selector callback
 	void backButtonCallback(cocos2d::Ref* pSender);
-	void startGame(cocos2d::Ref* pSender);
+	void startGame(cocos2d::Ref* pSender, int players);
 
 	// implement the "static create()" method manually
 	CREATE_FUNC(PlayerMenu);

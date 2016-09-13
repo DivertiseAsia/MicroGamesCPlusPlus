@@ -49,14 +49,14 @@ bool PlayerMenu::init()
 
 	MenuItems.pushBack(closeItem);
 
-	auto item1 = Label::createWithBMFont("fonts/font2.fnt", "1");
-	item1->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height / 2));
-
-	auto game1 = MenuItemLabel::create(item1, CC_CALLBACK_1(PlayerMenu::startGame, this));
-
-
-	MenuItems.pushBack(game1);
+	for (int i = 2; i <= 4; i++) {
+		auto item1 = Label::createWithBMFont("fonts/font2.fnt", std::to_string(i));
+		auto game1 = MenuItemLabel::create(item1, CC_CALLBACK_1(PlayerMenu::startGame, this, i));
+		game1->setPosition(Vec2(origin.x + visibleSize.width / 2,
+			origin.y + visibleSize.height /2 + visibleSize.height / 10 * (4-i)));
+		MenuItems.pushBack(game1);
+	}
+	
 
 	// create menu, it's an autorelease object
 	auto menu = Menu::createWithArray(MenuItems);
@@ -78,8 +78,8 @@ bool PlayerMenu::init()
 	return true;
 }
 
-void PlayerMenu::startGame(Ref* pSender) {
-
+void PlayerMenu::startGame(Ref* pSender, int players) {
+	log("Want %d players",players);
 }
 
 void PlayerMenu::backButtonCallback(Ref* pSender)
