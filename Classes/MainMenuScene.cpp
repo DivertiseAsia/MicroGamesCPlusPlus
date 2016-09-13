@@ -50,12 +50,10 @@ bool MainMenu::init()
 	MenuItems.pushBack(closeItem);
 
 	auto item1 = Label::createWithBMFont("fonts/font2.fnt", "TapTap");
-	item1->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height/2));
 
 	auto game1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MainMenu::pickPlayers, this));
-
-
+	game1->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height / 2));
 	MenuItems.pushBack(game1);
 
     // create menu, it's an autorelease object
@@ -92,6 +90,5 @@ void MainMenu::muteButtonCallback(Ref* pSender)
 	else {
 		SimpleAudioEngine::getInstance()->setEffectsVolume(1);
 		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(1);
-	}   
-	Director::getInstance()->replaceScene(TransitionSlideInR::create(1, PlayerMenu::createScene()));
+	}
 }
