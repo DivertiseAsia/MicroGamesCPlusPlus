@@ -1,6 +1,6 @@
 #include "SplashScene.h"
 #include "SimpleAudioEngine.h"
-#include "HelloWorldScene.h"
+#include "MainMenuScene.h"
 
 USING_NS_CC;
 
@@ -49,5 +49,5 @@ bool Splash::init()
 
 void Splash::endSplash(float duration)
 {
-	Director::getInstance()->replaceScene(HelloWorld::createScene());  
+	Director::getInstance()->replaceScene(MainMenu::createScene());  
 }
