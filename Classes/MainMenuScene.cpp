@@ -1,4 +1,5 @@
 #include "MainMenuScene.h"
+#include "PlayerMenuScene.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -37,6 +38,7 @@ bool MainMenu::init()
     //    you may modify it.
 
     // add a "close" icon to exit the progress. it's an autorelease object
+	Vector<MenuItem*> MenuItems;
     auto closeItem = MenuItemImage::create(
                                            "CloseNormal.png",
                                            "CloseSelected.png",
@@ -45,8 +47,19 @@ bool MainMenu::init()
     closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
                                 origin.y + closeItem->getContentSize().height/2));
 
+	MenuItems.pushBack(closeItem);
+
+	auto item1 = Label::createWithBMFont("fonts/font2.fnt", "TapTap");
+	item1->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height/2));
+
+	auto game1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MainMenu::pickPlayers, this));
+
+
+	MenuItems.pushBack(game1);
+
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
+	auto menu = Menu::createWithArray(MenuItems);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
@@ -65,6 +78,9 @@ bool MainMenu::init()
     return true;
 }
 
+void MainMenu::pickPlayers(Ref* pSender) {
+	Director::getInstance()->replaceScene(TransitionSlideInR::create(0.5f,PlayerMenu::createScene()));
+}
 
 void MainMenu::muteButtonCallback(Ref* pSender)
 {
@@ -77,5 +93,5 @@ void MainMenu::muteButtonCallback(Ref* pSender)
 		SimpleAudioEngine::getInstance()->setEffectsVolume(1);
 		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(1);
 	}   
-    
+	Director::getInstance()->replaceScene(TransitionSlideInR::create(1, PlayerMenu::createScene()));
 }

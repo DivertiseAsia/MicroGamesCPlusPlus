@@ -12,6 +12,7 @@ public:
     
     // a selector callback
     void muteButtonCallback(cocos2d::Ref* pSender);
+	void pickPlayers(cocos2d::Ref* pSender);
     
     // implement the "static create()" method manually
     CREATE_FUNC(MainMenu);
