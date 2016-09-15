@@ -1,13 +1,14 @@
 #include "AppDelegate.h"
 #include "SplashScene.h"
 #include "SimpleAudioEngine.h"
+#include "Holdrace.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(768, 1024);
+static cocos2d::Size designResolutionSize = cocos2d::Size(768,1024);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(320, 480);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(768, 1024);
+static cocos2d::Size mediumResolutionSize = cocos2d::Size(768,1024);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(1536, 2048);
 
 AppDelegate::AppDelegate()
@@ -76,7 +77,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = Splash::createScene();
+    //auto scene = Splash::createScene();
+    auto scene = Holdrace::createScene();
 
     // run
     director->runWithScene(scene);
