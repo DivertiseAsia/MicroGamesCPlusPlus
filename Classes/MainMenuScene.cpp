@@ -1,6 +1,7 @@
 #include "MainMenuScene.h"
 #include "PlayerMenuScene.h"
 #include "SimpleAudioEngine.h"
+#include "GameList.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -49,12 +50,13 @@ bool MainMenu::init()
 
 	MenuItems.pushBack(closeItem);
 
-	auto item1 = Label::createWithBMFont("fonts/font2.fnt", "TapTap");
-
-	auto game1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MainMenu::pickPlayers, this));
-	game1->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height / 2));
-	MenuItems.pushBack(game1);
+	for (int i = 0; i < GameList::instance()->numberOfAvailableGames(); i++) {
+		auto gameListingLabel = Label::createWithBMFont("fonts/font2.fnt", GameList::getGameName(GameList::instance ()->AVAILABLE_GAMES[i]));
+		auto gameListing = MenuItemLabel::create(gameListingLabel, CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
+		gameListing->setPosition(Vec2(origin.x + visibleSize.width / 2,
+			origin.y + visibleSize.height / 8 * (GameList::instance()->numberOfAvailableGames() - i)));
+		MenuItems.pushBack(gameListing);
+	}
 
     // create menu, it's an autorelease object
 	auto menu = Menu::createWithArray(MenuItems);
@@ -76,8 +78,8 @@ bool MainMenu::init()
     return true;
 }
 
-void MainMenu::pickPlayers(Ref* pSender) {
-	Director::getInstance()->replaceScene(TransitionSlideInR::create(0.5f,PlayerMenu::createScene()));
+void MainMenu::pickPlayers(Ref* pSender, GameList::GameType game) {
+	Director::getInstance()->replaceScene(TransitionSlideInR::create(0.5f,PlayerMenu::createScene(game)));
 }
 
 void MainMenu::muteButtonCallback(Ref* pSender)
