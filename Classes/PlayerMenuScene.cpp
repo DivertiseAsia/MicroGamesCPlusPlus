@@ -5,13 +5,14 @@
 
 USING_NS_CC;
 
-Scene* PlayerMenu::createScene()
+Scene* PlayerMenu::createScene(GameList::GameType game)
 {
 	// 'scene' is an autorelease object
 	auto scene = Scene::create();
 
 	// 'layer' is an autorelease object
 	auto layer = PlayerMenu::create();
+	layer->setGameToLoad(game);
 
 	// add layer as a child to scene
 	scene->addChild(layer);
@@ -78,8 +79,12 @@ bool PlayerMenu::init()
 	return true;
 }
 
+void PlayerMenu::setGameToLoad(GameList::GameType game) {
+	gameToLoad = game;
+}
+
 void PlayerMenu::startGame(Ref* pSender, int players) {
-	log("Want %d players",players);
+	log("Want %d players for %s",players,GameList::instance()->getGameName(gameToLoad).c_str());
 }
 
 void PlayerMenu::backButtonCallback(Ref* pSender)
