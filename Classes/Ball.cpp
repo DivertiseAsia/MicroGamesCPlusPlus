@@ -8,10 +8,12 @@
 
 #include "Ball.hpp"
 
-#define BALL_RADIUS 100
+#define BALL_RADIUS 50
 
 Ball::Ball()
 {
+    _radius = BALL_RADIUS;
+    _color = Color4F(Color4F::BLUE);
 }
 
 Ball::~Ball()
@@ -26,13 +28,9 @@ bool Ball::init(){
         return false;
     }
     
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    this->setContentSize(Size(_radius*2, _radius*2));
+    this->drawSolidCircle(Vec2(0,0), _radius, 3.1415968f, 360, _color);    //Draw circle at 0,0
     
-    this->setContentSize(Size(BALL_RADIUS*2, BALL_RADIUS*2));
-    this->drawSolidCircle(Vec2(0,0), 100, 3.14, 360, Color4F::BLUE);
-    
-
     return true;
 }
 

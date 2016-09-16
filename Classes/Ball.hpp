@@ -20,12 +20,13 @@ public:
     Ball();
     ~Ball();
     
+    CREATE_FUNC(Ball);
     virtual bool init();
     
-    CREATE_FUNC(Ball);
-    
 protected:
-    float radius();
+    float _radius;
+    Color4F _color;
+    
 };
 
 #endif /* Ball_hpp */
