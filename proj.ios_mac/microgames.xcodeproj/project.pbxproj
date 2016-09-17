@@ -62,6 +62,7 @@
 		96E16D2C1D8A7CFF00D732A8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */; };
 		96E16D2F1D8AEDB500D732A8 /* GLES-Render in Resources */ = {isa = PBXBuildFile; fileRef = 96E16D2E1D8AEDB500D732A8 /* GLES-Render */; };
 		96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D321D8C4A2600D732A8 /* GameList.cpp */; };
+		96E16D361D8D114E00D732A8 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E16D351D8D114E00D732A8 /* splash.png */; };
 		96F2C8B01D8842A100EED92B /* Holdrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8AE1D8842A100EED92B /* Holdrace.cpp */; };
 		96F2C8BA1D88432700EED92B /* MainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8B41D88432700EED92B /* MainMenuScene.cpp */; };
 		96F2C8BB1D88432700EED92B /* PlayerMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8B61D88432700EED92B /* PlayerMenuScene.cpp */; };
@@ -171,6 +172,7 @@
 		96E16D2E1D8AEDB500D732A8 /* GLES-Render */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "GLES-Render"; sourceTree = "<group>"; };
 		96E16D321D8C4A2600D732A8 /* GameList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameList.cpp; sourceTree = "<group>"; };
 		96E16D331D8C4A2600D732A8 /* GameList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameList.h; sourceTree = "<group>"; };
+		96E16D351D8D114E00D732A8 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
 		96F2C8AE1D8842A100EED92B /* Holdrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Holdrace.cpp; sourceTree = "<group>"; };
 		96F2C8AF1D8842A100EED92B /* Holdrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Holdrace.h; sourceTree = "<group>"; };
 		96F2C8B41D88432700EED92B /* MainMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuScene.cpp; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				96E16D351D8D114E00D732A8 /* splash.png */,
 				521A8EA819F11F5000D177D7 /* fonts */,
 				3EACC98E19EE6D4300EB3C5E /* res */,
 				46880B7619C43A67006E1F66 /* CloseNormal.png */,
@@ -503,6 +506,7 @@
 				46880B7D19C43A67006E1F66 /* CloseSelected.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
+				96E16D361D8D114E00D732A8 /* splash.png in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				96E16D2F1D8AEDB500D732A8 /* GLES-Render in Resources */,
