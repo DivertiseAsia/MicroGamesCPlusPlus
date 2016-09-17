@@ -52,7 +52,12 @@ bool PlayerMenu::init()
 	MenuItems.pushBack(closeItem);
 
 	for (int i = 2; i <= 4; i++) {
-		auto item1 = Label::createWithBMFont(SHARED_FONT_FILE_MENU, std::to_string(i));
+		std::string s;
+		std::stringstream out;
+		out << i;
+		s = out.str();
+
+		auto item1 = Label::createWithBMFont(SHARED_FONT_FILE_MENU, s);
 		auto game1 = MenuItemLabel::create(item1, CC_CALLBACK_1(PlayerMenu::startGame, this, i));
 		game1->setPosition(Vec2(origin.x + visibleSize.width / 2,
 			origin.y + visibleSize.height /2 + visibleSize.height / 10 * (4-i)));
