@@ -1,7 +1,6 @@
 #include "AppDelegate.h"
 #include "SplashScene.h"
 #include "SimpleAudioEngine.h"
-#include "Holdrace.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -77,8 +76,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    //auto scene = Splash::createScene();
-    auto scene = Holdrace::createScene();
+    auto scene = Splash::createScene();
 
     // run
     director->runWithScene(scene);
