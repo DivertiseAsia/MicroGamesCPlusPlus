@@ -85,6 +85,8 @@ void PlayerMenu::setGameToLoad(GameList::GameType game) {
 
 void PlayerMenu::startGame(Ref* pSender, int players) {
 	log("Want %d players for %s",players,GameList::instance()->getGameName(gameToLoad).c_str());
+	auto scene = GameList::instance()->getScene(gameToLoad);
+	Director::getInstance()->replaceScene(TransitionCrossFade::create(1, scene));
 }
 
 void PlayerMenu::backButtonCallback(Ref* pSender)

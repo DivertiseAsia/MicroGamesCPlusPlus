@@ -1,11 +1,19 @@
 #include "GameList.h"
+#include "Holdrace.h"
 
 USING_NS_CC;
 
 GameList* GameList::minstance = NULL;
 
 cocos2d::Scene* GameList::getScene(GameType listing) {
-	return NULL;
+	switch (listing) {
+		case OVERSHOOT:
+			return Holdrace::createScene();
+			break;
+		default:
+			return Holdrace::createScene();
+			break;
+	}
 }
 
 std::string GameList::getGameName(GameType listing) {
