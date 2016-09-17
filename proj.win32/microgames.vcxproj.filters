@@ -30,6 +30,12 @@
     <ClCompile Include="..\Classes\GameList.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Ball.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Holdrace.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -48,6 +54,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameList.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Ball.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Holdrace.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
