@@ -62,6 +62,9 @@
     <ClInclude Include="..\Classes\Holdrace.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Shared.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
