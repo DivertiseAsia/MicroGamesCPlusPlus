@@ -23,9 +23,14 @@ public:
     CREATE_FUNC(Ball);
     virtual bool init();
     
-protected:
+    Vec2 _velocity;
+    
+    void moveNext();
+    
+private:
     float _radius;
     Color4F _color;
+    
     
 };
 

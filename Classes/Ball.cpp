@@ -14,6 +14,7 @@ Ball::Ball()
 {
     _radius = BALL_RADIUS;
     _color = Color4F(Color4F::BLUE);
+    _velocity = Vec2(5,5);
 }
 
 Ball::~Ball()
@@ -34,3 +35,8 @@ bool Ball::init(){
     return true;
 }
 
+void Ball::moveNext(){
+    auto current = this->getPosition();
+    current += _velocity;
+    this->setPosition(current);
+}

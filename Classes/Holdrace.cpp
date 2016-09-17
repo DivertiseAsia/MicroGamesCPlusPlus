@@ -43,23 +43,29 @@ bool Holdrace::init()
     
     Size winSize = Director::getInstance()->getWinSize();
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
-    auto ball = Ball::create();
+    ball = Ball::create();
     
     // Add object to the scene here.
     ball->setPosition(screenCenter);
     this->addChild(ball);
     
-    //auto circle = DrawNode::create();
-    //circle->drawSolidCircle(Vec2(0,0), 100, 3.14, 360, Color4F::BLUE);
-    //circle->setAnchorPoint(Vec2(0.5,0.5));
-    //circle->setContentSize(Size(10, 10));
-    //circle->setPosition(screenCenter);
-    //auto box = circle->getBoundingBox();
-    //circle->drawRect(box.origin, box.size, Color4F::MAGENTA);
-    //this->addChild(circle);
-    
     //Debug Layer
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
     
+    this->scheduleUpdate();
+    
     return true;
+}
+
+void Holdrace::draw(Renderer* renderer, const Mat4& transform, bool transformUpdated){
+}
+
+void Holdrace::update(float dt){
+    log("update");
+    ball->moveNext();
+}
+
+void Holdrace::onEnter(){
+    Node::onEnter();
+    log("test onEnter");
 }
