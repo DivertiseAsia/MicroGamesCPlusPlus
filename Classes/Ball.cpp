@@ -8,18 +8,17 @@
 
 #include "Ball.hpp"
 
-#define BALL_RADIUS 50
 
-Ball::Ball()
+Ball::Ball(float radius, Color4F color, Vec2 initialVelocity)
 {
-    _radius = BALL_RADIUS;
-    _color = Color4F(Color4F::BLUE);
-    _velocity = Vec2(5,5);
+    _radius = radius;
+    _color = color;
+    _velocity = initialVelocity;
 }
 
 Ball::~Ball()
 {
-    
+    //Release the memoery here if any.
 }
 
 bool Ball::init(){
@@ -30,8 +29,26 @@ bool Ball::init(){
     }
     
     this->setContentSize(Size(_radius*2, _radius*2));
-    this->drawSolidCircle(Vec2(0,0), _radius, 3.1415968f, 360, _color);    //Draw circle at 0,0
+    this->drawSolidCircle(Vec2(_radius,_radius), _radius, 3.1415968f, 360, _color);    //Draw circle at 0,0
     
+    
+    auto rect = this->getBoundingBox();
+    this->drawRect( rect.origin, rect.size, Color4F::RED);
+    
+    this->setName("Ball");
+    
+    //auto listener = EventListenerTouchOneByOne::create();
+    //listener->setSwallowTouches(true);
+    
+    // trigger when you push down
+    //listener->onTouchBegan = [](Touch* touch, Event* event){
+    //    log("Ball is touched!!!!");
+    //    return true; // if you are consuming it
+    //};
+
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+    
+    this->setAnchorPoint(Vec2(0.5,0.5));
     return true;
 }
 

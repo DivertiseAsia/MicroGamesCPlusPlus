@@ -11,19 +11,23 @@ class Holdrace : public Node
 public:
     static cocos2d::Scene* createScene(); //Create the scene which holds the root node.
     
+    //Function members form the based class
     bool init() override;
     void draw(Renderer* renderer, const Mat4& transform, bool transformUpdated);
     void update(float dt) override;
     void onEnter() override;
     
-    cocos2d::DrawNode* drawNode;
-    
     // implement the "static create()" method manually
     CREATE_FUNC(Holdrace);
     
+    // Our game custom functions
+    void startGame(float);
+    void initTouchHandling();
+    
+    
 private:
     Ball *ball;
-    
+    DrawNode* drawNode;
 };
 
 #endif // __HOLDRACE_SCENE_H__

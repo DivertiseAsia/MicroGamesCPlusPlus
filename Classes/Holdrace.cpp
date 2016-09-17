@@ -38,11 +38,12 @@ bool Holdrace::init()
         return false;
     }
     
-    auto visibleSize = Director::getInstance()->getVisibleSize();
+    //auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     Size winSize = Director::getInstance()->getWinSize();
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
+    
     ball = Ball::create();
     
     // Add object to the scene here.
@@ -52,6 +53,8 @@ bool Holdrace::init()
     //Debug Layer
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
     
+    this->setName("HoldraceSceneRoot");
+    this->initTouchHandling();
     this->scheduleUpdate();
     
     return true;
@@ -61,11 +64,59 @@ void Holdrace::draw(Renderer* renderer, const Mat4& transform, bool transformUpd
 }
 
 void Holdrace::update(float dt){
-    log("update");
+    
     ball->moveNext();
 }
 
+//This method will be called on the Node entered.
 void Holdrace::onEnter(){
     Node::onEnter();
-    log("test onEnter");
+    //schedule(SEL_SCHEDULE(Holdrace::startGame), 1000);
+    //this->scheduleOnce(schedule_selector(Holdrace::startGame), 1.0f);
+}
+
+void Holdrace::startGame(float dt){
+    ball->setVelocity(Vec2(1,0));
+}
+
+void Holdrace::initTouchHandling(){
+    auto listener1 = EventListenerTouchOneByOne::create();
+    
+    // trigger when you push down
+    listener1->onTouchBegan = [](Touch* touch, Event* event){
+        
+        
+        auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
+        
+        Vector<Node *> children = parentNode->getChildren();
+        Point touchPosition = parentNode->convertTouchToNodeSpace(touch);
+        for (auto iter = children.rbegin(); iter != children.rend(); ++iter) {
+            Node *childNode = *iter;
+            if (childNode->getBoundingBox().containsPoint(touchPosition)) {
+                //childNode is the touched Node
+                //do the stuff here
+                log(">>%s",childNode->getName().c_str());
+                return true;
+            }
+        }
+        return false;
+        //return true; // if you are consuming it
+        log("TOUCH!!");
+        
+    };
+    
+    // trigger when moving touch
+    listener1->onTouchMoved = [](Touch* touch, Event* event){
+        log("MOVE");
+    };
+    
+    // trigger when you let up
+    listener1->onTouchEnded = [=](Touch* touch, Event* event){
+        // your code
+        log("TOUCH ENDED");
+    };
+    
+    // Add listener
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
+    
 }

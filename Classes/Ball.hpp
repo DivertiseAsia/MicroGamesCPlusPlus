@@ -14,23 +14,27 @@
 
 USING_NS_CC; //Alias to declare using cocos namespace
 
+#define DEFAULT_BALL_RADIUS 50
+#define DEFAULT_BALL_COLOR Color4F::BLUE
+#define DEFAULT_BALL_INITIAL_VELOCITY Vec2(0,0)
+
 class Ball : public DrawNode
 {
 public:
-    Ball();
+    Ball(float radius=DEFAULT_BALL_RADIUS, Color4F color=DEFAULT_BALL_COLOR, Vec2 initialVelocity=DEFAULT_BALL_INITIAL_VELOCITY);
     ~Ball();
     
     CREATE_FUNC(Ball);
     virtual bool init();
     
-    Vec2 _velocity;
-    
     void moveNext();
+    
+    
+    CC_SYNTHESIZE(Vec2, _velocity, Velocity); //create getter and setter
     
 private:
     float _radius;
     Color4F _color;
-    
     
 };
 
