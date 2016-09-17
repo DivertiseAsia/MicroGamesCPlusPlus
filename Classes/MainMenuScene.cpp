@@ -2,6 +2,7 @@
 #include "PlayerMenuScene.h"
 #include "SimpleAudioEngine.h"
 #include "GameList.h"
+#include "Shared.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -26,7 +27,7 @@ bool MainMenu::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !Layer::init() )
+    if ( !LayerColor::initWithColor(Color4B(SHARED_COLOR_BACKGROUND)))
     {
         return false;
     }
@@ -51,7 +52,7 @@ bool MainMenu::init()
 	MenuItems.pushBack(closeItem);
 
 	for (int i = 0; i < GameList::instance()->numberOfAvailableGames(); i++) {
-		auto gameListingLabel = Label::createWithBMFont("fonts/font2.fnt", GameList::getGameName(GameList::instance ()->AVAILABLE_GAMES[i]));
+		auto gameListingLabel = Label::createWithBMFont(SHARED_FONT_FILE_MENU, GameList::getGameName(GameList::instance ()->AVAILABLE_GAMES[i]));
 		auto gameListing = MenuItemLabel::create(gameListingLabel, CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
 		gameListing->setPosition(Vec2(origin.x + visibleSize.width / 2,
 			origin.y + visibleSize.height / 8 * (GameList::instance()->numberOfAvailableGames() - i)));
@@ -66,7 +67,7 @@ bool MainMenu::init()
     /////////////////////////////
     // 3. add your codes below...
     
-	auto label = Label::createWithBMFont("fonts/font2.fnt", "MicroGames");
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE_TITLE, SHARED_GAME_NAME);
     
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
