@@ -27,7 +27,7 @@ bool PlayerMenu::init()
 {
 	//////////////////////////////
 	// 1. super init first
-	if (!Layer::init())
+	if (!LayerColor::initWithColor(Color4B(SHARED_COLOR_BACKGROUND)))
 	{
 		return false;
 	}

@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "GameList.h"
 
-class MainMenu : public cocos2d::Layer
+class MainMenu : public cocos2d::LayerColor
 {
 public:
     static cocos2d::Scene* createScene();
