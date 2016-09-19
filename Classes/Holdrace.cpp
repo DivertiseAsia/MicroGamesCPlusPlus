@@ -9,7 +9,9 @@
 #include "Holdrace.h"
 #include "SimpleAudioEngine.h"
 #include "Ball.hpp"
+#include "GameButton.hpp"
 #include "GLES-Render/B2DebugDrawLayer.h"
+#include "ui/CocosGUI.h"
 
 USING_NS_CC;
 
@@ -44,11 +46,32 @@ bool Holdrace::init()
     Size winSize = Director::getInstance()->getWinSize();
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
     
-    ball = Ball::create();
-    
     // Add object to the scene here.
-    ball->setPosition(screenCenter);
-    this->addChild(ball);
+    
+    // Create balls
+    //ball = Ball::create();
+    //ball->setPosition(screenCenter);
+    //this->addChild(ball);
+    
+    // Create buttons
+    auto button = GameButton::create();
+    button->setPosition(screenCenter);
+    button->addTouchEventListener([&](Ref* sender, GameButton::Widget::TouchEventType type){
+        log("any call at all?");
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                log("touch begin");
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                log("clicked");
+                break;
+            default:
+                break;
+        }
+    });
+    this->addChild(button);
+    
     
     //Debug Layer
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
@@ -65,7 +88,7 @@ void Holdrace::draw(Renderer* renderer, const Mat4& transform, bool transformUpd
 
 void Holdrace::update(float dt){
     
-    ball->moveNext();
+    //ball->moveNext();
 }
 
 //This method will be called on the Node entered.

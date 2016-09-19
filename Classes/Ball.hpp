@@ -29,7 +29,6 @@ public:
     
     void moveNext();
     
-    
     CC_SYNTHESIZE(Vec2, _velocity, Velocity); //create getter and setter
     
 private:

@@ -33,20 +33,8 @@ bool Ball::init(){
     
     
     auto rect = this->getBoundingBox();
-    this->drawRect( rect.origin, rect.size, Color4F::RED);
-    
+    this->drawRect( rect.origin, rect.size, Color4F::RED); //For debugging propose
     this->setName("Ball");
-    
-    //auto listener = EventListenerTouchOneByOne::create();
-    //listener->setSwallowTouches(true);
-    
-    // trigger when you push down
-    //listener->onTouchBegan = [](Touch* touch, Event* event){
-    //    log("Ball is touched!!!!");
-    //    return true; // if you are consuming it
-    //};
-
-    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     
     this->setAnchorPoint(Vec2(0.5,0.5));
     return true;
