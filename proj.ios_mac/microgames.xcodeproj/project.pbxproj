@@ -173,6 +173,7 @@
 		96E16D321D8C4A2600D732A8 /* GameList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameList.cpp; sourceTree = "<group>"; };
 		96E16D331D8C4A2600D732A8 /* GameList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameList.h; sourceTree = "<group>"; };
 		96E16D351D8D114E00D732A8 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
+		96E16D381D8D385300D732A8 /* Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shared.h; sourceTree = "<group>"; };
 		96F2C8AE1D8842A100EED92B /* Holdrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Holdrace.cpp; sourceTree = "<group>"; };
 		96F2C8AF1D8842A100EED92B /* Holdrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Holdrace.h; sourceTree = "<group>"; };
 		96F2C8B41D88432700EED92B /* MainMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuScene.cpp; sourceTree = "<group>"; };
@@ -273,6 +274,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				96E16D381D8D385300D732A8 /* Shared.h */,
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
 				1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */,
