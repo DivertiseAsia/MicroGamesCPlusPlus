@@ -24,7 +24,9 @@ public:
     Ball(float radius=DEFAULT_BALL_RADIUS, Color4F color=DEFAULT_BALL_COLOR, Vec2 initialVelocity=DEFAULT_BALL_INITIAL_VELOCITY);
     ~Ball();
     
-    CREATE_FUNC(Ball);
+    static Ball* create(float radius=DEFAULT_BALL_RADIUS, Color4F color=DEFAULT_BALL_COLOR);
+    static Ball* create(Color4F color);
+    
     virtual bool init();
     
     void moveNext();

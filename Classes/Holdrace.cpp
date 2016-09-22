@@ -48,10 +48,19 @@ bool Holdrace::init()
     
     // Add object to the scene here.
     
+    //Create drawNode and draw the race line
+    _drawNode = DrawNode::create(10);    //Default line width
+    _drawNode->drawLine(Vec2(screenCenter.x,0), Vec2(screenCenter.x,winSize.height), Color4F::GRAY);
+    this->addChild(_drawNode);
+    
+    
     // Create balls
-    //ball = Ball::create();
-    //ball->setPosition(screenCenter);
-    //this->addChild(ball);
+    for(int i=0;i<4;i++){
+        auto p = Vec2(100*i,100*i);
+        _ball[i] = Ball::create(Color4F(1.0/i,1.0/(i/2.0),1.0/(i/2.0),1));
+        _ball[i]->setPosition(p);
+        this->addChild(_ball[i]);
+    }
     
     // Create buttons
     auto button = GameButton::create();
@@ -84,6 +93,7 @@ bool Holdrace::init()
 }
 
 void Holdrace::draw(Renderer* renderer, const Mat4& transform, bool transformUpdated){
+    
 }
 
 void Holdrace::update(float dt){
@@ -99,7 +109,7 @@ void Holdrace::onEnter(){
 }
 
 void Holdrace::startGame(float dt){
-    ball->setVelocity(Vec2(1,0));
+    _ball[0]->setVelocity(Vec2(1,0));
 }
 
 void Holdrace::initTouchHandling(){

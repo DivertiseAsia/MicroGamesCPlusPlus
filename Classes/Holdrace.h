@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "Ball.hpp"
+#include "GameButton.hpp"
 
 USING_NS_CC;
 
@@ -26,8 +27,10 @@ public:
     
     
 private:
-    Ball *ball;
-    DrawNode* drawNode;
+    Ball* _ball[4];
+    GameButton* _button[4];
+    
+    DrawNode* _drawNode;
 };
 
 #endif // __HOLDRACE_SCENE_H__

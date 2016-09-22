@@ -21,6 +21,25 @@ Ball::~Ball()
     //Release the memoery here if any.
 }
 
+Ball* Ball::create(float radius, Color4F color){
+    Ball *pRet = new(std::nothrow)Ball(radius, color, Vec2(0,0));
+    if (pRet && pRet->init())
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = nullptr;
+        return nullptr;
+    }
+}
+
+Ball* Ball::create(Color4F color){
+    return Ball::create(DEFAULT_BALL_RADIUS, color);
+}
+
 bool Ball::init(){
     
     if (!DrawNode::init())
