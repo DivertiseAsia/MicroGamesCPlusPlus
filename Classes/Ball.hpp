@@ -14,7 +14,7 @@
 
 USING_NS_CC; //Alias to declare using cocos namespace
 
-#define DEFAULT_BALL_RADIUS 50
+#define DEFAULT_BALL_RADIUS 20
 #define DEFAULT_BALL_COLOR Color4F::BLUE
 #define DEFAULT_BALL_INITIAL_VELOCITY Vec2(0,0)
 

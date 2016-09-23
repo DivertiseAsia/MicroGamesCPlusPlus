@@ -42,6 +42,8 @@ bool Holdrace::init()
     
     //auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    auto screenSize = Director::getInstance()->getVisibleSize();
+    
     
     Size winSize = Director::getInstance()->getWinSize();
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
@@ -54,15 +56,22 @@ bool Holdrace::init()
     this->addChild(_drawNode);
     
     
+    auto buttonPos = {origin, origin+screenSize, Vec2(origin.x,origin.y+screenSize.height), Vec2(origin.x+screenSize.width, origin.y)};
+    
     // Create balls
     for(int i=0;i<4;i++){
-        auto p = Vec2(100*i,100*i);
+        auto p = Vec2(screenCenter.x,screenSize.height);
         _ball[i] = Ball::create(Color4F(1.0/i,1.0/(i/2.0),1.0/(i/2.0),1));
         _ball[i]->setPosition(p);
         this->addChild(_ball[i]);
+        
+        _button[i] = GameButton::create();
+        _button[i]->setPosition(buttonPos.begin()[i]);
+        this->addChild(_button[i]);
     }
     
     // Create buttons
+    /*
     auto button = GameButton::create();
     button->setPosition(screenCenter);
     button->addTouchEventListener([&](Ref* sender, GameButton::Widget::TouchEventType type){
@@ -80,6 +89,7 @@ bool Holdrace::init()
         }
     });
     this->addChild(button);
+     */
     
     
     //Debug Layer
