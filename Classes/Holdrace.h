@@ -1,6 +1,7 @@
 #ifndef __HOLDRACE_SCENE_H__
 #define __HOLDRACE_SCENE_H__
 
+#include "Shared.h"
 #include "cocos2d.h"
 #include "Ball.hpp"
 #include "GameButton.hpp"
@@ -24,6 +25,9 @@ public:
     // Our game custom functions
     void startGame(float);
     void initTouchHandling();
+    
+    //Event handling
+    static void onPress(Ref*, GameButton::Widget::TouchEventType);
     
     
 private:
