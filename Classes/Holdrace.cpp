@@ -40,6 +40,8 @@ bool Holdrace::init()
         return false;
     }
     
+    //http://www.cocos2d-x.org/wiki/Multi_resolution_support
+    
     //auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     auto screenSize = Director::getInstance()->getVisibleSize();
@@ -55,18 +57,23 @@ bool Holdrace::init()
     _drawNode->drawLine(Vec2(screenCenter.x,0), Vec2(screenCenter.x,winSize.height), Color4F::GRAY);
     this->addChild(_drawNode);
     
-    
+    //Position should be based on visibleOrigin and visibleSize properties.
     auto buttonPos = {origin, origin+screenSize, Vec2(origin.x,origin.y+screenSize.height), Vec2(origin.x+screenSize.width, origin.y)};
+    auto colors = SHARED_COLOR_PLAYERS;
     
     // Create balls
     for(int i=0;i<4;i++){
         auto p = Vec2(screenCenter.x,screenSize.height);
-        _ball[i] = Ball::create(Color4F(1.0/i,1.0/(i/2.0),1.0/(i/2.0),1));
+        _ball[i] = Ball::create(colors.begin()[i]);
         _ball[i]->setPosition(p);
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
         _button[i]->setPosition(buttonPos.begin()[i]);
+        _button[i]->changeColor(colors.begin()[i]);
+        _button[i]->setTag(i);  //Set the number to indicate button order.
+        _button[i]->addTouchEventListener(Holdrace::onPress);
+        
         this->addChild(_button[i]);
     }
     
@@ -162,4 +169,18 @@ void Holdrace::initTouchHandling(){
     // Add listener
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
     
+}
+
+void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
+    switch (type)
+    {
+        case ui::Widget::TouchEventType::BEGAN:
+            log("touch begin");
+            break;
+        case ui::Widget::TouchEventType::ENDED:
+            log("clicked");
+            break;
+        default:
+            break;
+    }
 }

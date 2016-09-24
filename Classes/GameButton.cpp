@@ -22,6 +22,19 @@ bool GameButton::init(){
         return false;
     }
     
+    this->loadTextureNormal(createSpriteFrame());
+    
+    this->setName("GameButton");
+
+    return true;
+}
+
+void GameButton::changeColor(Color4F color){
+    _color = color;
+    this->loadTextureNormal(createSpriteFrame());
+}
+
+SpriteFrame* GameButton::createSpriteFrame() const{
     //Create renderTexture
     auto renderTexture = RenderTexture::create(_radius*2, _radius*2, cocos2d::Texture2D::PixelFormat::RGBA8888);
     //Draw texture to Sprite
@@ -36,11 +49,6 @@ bool GameButton::init(){
     renderTexture->end();
     renderTexture->retain();
     
-    this->loadTextureNormal(renderTexture->getSprite()->getSpriteFrame());
-    
-    this->setName("GameButton");
-
-    
-    return true;
+    return renderTexture->getSprite()->getSpriteFrame();
 }
 

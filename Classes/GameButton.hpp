@@ -9,11 +9,11 @@
 #ifndef GameButton_hpp
 #define GameButton_hpp
 
-#include <stdio.h>
+#include "cocos2d.h"
 #include "ui/CocosGUI.h"
 
 #define DEFAULT_BUTTON_RADIUS 100
-#define DEFAULT_BUTTON_COLOR Color4F(1,0.5f,0.5f,0.5)
+#define DEFAULT_BUTTON_COLOR Color4F(1,0.5f,0.5f,0.8f)
 
 USING_NS_CC;
 
@@ -25,9 +25,13 @@ public:
 
     virtual bool init();
     
+    void changeColor(Color4F color);
+    
 private:
     float _radius;
     Color4F _color;
+    
+    SpriteFrame* createSpriteFrame() const;
 };
 
 
