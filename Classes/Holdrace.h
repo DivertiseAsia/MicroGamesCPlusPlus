@@ -6,6 +6,8 @@
 #include "Ball.hpp"
 #include "GameButton.hpp"
 
+#define BALL_SPEED 5
+
 USING_NS_CC;
 
 class Holdrace : public Node

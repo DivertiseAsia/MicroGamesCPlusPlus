@@ -60,6 +60,8 @@
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		963931DE1D8FED9C00B739F0 /* GameButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 963931DC1D8FED9C00B739F0 /* GameButton.cpp */; };
+		96C667B91D96733D0091F8C8 /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96C667B71D96733D0091F8C8 /* SoundManager.cpp */; };
+		96C667BB1D9673990091F8C8 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 96C667BA1D9673990091F8C8 /* sounds */; };
 		96E16D2C1D8A7CFF00D732A8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */; };
 		96E16D2F1D8AEDB500D732A8 /* GLES-Render in Resources */ = {isa = PBXBuildFile; fileRef = 96E16D2E1D8AEDB500D732A8 /* GLES-Render */; };
 		96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D321D8C4A2600D732A8 /* GameList.cpp */; };
@@ -170,13 +172,16 @@
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		963931DC1D8FED9C00B739F0 /* GameButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameButton.cpp; sourceTree = "<group>"; };
 		963931DD1D8FED9C00B739F0 /* GameButton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameButton.hpp; sourceTree = "<group>"; };
+		96C667B61D96733D0091F8C8 /* Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shared.h; sourceTree = "<group>"; };
+		96C667B71D96733D0091F8C8 /* SoundManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundManager.cpp; sourceTree = "<group>"; };
+		96C667B81D96733D0091F8C8 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
+		96C667BA1D9673990091F8C8 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		96E16D2B1D8A7CFF00D732A8 /* Ball.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
 		96E16D2E1D8AEDB500D732A8 /* GLES-Render */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "GLES-Render"; sourceTree = "<group>"; };
 		96E16D321D8C4A2600D732A8 /* GameList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameList.cpp; sourceTree = "<group>"; };
 		96E16D331D8C4A2600D732A8 /* GameList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameList.h; sourceTree = "<group>"; };
 		96E16D351D8D114E00D732A8 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
-		96E16D381D8D385300D732A8 /* Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shared.h; sourceTree = "<group>"; };
 		96F2C8AE1D8842A100EED92B /* Holdrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Holdrace.cpp; sourceTree = "<group>"; };
 		96F2C8AF1D8842A100EED92B /* Holdrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Holdrace.h; sourceTree = "<group>"; };
 		96F2C8B41D88432700EED92B /* MainMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuScene.cpp; sourceTree = "<group>"; };
@@ -277,7 +282,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				96E16D381D8D385300D732A8 /* Shared.h */,
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
 				1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */,
@@ -319,6 +323,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				96C667BA1D9673990091F8C8 /* sounds */,
 				96E16D351D8D114E00D732A8 /* splash.png */,
 				521A8EA819F11F5000D177D7 /* fonts */,
 				3EACC98E19EE6D4300EB3C5E /* res */,
@@ -333,6 +338,9 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				96C667B61D96733D0091F8C8 /* Shared.h */,
+				96C667B71D96733D0091F8C8 /* SoundManager.cpp */,
+				96C667B81D96733D0091F8C8 /* SoundManager.h */,
 				96E16D321D8C4A2600D732A8 /* GameList.cpp */,
 				96E16D331D8C4A2600D732A8 /* GameList.h */,
 				96E16D2E1D8AEDB500D732A8 /* GLES-Render */,
@@ -504,6 +512,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96C667BB1D9673990091F8C8 /* sounds in Resources */,
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
@@ -553,6 +562,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				96C667B91D96733D0091F8C8 /* SoundManager.cpp in Sources */,
 				96F2C8BC1D88432700EED92B /* SplashScene.cpp in Sources */,
 				96E16D2C1D8A7CFF00D732A8 /* Ball.cpp in Sources */,
 				96F2C8BA1D88432700EED92B /* MainMenuScene.cpp in Sources */,

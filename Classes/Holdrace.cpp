@@ -12,6 +12,7 @@
 #include "GameButton.hpp"
 #include "GLES-Render/B2DebugDrawLayer.h"
 #include "ui/CocosGUI.h"
+#include "SoundManager.h"
 
 USING_NS_CC;
 
@@ -58,14 +59,20 @@ bool Holdrace::init()
     this->addChild(_drawNode);
     
     //Position should be based on visibleOrigin and visibleSize properties.
-    auto buttonPos = {origin, origin+screenSize, Vec2(origin.x,origin.y+screenSize.height), Vec2(origin.x+screenSize.width, origin.y)};
+    auto buttonPos = {
+        Vec2(origin.x,origin.y+screenSize.height),  //0
+        Vec2(origin.x+screenSize.width, origin.y),  //1
+        origin, //2
+        origin+screenSize}; //3
     auto colors = SHARED_COLOR_PLAYERS;
+    
     
     // Create balls
     for(int i=0;i<4;i++){
         auto p = Vec2(screenCenter.x,screenSize.height);
         _ball[i] = Ball::create(colors.begin()[i]);
         _ball[i]->setPosition(p);
+        _ball[i]->setVelocity(Vec2(0,-1*BALL_SPEED));
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
@@ -73,31 +80,10 @@ bool Holdrace::init()
         _button[i]->changeColor(colors.begin()[i]);
         _button[i]->setTag(i);  //Set the number to indicate button order.
         _button[i]->addTouchEventListener(Holdrace::onPress);
+        _button[i]->setBall(_ball[i]);
         
         this->addChild(_button[i]);
     }
-    
-    // Create buttons
-    /*
-    auto button = GameButton::create();
-    button->setPosition(screenCenter);
-    button->addTouchEventListener([&](Ref* sender, GameButton::Widget::TouchEventType type){
-        log("any call at all?");
-        switch (type)
-        {
-            case ui::Widget::TouchEventType::BEGAN:
-                log("touch begin");
-                break;
-            case ui::Widget::TouchEventType::ENDED:
-                log("clicked");
-                break;
-            default:
-                break;
-        }
-    });
-    this->addChild(button);
-     */
-    
     
     //Debug Layer
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
@@ -177,9 +163,13 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
         case ui::Widget::TouchEventType::BEGAN:
             log("touch begin");
             break;
-        case ui::Widget::TouchEventType::ENDED:
-            log("clicked");
+        case ui::Widget::TouchEventType::ENDED:{
+            auto button = static_cast<GameButton*>(sender);
+            log("clicked on button-%i", button->getTag());
+            button->getBall()->moveNext();
+            SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
             break;
+        }
         default:
             break;
     }

@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
+#include "Ball.hpp"
 
 #define DEFAULT_BUTTON_RADIUS 100
 #define DEFAULT_BUTTON_COLOR Color4F(1,0.5f,0.5f,0.8f)
@@ -26,6 +27,9 @@ public:
     virtual bool init();
     
     void changeColor(Color4F color);
+    CC_SYNTHESIZE(Ball*, _ball, Ball);
+    
+    
     
 private:
     float _radius;
