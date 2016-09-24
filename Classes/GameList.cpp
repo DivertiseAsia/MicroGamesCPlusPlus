@@ -1,5 +1,6 @@
 #include "GameList.h"
 #include "Holdrace.h"
+#include "Taprace.h"
 
 USING_NS_CC;
 
@@ -7,6 +8,9 @@ GameList* GameList::minstance = NULL;
 
 cocos2d::Scene* GameList::getScene(GameType listing) {
 	switch (listing) {
+        case TAPTAP:
+            return Taprace::createScene();
+            break;
 		case OVERSHOOT:
 			return Holdrace::createScene();
 			break;

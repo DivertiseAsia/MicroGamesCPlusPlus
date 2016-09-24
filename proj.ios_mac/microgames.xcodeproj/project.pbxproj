@@ -62,6 +62,7 @@
 		963931DE1D8FED9C00B739F0 /* GameButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 963931DC1D8FED9C00B739F0 /* GameButton.cpp */; };
 		96C667B91D96733D0091F8C8 /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96C667B71D96733D0091F8C8 /* SoundManager.cpp */; };
 		96C667BB1D9673990091F8C8 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 96C667BA1D9673990091F8C8 /* sounds */; };
+		96C667BD1D967A160091F8C8 /* Taprace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96C667BC1D967A160091F8C8 /* Taprace.cpp */; };
 		96E16D2C1D8A7CFF00D732A8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */; };
 		96E16D2F1D8AEDB500D732A8 /* GLES-Render in Resources */ = {isa = PBXBuildFile; fileRef = 96E16D2E1D8AEDB500D732A8 /* GLES-Render */; };
 		96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D321D8C4A2600D732A8 /* GameList.cpp */; };
@@ -176,6 +177,8 @@
 		96C667B71D96733D0091F8C8 /* SoundManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundManager.cpp; sourceTree = "<group>"; };
 		96C667B81D96733D0091F8C8 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
 		96C667BA1D9673990091F8C8 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		96C667BC1D967A160091F8C8 /* Taprace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Taprace.cpp; sourceTree = "<group>"; };
+		96C667BE1D967B1E0091F8C8 /* Taprace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Taprace.h; sourceTree = "<group>"; };
 		96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		96E16D2B1D8A7CFF00D732A8 /* Ball.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
 		96E16D2E1D8AEDB500D732A8 /* GLES-Render */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "GLES-Render"; sourceTree = "<group>"; };
@@ -353,7 +356,9 @@
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
 				96F2C8AE1D8842A100EED92B /* Holdrace.cpp */,
+				96C667BC1D967A160091F8C8 /* Taprace.cpp */,
 				96F2C8AF1D8842A100EED92B /* Holdrace.h */,
+				96C667BE1D967B1E0091F8C8 /* Taprace.h */,
 				96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */,
 				96E16D2B1D8A7CFF00D732A8 /* Ball.hpp */,
 				963931DC1D8FED9C00B739F0 /* GameButton.cpp */,
@@ -571,6 +576,7 @@
 				96F2C8B01D8842A100EED92B /* Holdrace.cpp in Sources */,
 				96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */,
 				963931DE1D8FED9C00B739F0 /* GameButton.cpp in Sources */,
+				96C667BD1D967A160091F8C8 /* Taprace.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 			);
