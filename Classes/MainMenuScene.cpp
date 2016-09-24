@@ -1,11 +1,10 @@
 #include "MainMenuScene.h"
 #include "PlayerMenuScene.h"
-#include "SimpleAudioEngine.h"
 #include "GameList.h"
 #include "Shared.h"
+#include "SoundManager.h"
 
 USING_NS_CC;
-using namespace CocosDenshion;
 
 Scene* MainMenu::createScene()
 {
@@ -80,18 +79,17 @@ bool MainMenu::init()
 }
 
 void MainMenu::pickPlayers(Ref* pSender, GameList::GameType game) {
+	SoundManager::instance()->playEffect(SOUND_FILE_MENU_TRANS);
 	Director::getInstance()->replaceScene(TransitionSlideInR::create(0.5f,PlayerMenu::createScene(game)));
 }
 
 void MainMenu::muteButtonCallback(Ref* pSender)
 {
     //Mute or unmute the sound effects of the game
-	if (SimpleAudioEngine::getInstance()->getEffectsVolume() > 0) {
-		SimpleAudioEngine::getInstance()->setEffectsVolume(0);
-		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0);
+	if (SoundManager::instance()->isMuted()) {
+		SoundManager::instance()->unmuteAll();
 	}
 	else {
-		SimpleAudioEngine::getInstance()->setEffectsVolume(1);
-		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(1);
+		SoundManager::instance()->muteAll();
 	}
 }
