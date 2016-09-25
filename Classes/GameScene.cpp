@@ -3,14 +3,6 @@
 #include "Holdrace.h"
 USING_NS_CC;
 
-Scene* GameScene::makeTapTap(int numberOfPlayers) {
-	return GameScene::createScene<Taprace>(numberOfPlayers);
-}
-
-Scene* GameScene::makeHoldrace(int numberOfPlayers) {
-	return GameScene::createScene<Holdrace>(numberOfPlayers);
-}
-
 template <class T>
 Scene* GameScene::createScene(int numberOfPlayers)
 {
@@ -52,3 +44,6 @@ GameScene* GameScene::create(int numberOfPlayers) {
 void GameScene::startGame(float dt){
     
 }
+
+template Scene* GameScene::createScene<Taprace>(int);
+template Scene* GameScene::createScene<Holdrace>(int);

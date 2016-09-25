@@ -9,8 +9,6 @@ class GameScene : public cocos2d::Layer
 {
 public:
 	GameScene(int numberOfPlayers);
-	static Scene* GameScene::makeTapTap(int numberOfPlayers);
-	static Scene* GameScene::makeHoldrace(int numberOfPlayers);
 	template <class T> static Scene* createScene(int numberOfPlayers); //Create the scene which holds the root node.
     
     // implement the "static create()" method manually
