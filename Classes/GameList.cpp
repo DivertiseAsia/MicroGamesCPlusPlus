@@ -7,10 +7,10 @@ USING_NS_CC;
 
 GameList* GameList::minstance = NULL;
 
-cocos2d::Scene* GameList::getScene(GameType listing, int numberOfPlayers) {
+Scene* GameList::getScene(GameType listing, int numberOfPlayers) {
 	switch (listing) {
 		default:
-			return GameScene::createScene(numberOfPlayers);
+			return GameScene::makeTapTap(numberOfPlayers);
 	}
 }
 

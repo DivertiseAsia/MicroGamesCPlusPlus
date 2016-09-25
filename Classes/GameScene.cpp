@@ -2,13 +2,18 @@
 #include "Taprace.h"
 USING_NS_CC;
 
+Scene* GameScene::makeTapTap(int numberOfPlayers) {
+	return GameScene::createScene<Taprace>(numberOfPlayers);
+}
+
+template <class T>
 Scene* GameScene::createScene(int numberOfPlayers)
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
     // 'layer' is an autorelease object
-    auto layer = GameScene::create<Taprace>(numberOfPlayers);
+    auto layer = GameScene::create<T>(numberOfPlayers);
     
     // add layer as a child to scene
     scene->addChild(layer);
