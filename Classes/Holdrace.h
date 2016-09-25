@@ -7,7 +7,9 @@
 #include "GameButton.hpp"
 #include "GameScene.h"
 
-#define BALL_SPEED 5
+#define BALL_SPEEDMAX 5
+#define BALL_ACCELERATION 0.01
+#define BALL_FRICTION 1.01
 
 USING_NS_CC;
 

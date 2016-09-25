@@ -60,6 +60,7 @@
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		963931DE1D8FED9C00B739F0 /* GameButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 963931DC1D8FED9C00B739F0 /* GameButton.cpp */; };
+		969DA58D1D97B61A00315F6D /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 969DA58B1D97B61A00315F6D /* GameScene.cpp */; };
 		96C667B91D96733D0091F8C8 /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96C667B71D96733D0091F8C8 /* SoundManager.cpp */; };
 		96C667BB1D9673990091F8C8 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 96C667BA1D9673990091F8C8 /* sounds */; };
 		96C667BD1D967A160091F8C8 /* Taprace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96C667BC1D967A160091F8C8 /* Taprace.cpp */; };
@@ -173,6 +174,8 @@
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		963931DC1D8FED9C00B739F0 /* GameButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameButton.cpp; sourceTree = "<group>"; };
 		963931DD1D8FED9C00B739F0 /* GameButton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameButton.hpp; sourceTree = "<group>"; };
+		969DA58B1D97B61A00315F6D /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
+		969DA58C1D97B61A00315F6D /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		96C667B61D96733D0091F8C8 /* Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shared.h; sourceTree = "<group>"; };
 		96C667B71D96733D0091F8C8 /* SoundManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundManager.cpp; sourceTree = "<group>"; };
 		96C667B81D96733D0091F8C8 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
@@ -341,6 +344,8 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				969DA58B1D97B61A00315F6D /* GameScene.cpp */,
+				969DA58C1D97B61A00315F6D /* GameScene.h */,
 				96C667B61D96733D0091F8C8 /* Shared.h */,
 				96C667B71D96733D0091F8C8 /* SoundManager.cpp */,
 				96C667B81D96733D0091F8C8 /* SoundManager.h */,
@@ -570,6 +575,7 @@
 				96C667B91D96733D0091F8C8 /* SoundManager.cpp in Sources */,
 				96F2C8BC1D88432700EED92B /* SplashScene.cpp in Sources */,
 				96E16D2C1D8A7CFF00D732A8 /* Ball.cpp in Sources */,
+				969DA58D1D97B61A00315F6D /* GameScene.cpp in Sources */,
 				96F2C8BA1D88432700EED92B /* MainMenuScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				96F2C8BB1D88432700EED92B /* PlayerMenuScene.cpp in Sources */,

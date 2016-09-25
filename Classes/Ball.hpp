@@ -32,6 +32,8 @@ public:
     void moveNext();
     
     CC_SYNTHESIZE(Vec2, _velocity, Velocity); //create getter and setter
+    CC_SYNTHESIZE(Vec2, _friction, Fricition);
+    CC_SYNTHESIZE(Vec2, _acceleration, Acceleration);
     
 private:
     float _radius;

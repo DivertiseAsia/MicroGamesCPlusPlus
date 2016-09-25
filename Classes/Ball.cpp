@@ -59,7 +59,25 @@ bool Ball::init(){
 }
 
 void Ball::moveNext(){
+    //Update velocity (by acceleration)
+    _velocity += _acceleration;
+    
+    if (_acceleration == Vec2::ZERO){
+        assert(_friction.x >=0&& _friction.y>=0);
+        //Slow down by friction
+        if (_friction.y > 1)
+            _velocity.y = (fabs(_velocity.y) < _friction.y-1) ? 0 : _velocity.y / _friction.y;
+        
+        if (_friction.x > 1)
+            _velocity.x = (fabs(_velocity.x) < _friction.x-1) ? 0 : _velocity.x / _friction.x;
+    
+    }
+    
+    //Update Position
     auto current = this->getPosition();
     current += _velocity;
     this->setPosition(current);
+    
+    if (this->getTag()==1)
+        log("%i: My speed = %.0f", this->getTag(),_velocity.y);
 }

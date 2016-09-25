@@ -53,12 +53,13 @@ bool Holdrace::init()
     auto colors = SHARED_COLOR_PLAYERS;
     
     
-    // Create balls
-    for(int i=0;i<4;i++){
+    // Create balls and buttons
+    for(int i=0;i<numberOfPlayers;i++){
         auto p = Vec2(screenCenter.x,screenSize.height);
         _ball[i] = Ball::create(colors.begin()[i]);
         _ball[i]->setPosition(p);
-        _ball[i]->setVelocity(Vec2(0,-1*BALL_SPEED));
+        _ball[i]->setFricition(Vec2(0,BALL_FRICTION));
+        _ball[i]->setTag(i);
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
@@ -67,7 +68,6 @@ bool Holdrace::init()
         _button[i]->setTag(i);  //Set the number to indicate button order.
         _button[i]->addTouchEventListener(Holdrace::onPress);
         _button[i]->setBall(_ball[i]);
-        
         this->addChild(_button[i]);
     }
     
@@ -88,17 +88,19 @@ void Holdrace::draw(Renderer* renderer, const Mat4& transform, bool transformUpd
 void Holdrace::update(float dt){
     
     //ball->moveNext();
+    for(int i=0;i<numberOfPlayers;i++){
+        _ball[i]->moveNext();
+    }
 }
 
 //This method will be called on the Node entered.
 void Holdrace::onEnter(){
     Node::onEnter();
-    //schedule(SEL_SCHEDULE(Holdrace::startGame), 1000);
-    //this->scheduleOnce(schedule_selector(Holdrace::startGame), 1.0f);
+    
 }
 
 void Holdrace::startGame(float dt){
-    _ball[0]->setVelocity(Vec2(1,0));
+    //_ball[0]->setVelocity(Vec2(1,0));
 }
 
 void Holdrace::initTouchHandling(){
@@ -144,15 +146,16 @@ void Holdrace::initTouchHandling(){
 }
 
 void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
+    auto button = static_cast<GameButton*>(sender);
     switch (type)
     {
-        case ui::Widget::TouchEventType::BEGAN:
-            log("touch begin");
+        case ui::Widget::TouchEventType::BEGAN:{
+            button->getBall()->setAcceleration(Vec2(0,-BALL_ACCELERATION));
             break;
+        }
         case ui::Widget::TouchEventType::ENDED:{
-            auto button = static_cast<GameButton*>(sender);
             log("clicked on button-%i", button->getTag());
-            button->getBall()->moveNext();
+            button->getBall()->setAcceleration(Vec2(0,0));
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
             break;
         }
