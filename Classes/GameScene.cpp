@@ -1,9 +1,14 @@
 #include "GameScene.h"
 #include "Taprace.h"
+#include "Holdrace.h"
 USING_NS_CC;
 
 Scene* GameScene::makeTapTap(int numberOfPlayers) {
 	return GameScene::createScene<Taprace>(numberOfPlayers);
+}
+
+Scene* GameScene::makeHoldrace(int numberOfPlayers) {
+	return GameScene::createScene<Holdrace>(numberOfPlayers);
 }
 
 template <class T>
@@ -30,10 +35,8 @@ GameScene::GameScene(int numberOfPlayers)
 template <class T>
 GameScene* GameScene::create(int numberOfPlayers) {
 	GameScene *pRet = new T(numberOfPlayers);
-	log("cerating game scene");
 	if (pRet && pRet->init())
 	{
-		log("ptr init");
 		pRet->autorelease();
 		return pRet;
 	}

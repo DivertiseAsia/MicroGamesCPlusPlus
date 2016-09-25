@@ -7,7 +7,6 @@
 //
 
 #include "Taprace.h"
-#include "SimpleAudioEngine.h"
 #include "Ball.hpp"
 #include "GameButton.hpp"
 #include "GLES-Render/B2DebugDrawLayer.h"
@@ -19,17 +18,12 @@ USING_NS_CC;
 // on "init" you need to initialize your instance
 bool Taprace::init()
 {
-	log("is node inited");
     //////////////////////////////
     // 1. super init first
     if ( !GameScene::init() )
     {
         return false;
     }
-
-	log("I've been called..");
-	log("Number of polayers:");
-	log(numberOfPlayers);
     
     //http://www.cocos2d-x.org/wiki/Multi_resolution_support
     

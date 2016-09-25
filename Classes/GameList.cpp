@@ -8,9 +8,14 @@ USING_NS_CC;
 GameList* GameList::minstance = NULL;
 
 Scene* GameList::getScene(GameType listing, int numberOfPlayers) {
-	switch (listing) {
-		default:
-			return GameScene::makeTapTap(numberOfPlayers);
+	switch (listing) 
+	{
+	case OVERSHOOT:
+		return GameScene::createScene<Holdrace>(numberOfPlayers);
+	case TAPTAP:
+		return GameScene::createScene<Taprace>(numberOfPlayers);
+	default:
+		return GameScene::createScene<Taprace>(numberOfPlayers);
 	}
 }
 
