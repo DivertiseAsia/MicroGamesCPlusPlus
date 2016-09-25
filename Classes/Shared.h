@@ -1,8 +1,6 @@
 #ifndef __SHARED_H__
 #define __SHARED_H__
 
-USING_NS_CC;
-
 #define SHARED_FONT_FILE_TITLE	"fonts/font-title.fnt"
 #define SHARED_FONT_FILE_MENU	"fonts/font-menu.fnt"
 #define SHARED_FONT_FILE_INGAME	"fonts/font-ingame.fnt"

@@ -16,30 +16,20 @@
 
 USING_NS_CC;
 
-Scene* Taprace::createScene()
-{
-    // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    auto layer = Taprace::create();
-    
-    // add layer as a child to scene
-    scene->addChild(layer);
-    
-    // return the scene
-    return scene;
-}
-
 // on "init" you need to initialize your instance
 bool Taprace::init()
 {
+	log("is node inited");
     //////////////////////////////
     // 1. super init first
-    if ( !Node::init() )
+    if ( !GameScene::init() )
     {
         return false;
     }
+
+	log("I've been called..");
+	log("Number of polayers:");
+	log(numberOfPlayers);
     
     //http://www.cocos2d-x.org/wiki/Multi_resolution_support
     
@@ -68,7 +58,7 @@ bool Taprace::init()
     
     
     // Create balls
-    for(int i=0;i<4;i++){
+    for(int i=0;i<numberOfPlayers;i++){
         auto p = Vec2(screenCenter.x,screenSize.height);
         _ball[i] = Ball::create(colors.begin()[i]);
         _ball[i]->setPosition(p);

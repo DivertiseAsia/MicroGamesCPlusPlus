@@ -8,7 +8,7 @@ class GameList
 public:
 	enum GameType { TAPTAP, OVERSHOOT, PINBALL, AIRHOCKEY, FLAPFLAP};
 
-    static cocos2d::Scene* getScene(GameType listing);
+    static cocos2d::Scene* getScene(GameType listing, int numberOfPlayers);
 	static std::string getGameName(GameType listing);
 	static GameList* instance();
 	static int numberOfAvailableGames();

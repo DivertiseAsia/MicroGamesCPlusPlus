@@ -5,15 +5,15 @@
 #include "cocos2d.h"
 #include "Ball.hpp"
 #include "GameButton.hpp"
+#include "GameScene.h"
 
 #define BALL_SPEED 5
 
 USING_NS_CC;
 
-class Taprace : public Node
+class Taprace : public GameScene
 {
 public:
-    static cocos2d::Scene* createScene(); //Create the scene which holds the root node.
     
     //Function members form the based class
     bool init() override;
@@ -21,16 +21,13 @@ public:
     void update(float dt) override;
     void onEnter() override;
     
-    // implement the "static create()" method manually
-    CREATE_FUNC(Taprace);
-    
     // Our game custom functions
     void startGame(float);
     void initTouchHandling();
     
     //Event handling
     static void onPress(Ref*, GameButton::Widget::TouchEventType);
-    
+	using GameScene::GameScene;
     
 private:
     Ball* _ball[4];
