@@ -19,6 +19,7 @@ public:
 	void endGame(int[]);
     
 protected:
+	void showReturnMenu(float);
 	int numberOfPlayers;
 	GameStatus gameStatus;
 };

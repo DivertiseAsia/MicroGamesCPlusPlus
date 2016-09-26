@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "Taprace.h"
 #include "Holdrace.h"
+#include "MainMenuScene.h"
 USING_NS_CC;
 
 template <class T>
@@ -63,7 +64,37 @@ void GameScene::endGame(int[])
 
 		// add the label as a child to this layer
 		this->addChild(label, 1);
+
+		this->scheduleOnce(schedule_selector(GameScene::showReturnMenu), 1.0f);
 	}
+}
+
+void GameScene::showReturnMenu(float dt) {
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "Press anywhere to go home");
+
+	// position the label on the center of the screen
+	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + label->getContentSize().height));
+
+	// add the label as a child to this layer
+	this->addChild(label, 1);
+
+
+	auto listener1 = EventListenerTouchOneByOne::create();
+
+	listener1->onTouchBegan = [](Touch* touch, Event* event) {
+		return true;
+	};
+
+	listener1->onTouchEnded = [=](Touch* touch, Event* event) {
+		Director::getInstance()->replaceScene(MainMenu::createScene());
+	};
+	
+	// Add listener
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
 }
 
 template Scene* GameScene::createScene<Taprace>(int);
