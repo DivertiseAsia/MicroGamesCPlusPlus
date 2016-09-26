@@ -8,6 +8,7 @@ USING_NS_CC;
 class GameScene : public cocos2d::Layer
 {
 public:
+	enum GameStatus { GAME_START, GAME_INPROGRESS, GAME_OVER };
 	GameScene(int numberOfPlayers);
 	template <class T> static Scene* createScene(int numberOfPlayers); //Create the scene which holds the root node.
     
@@ -15,10 +16,11 @@ public:
 	template <class T> static GameScene* create(int numberOfPlayers);
     // Our game custom functions
     void startGame(float);
-    
+	void endGame(int[]);
     
 protected:
 	int numberOfPlayers;
+	GameStatus gameStatus;
 };
 
 #endif // __GameScene_SCENE_H__

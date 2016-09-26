@@ -34,6 +34,16 @@ void GameButton::changeColor(Color4F color){
     this->loadTextureNormal(createSpriteFrame());
 }
 
+void GameButton::setPlayer(int player)
+{
+	_player = player;
+}
+
+int GameButton::getPlayer()
+{
+	return _player;
+}
+
 SpriteFrame* GameButton::createSpriteFrame() const{
     //Create renderTexture
     auto renderTexture = RenderTexture::create(_radius*2, _radius*2, cocos2d::Texture2D::PixelFormat::RGBA8888);

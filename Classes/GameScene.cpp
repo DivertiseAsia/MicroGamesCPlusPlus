@@ -22,6 +22,7 @@ Scene* GameScene::createScene(int numberOfPlayers)
 GameScene::GameScene(int numberOfPlayers)
 {
 	this->numberOfPlayers = numberOfPlayers;
+	this->gameStatus = GAME_START;
 }
 
 template <class T>
@@ -43,6 +44,26 @@ GameScene* GameScene::create(int numberOfPlayers) {
 
 void GameScene::startGame(float dt){
     
+}
+
+void GameScene::endGame(int[])
+{
+	if (gameStatus == GAME_INPROGRESS) {
+		log("game over");
+		gameStatus = GAME_OVER;
+
+		Vec2 origin = Director::getInstance()->getVisibleOrigin();
+		auto visibleSize = Director::getInstance()->getVisibleSize();
+
+		auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "GAMEOVER");
+
+		// position the label on the center of the screen
+		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+			origin.y + visibleSize.height - label->getContentSize().height));
+
+		// add the label as a child to this layer
+		this->addChild(label, 1);
+	}
 }
 
 template Scene* GameScene::createScene<Taprace>(int);

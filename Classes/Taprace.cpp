@@ -49,6 +49,8 @@ bool Taprace::init()
         origin, //2
         origin+screenSize}; //3
     auto colors = SHARED_COLOR_PLAYERS;
+
+	auto ballspeed = screenSize.height / TAPS_REQUIRED;
     
     
     // Create balls
@@ -56,15 +58,17 @@ bool Taprace::init()
         auto p = Vec2(screenCenter.x,screenSize.height);
         _ball[i] = Ball::create(colors.begin()[i]);
         _ball[i]->setPosition(p);
-        _ball[i]->setVelocity(Vec2(0,-1*BALL_SPEED));
+        _ball[i]->setVelocity(Vec2(0,-1*ballspeed));
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
         _button[i]->setPosition(buttonPos.begin()[i]);
         _button[i]->changeColor(colors.begin()[i]);
         _button[i]->setTag(i);  //Set the number to indicate button order.
-        _button[i]->addTouchEventListener(Taprace::onPress);
+        _button[i]->addTouchEventListener(CC_CALLBACK_2(Taprace::onPress,this));
         _button[i]->setBall(_ball[i]);
+		_button[i]->setPlayer(i);
+		_score[i] = 0;
         
         this->addChild(_button[i]);
     }
@@ -75,6 +79,7 @@ bool Taprace::init()
     this->setName("TapraceSceneRoot");
     this->initTouchHandling();
     this->scheduleUpdate();
+	this->startGame(0);
     
     return true;
 }
@@ -96,7 +101,7 @@ void Taprace::onEnter(){
 }
 
 void Taprace::startGame(float dt){
-    _ball[0]->setVelocity(Vec2(1,0));
+	gameStatus = GAME_INPROGRESS;
 }
 
 void Taprace::initTouchHandling(){
@@ -142,16 +147,23 @@ void Taprace::initTouchHandling(){
 }
 
 void Taprace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
+	if (gameStatus != GAME_INPROGRESS) {
+		return;
+	}
     switch (type)
     {
         case ui::Widget::TouchEventType::BEGAN:
-            log("touch begin");
             break;
         case ui::Widget::TouchEventType::ENDED:{
             auto button = static_cast<GameButton*>(sender);
-            log("clicked on button-%i", button->getTag());
             button->getBall()->moveNext();
+			_score[button->getPlayer()] ++;
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+			if (_score[button->getPlayer()] > TAPS_REQUIRED) {
+				log("player %i should win", button->getPlayer());
+				int winners[] = { button->getPlayer() };
+				endGame(winners);
+			}
             break;
         }
         default:

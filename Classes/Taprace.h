@@ -7,7 +7,7 @@
 #include "GameButton.hpp"
 #include "GameScene.h"
 
-#define BALL_SPEED 5
+#define TAPS_REQUIRED 30
 
 USING_NS_CC;
 
@@ -26,13 +26,13 @@ public:
     void initTouchHandling();
     
     //Event handling
-    static void onPress(Ref*, GameButton::Widget::TouchEventType);
+    void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
 	using GameScene::GameScene;
     
 private:
     Ball* _ball[4];
     GameButton* _button[4];
-    
+	int _score[4];
     DrawNode* _drawNode;
 };
 

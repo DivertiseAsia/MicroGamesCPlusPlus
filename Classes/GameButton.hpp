@@ -28,13 +28,13 @@ public:
     
     void changeColor(Color4F color);
     CC_SYNTHESIZE(Ball*, _ball, Ball);
-    
-    
-    
+
+	void setPlayer(int player);
+	int getPlayer();
 private:
     float _radius;
     Color4F _color;
-    
+	int _player;
     SpriteFrame* createSpriteFrame() const;
 };
 
