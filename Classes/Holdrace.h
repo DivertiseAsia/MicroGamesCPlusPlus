@@ -26,16 +26,22 @@ public:
     // Our game custom functions
     void startGame();
     void initTouchHandling();
+    void showWinner();
+    
     
     //Event handling
     void onPress(Ref*, GameButton::Widget::TouchEventType);
+    void onBallStopped();
     
 	using GameScene::GameScene;
 private:
+    bool _moved[4] = {false, false, false, false};
+    int _moveCount = 0;
     Ball* _ball[4];
     GameButton* _button[4];
-    
     DrawNode* _drawNode;
+    
+    Ball* getWinner();
 };
 
 #endif // __HOLDRACE_SCENE_H__

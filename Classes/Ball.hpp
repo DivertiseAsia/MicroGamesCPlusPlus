@@ -29,6 +29,8 @@ public:
     
     virtual bool init();
     
+    //TODO: Implement ball stop listener
+    void addStopListener();
     void moveNext();
     
     CC_SYNTHESIZE(Vec2, _velocity, Velocity); //create getter and setter
@@ -38,7 +40,7 @@ public:
 private:
     float _radius;
     Color4F _color;
-    
+    bool _moved = false;
 };
 
 #endif /* Ball_hpp */

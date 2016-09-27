@@ -55,10 +55,16 @@ bool Ball::init(){
     this->drawRect( rect.origin, rect.origin+rect.size, Color4F::RED); //For debugging propose
     this->setName("Ball");
     this->setAnchorPoint(Vec2(0.5,0.5));
+    
     return true;
 }
 
 void Ball::moveNext(){
+    if (_velocity.getLength() == 0 && _acceleration.getLength() == 0 &&_moved){
+        EventCustom event("ball_stop");
+        event.setUserData(this);
+        _eventDispatcher->dispatchEvent(&event);
+    }
     //Update velocity (by acceleration)
     _velocity += _acceleration;
     
@@ -78,6 +84,6 @@ void Ball::moveNext(){
     current += _velocity;
     this->setPosition(current);
     
-    //if (this->getTag()==1)
-    //    log("%i: My speed = %.0f", this->getTag(),_velocity.y);
+    if (_velocity.getLength() != 0)
+        _moved = true;
 }

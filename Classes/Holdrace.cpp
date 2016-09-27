@@ -74,6 +74,21 @@ bool Holdrace::init()
     //Debug Layer
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
     
+    
+    auto eventName = "ball_stop"; //***** You need this line or the listener will never get fired *****
+    _eventDispatcher->addCustomEventListener(eventName, [=](EventCustom* event){
+        auto ball = static_cast<Ball*>(event->getUserData());
+        auto ballID = ball->getTag();
+        log("ball-%i is stopped", ballID);
+        _moved[ballID] = true;
+        _moveCount++;
+        if (_moveCount == numberOfPlayers){
+            log("All players played");
+            this->showWinner();
+        }
+    });
+    
+    
     this->setName("HoldraceSceneRoot");
     this->initTouchHandling();
     this->scheduleUpdate();
@@ -89,7 +104,8 @@ void Holdrace::update(float dt){
     
     //ball->moveNext();
     for(int i=0;i<numberOfPlayers;i++){
-        _ball[i]->moveNext();
+        if (!_moved[i])
+            _ball[i]->moveNext();
     }
 }
 
@@ -101,6 +117,9 @@ void Holdrace::onEnter(){
 
 void Holdrace::startGame(){
     GameScene::startGame(4);
+    for(int i=0;i<4;i++)
+        _moved[i] = false;
+    _moveCount = 0;
 }
 
 void Holdrace::initTouchHandling(){
@@ -147,7 +166,7 @@ void Holdrace::initTouchHandling(){
 
 void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
     auto button = static_cast<GameButton*>(sender);
-    if (this->gameStatus!=GAME_INPROGRESS)return;
+    if (this->gameStatus!=GAME_INPROGRESS ||(button->getActionTag() == 10))return;
     switch (type)
     {
         case ui::Widget::TouchEventType::BEGAN:{
@@ -155,7 +174,7 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
             break;
         }
         case ui::Widget::TouchEventType::ENDED:{
-            log("clicked on button-%i", button->getTag());
+            button->setActionTag(10);
             button->getBall()->setAcceleration(Vec2(0,0));
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
             break;
@@ -163,4 +182,28 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
         default:
             break;
     }
+}
+
+void Holdrace::onBallStopped(){
+    log("ball stopped");
+}
+
+void Holdrace::showWinner(){
+    Ball* ball = this->getWinner();
+    std::ostringstream ss;
+    ss << ball->getTag();
+    std::string s(ss.str());
+    showText("Winner is "+s, 3.0f);
+}
+
+Ball* Holdrace::getWinner(){
+    float closest = Director::getInstance()->getVisibleSize().height;
+    Ball* winner = NULL;
+    for(int i=0;i<numberOfPlayers;i++){
+        if(_ball[i]->getPositionY() < closest){
+            closest = _ball[i]->getPositionY();
+            winner = _ball[i];
+        }
+    }
+    return winner;
 }
