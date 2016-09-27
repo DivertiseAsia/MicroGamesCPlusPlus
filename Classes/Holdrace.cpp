@@ -66,7 +66,7 @@ bool Holdrace::init()
         _button[i]->setPosition(buttonPos.begin()[i]);
         _button[i]->changeColor(colors.begin()[i]);
         _button[i]->setTag(i);  //Set the number to indicate button order.
-        _button[i]->addTouchEventListener(Holdrace::onPress);
+        _button[i]->addTouchEventListener(CC_CALLBACK_2(Holdrace::onPress, this));
         _button[i]->setBall(_ball[i]);
         this->addChild(_button[i]);
     }
@@ -147,6 +147,7 @@ void Holdrace::initTouchHandling(){
 
 void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
     auto button = static_cast<GameButton*>(sender);
+    if (this->gameStatus!=GAME_INPROGRESS)return;
     switch (type)
     {
         case ui::Widget::TouchEventType::BEGAN:{

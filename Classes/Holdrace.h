@@ -28,7 +28,7 @@ public:
     void initTouchHandling();
     
     //Event handling
-    static void onPress(Ref*, GameButton::Widget::TouchEventType);
+    void onPress(Ref*, GameButton::Widget::TouchEventType);
     
 	using GameScene::GameScene;
 private:
