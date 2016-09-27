@@ -78,6 +78,6 @@ void Ball::moveNext(){
     current += _velocity;
     this->setPosition(current);
     
-    if (this->getTag()==1)
-        log("%i: My speed = %.0f", this->getTag(),_velocity.y);
+    //if (this->getTag()==1)
+    //    log("%i: My speed = %.0f", this->getTag(),_velocity.y);
 }

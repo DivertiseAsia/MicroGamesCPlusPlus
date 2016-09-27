@@ -17,11 +17,14 @@ public:
     // Our game custom functions
     void startGame(float);
 	void endGame(int[]);
+    void updateCounter(float);
+    void showText(std::string, float);
     
 protected:
 	void showReturnMenu(float);
 	int numberOfPlayers;
 	GameStatus gameStatus;
+    int _counter = 0;
 };
 
 #endif // __GameScene_SCENE_H__

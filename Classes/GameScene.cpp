@@ -42,9 +42,29 @@ GameScene* GameScene::create(int numberOfPlayers) {
 	}
 }
 
+//Reduce countdown Counter
+void GameScene::updateCounter(float dt){
+    _counter -= dt;
+    if (_counter<=0){
+        this->unschedule(schedule_selector(GameScene::updateCounter));
+        _counter = 0;
+        gameStatus = GAME_INPROGRESS;
+        log("Game started!");
+        showText("Go!", 1.0f);
+    } else{
+        std::ostringstream ss;
+        ss << _counter;
+        std::string s(ss.str());
+        showText(s, 1.0f);
+    }
+}
 
+//Start game with the given time dt(seconds)
 void GameScene::startGame(float dt){
-    
+    if (gameStatus == GAME_START){
+        _counter = dt;
+        this->schedule(schedule_selector(GameScene::updateCounter),1.0f);
+    }
 }
 
 void GameScene::endGame(int[])
@@ -95,6 +115,23 @@ void GameScene::showReturnMenu(float dt) {
 	
 	// Add listener
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
+}
+
+void GameScene::showText(std::string s, float dt){
+    log("showText %s", s.c_str());
+    auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, s);
+    label->setBMFontSize(64);
+    
+    // position the label on the center of the screen
+    Size winSize = Director::getInstance()->getWinSize();
+    auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
+    label->setPosition(screenCenter);
+    
+    // add the label as a child to this layer
+    this->addChild(label, 1);
+    
+    this->scheduleOnce([this, label, dt](float tp){ this->removeChild(label);}, dt, "remove"+s);
+
 }
 
 template Scene* GameScene::createScene<Taprace>(int);

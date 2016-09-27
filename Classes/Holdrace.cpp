@@ -96,11 +96,11 @@ void Holdrace::update(float dt){
 //This method will be called on the Node entered.
 void Holdrace::onEnter(){
     Node::onEnter();
-    
+    startGame();
 }
 
-void Holdrace::startGame(float dt){
-    //_ball[0]->setVelocity(Vec2(1,0));
+void Holdrace::startGame(){
+    GameScene::startGame(4);
 }
 
 void Holdrace::initTouchHandling(){
