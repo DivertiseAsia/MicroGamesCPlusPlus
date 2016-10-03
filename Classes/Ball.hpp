@@ -29,8 +29,9 @@ public:
     
     virtual bool init();
     
-    //TODO: Implement ball stop listener
+    void addMoveListener();
     void addStopListener();
+    
     void moveNext();
     
     CC_SYNTHESIZE(Vec2, _velocity, Velocity); //create getter and setter

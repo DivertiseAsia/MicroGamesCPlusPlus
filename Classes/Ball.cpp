@@ -84,6 +84,10 @@ void Ball::moveNext(){
     current += _velocity;
     this->setPosition(current);
     
+    EventCustom event("ball_move");
+    event.setUserData(this);
+    _eventDispatcher->dispatchEvent(&event);
+    
     if (_velocity.getLength() != 0)
         _moved = true;
 }

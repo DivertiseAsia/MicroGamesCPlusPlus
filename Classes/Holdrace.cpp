@@ -75,6 +75,7 @@ bool Holdrace::init()
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
     
     
+    //Listen to ball stop event
     auto eventName = "ball_stop"; //***** You need this line or the listener will never get fired *****
     _eventDispatcher->addCustomEventListener(eventName, [=](EventCustom* event){
         auto ball = static_cast<Ball*>(event->getUserData());
@@ -86,6 +87,26 @@ bool Holdrace::init()
             log("All players played");
             this->showWinner();
         }
+    });
+    
+    //Listen to ball_move event
+    auto eventNameBallMove = "ball_move";
+    _eventDispatcher->addCustomEventListener(eventNameBallMove, [=](EventCustom* event){
+        auto ball = static_cast<Ball*>(event->getUserData());
+        //log("ball-%i is moving", ballID);
+        auto ballID = ball->getTag();
+        if (ball->getPositionY() < 0){
+            ball->setPositionY(-DEFAULT_BALL_RADIUS);
+            ball->setVelocity(Vec2::ZERO);
+            ball->setAcceleration(Vec2::ZERO);
+            _moved[ballID] = true;
+            _moveCount++;
+            if (_moveCount == numberOfPlayers){
+                log("All players played");
+                this->showWinner();
+            }
+        }
+        
     });
     
     
@@ -200,7 +221,7 @@ Ball* Holdrace::getWinner(){
     float closest = Director::getInstance()->getVisibleSize().height;
     Ball* winner = NULL;
     for(int i=0;i<numberOfPlayers;i++){
-        if(_ball[i]->getPositionY() < closest){
+        if(_ball[i]->getPositionY() < closest && _ball[i]->getPositionY() >= 0){
             closest = _ball[i]->getPositionY();
             winner = _ball[i];
         }
