@@ -210,20 +210,17 @@ void Holdrace::onBallStopped(){
 }
 
 void Holdrace::showWinner(){
-    Ball* ball = this->getWinner();
-    std::ostringstream ss;
-    ss << ball->getTag();
-    std::string s(ss.str());
-    showText("Winner is "+s, 3.0f);
+	int winners[] = { this->getWinner() };
+	this->endGame(winners);
 }
 
-Ball* Holdrace::getWinner(){
+int Holdrace::getWinner(){
     float closest = Director::getInstance()->getVisibleSize().height;
-    Ball* winner = NULL;
+    int winner = -1;
     for(int i=0;i<numberOfPlayers;i++){
         if(_ball[i]->getPositionY() < closest && _ball[i]->getPositionY() >= 0){
             closest = _ball[i]->getPositionY();
-            winner = _ball[i];
+            winner = i;
         }
     }
     return winner;

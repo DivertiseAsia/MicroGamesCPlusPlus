@@ -2,6 +2,7 @@
 #include "Taprace.h"
 #include "Holdrace.h"
 #include "MainMenuScene.h"
+#include "Shared.h"
 USING_NS_CC;
 
 template <class T>
@@ -67,7 +68,7 @@ void GameScene::startGame(float dt){
     }
 }
 
-void GameScene::endGame(int[])
+void GameScene::endGame(int * winners)
 {
 	if (gameStatus == GAME_INPROGRESS) {
 		log("game over");
@@ -76,7 +77,7 @@ void GameScene::endGame(int[])
 		Vec2 origin = Director::getInstance()->getVisibleOrigin();
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 
-		auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "GAMEOVER");
+		auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "WINNER");
 
 		// position the label on the center of the screen
 		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
@@ -84,6 +85,19 @@ void GameScene::endGame(int[])
 
 		// add the label as a child to this layer
 		this->addChild(label, 1);
+
+		//draw winner circles
+		int totalWinners = sizeof(winners) / sizeof(winners[0]);
+		auto colors = SHARED_COLOR_PLAYERS;
+		for (int i = 0; i < totalWinners; i++) {
+			auto dNode = DrawNode::create();
+			int radius = visibleSize.width / 6;
+			dNode->setContentSize(Size(radius * 2, radius * 2));
+			dNode->drawSolidCircle(Vec2(radius, radius), radius, 3.1415968f, 360, colors.begin()[winners[i]]);
+			dNode->setPosition(Vec2(origin.x + visibleSize.width / 2 - dNode->getContentSize().width / 2,
+				origin.y + visibleSize.height / 2 - dNode->getContentSize().height / 2));
+			this->addChild(dNode);
+		}
 
 		this->scheduleOnce(schedule_selector(GameScene::showReturnMenu), 1.0f);
 	}

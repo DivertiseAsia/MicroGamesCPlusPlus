@@ -41,7 +41,7 @@ private:
     GameButton* _button[4];
     DrawNode* _drawNode;
     
-    Ball* getWinner();
+    int getWinner();
 };
 
 #endif // __HOLDRACE_SCENE_H__
