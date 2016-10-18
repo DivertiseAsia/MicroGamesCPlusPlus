@@ -13,6 +13,8 @@
 #define SHARED_PLAYER3 2
 #define SHARED_PLAYER4 3
 
+#define SHARED_MAX_PLAYERS 4
+
 #define SHARED_GAME_NAME "MicroGames"
 
 

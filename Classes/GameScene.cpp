@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "Taprace.h"
 #include "Holdrace.h"
+#include "Pinball.h"
 #include "MainMenuScene.h"
 #include "Shared.h"
 USING_NS_CC;
@@ -150,3 +151,4 @@ void GameScene::showText(std::string s, float dt){
 
 template Scene* GameScene::createScene<Taprace>(int);
 template Scene* GameScene::createScene<Holdrace>(int);
+template Scene* GameScene::createScene<Pinball>(int);
