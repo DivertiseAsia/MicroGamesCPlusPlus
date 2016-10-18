@@ -33,10 +33,13 @@ public:
 	using GameScene::GameScene;
     
 private:
+	void updateScore();
     Ball* _ball;
     GameButton* _button[4];
 	int _score[2];
     DrawNode* _drawNode;
+	Label* scoreTop;
+	Label* scoreBottom;
 };
 
 #endif // __PINBALL_SCENE_H__
