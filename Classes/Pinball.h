@@ -36,6 +36,7 @@ private:
 	void updateScore();
     Ball* _ball;
     GameButton* _button[4];
+	DrawNode* _paddle[4];
 	int _score[2];
     DrawNode* _drawNode;
 	Label* scoreTop;

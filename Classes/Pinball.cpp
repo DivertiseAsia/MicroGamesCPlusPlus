@@ -100,16 +100,14 @@ bool Pinball::init()
 		_button[i] = GameButton::create();
 		if (numberOfPlayers < 3 && i == 2) {
 			_button[i]->changeColor(colors.begin()[SHARED_PLAYER2]);
-			_button[i]->setPlayer(SHARED_PLAYER2);
 		}
 		else if (numberOfPlayers < 4 && i == 3) {
 			_button[i]->changeColor(colors.begin()[SHARED_PLAYER1]);
-			_button[i]->setPlayer(SHARED_PLAYER1);
 		}
 		else {
 			_button[i]->changeColor(colors.begin()[i]);
-			_button[i]->setPlayer(i);
 		}
+		_button[i]->setPlayer(i);
 		_button[i]->setPosition(buttonPos.begin()[i]);
 		_button[i]->setTag(i);  //Set the number to indicate button order.
 		_button[i]->addTouchEventListener(CC_CALLBACK_2(Pinball::onPress, this));
@@ -118,6 +116,24 @@ bool Pinball::init()
 		body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
 		body->setDynamic(false);
 		_button[i]->addComponent(body);
+
+		//paddle
+		_paddle[i] = DrawNode::create();
+		_paddle[i]->setContentSize(cocos2d::Size(20, screenSize.width/3));
+		_paddle[i]->drawSolidRect(Vec2(0, 0), Vec2(20, screenSize.width/3), Color4F::BLUE);
+		auto paddlebody = PhysicsBody::createBox(Size(20, screenSize.width/3), PhysicsMaterial(1, .99f, .5f));
+		paddlebody->setAngularVelocity(5.0f);
+		paddlebody->setAngularVelocityLimit(10);
+		paddlebody->setVelocityLimit(0);
+		paddlebody->setGravityEnable(false);
+		_paddle[i]->addComponent(paddlebody);
+		_paddle[i]->setPosition(buttonPos.begin()[i]);
+		this->addChild(_paddle[i]);
+		
+
+		auto joint = PhysicsJointPin::construct(body, paddlebody, buttonPos.begin()[i]);
+		joint->setCollisionEnable(false);
+
 		this->addChild(_button[i]);
 	}
 
@@ -231,28 +247,21 @@ void Pinball::initTouchHandling() {
 
 	// Add listener
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
-
 }
 
 void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
+	auto button = static_cast<GameButton*>(sender);
 	if (gameStatus != GAME_INPROGRESS) {
 		return;
 	}
 	switch (type)
 	{
 	case ui::Widget::TouchEventType::BEGAN:
+		_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-5);
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
-		/*auto button = static_cast<GameButton*>(sender);
-		button->getBall()->moveNext();
-		_score[button->getPlayer()] ++;
-		
-		if (_score[button->getPlayer()] > TAPS_REQUIRED) {
-			log("player %i should win", button->getPlayer());
-			int winners[] = { button->getPlayer() };
-			endGame(winners);
-		}*/
+		_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(5);
 		break;
 	}
 	default:
