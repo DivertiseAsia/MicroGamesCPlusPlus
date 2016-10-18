@@ -161,8 +161,7 @@ void Taprace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
 			if (_score[button->getPlayer()] > TAPS_REQUIRED) {
 				log("player %i should win", button->getPlayer());
-				int winners[] = { button->getPlayer() };
-				endGame(winners);
+				endGame(button->getPlayer());
 			}
             break;
         }

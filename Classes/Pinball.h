@@ -7,10 +7,11 @@
 #include "GameButton.hpp"
 #include "GameScene.h"
 
-#define BALL_SPEED 30
+#define POINTS_TO_WIN 3
 #define TEAM_TOP 0
 #define TEAM_BOT 1
-
+#define TEAM_TOP_PLAYERS {SHARED_PLAYER1, SHARED_PLAYER4}
+#define TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
 USING_NS_CC;
 
 class Pinball : public GameScene

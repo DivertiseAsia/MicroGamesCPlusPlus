@@ -53,15 +53,33 @@ bool Pinball::init()
 
 	_score[TEAM_TOP] = 0;
 	_score[TEAM_BOT] = 0;
+	//create the walls
+	auto drawNode = DrawNode::create();
+	drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
+	drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
+	auto body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1,.95f,1));
+	body->setDynamic(false);
+	drawNode->addComponent(body);
+	drawNode->setPosition(Vec2(0, 0));
+	this->addChild(drawNode);
+	drawNode = DrawNode::create();
+	drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
+	drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
+	body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1, .95f, 1));
+	body->setDynamic(false);
+	drawNode->addComponent(body);
+	drawNode->setPosition(Vec2(screenSize.width - 3, 0));
+	this->addChild(drawNode);
 
 	//create the ball
 	auto p = Vec2(screenCenter.x, screenCenter.y);
 	_ball = Ball::create(colors.begin()[0]);
 	_ball->setPosition(p);
-	_ball->setVelocity(Vec2(0, -1 * BALL_SPEED));
-	this->addChild(_ball);
 
-	log("made the ball");
+	body = PhysicsBody::createCircle(DEFAULT_BALL_RADIUS, PhysicsMaterial());
+	body->setGravityEnable(true);
+	_ball->addComponent(body);
+	this->addChild(_ball);
 
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
@@ -82,6 +100,10 @@ bool Pinball::init()
 		_button[i]->setTag(i);  //Set the number to indicate button order.
 		_button[i]->addTouchEventListener(CC_CALLBACK_2(Pinball::onPress, this));
 
+
+		body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
+		body->setDynamic(false);
+		_button[i]->addComponent(body);
 		this->addChild(_button[i]);
 	}
 
@@ -101,15 +123,54 @@ void Pinball::draw(Renderer* renderer, const Mat4& transform, bool transformUpda
 }
 
 void Pinball::update(float dt) {
+	float gameHeight = Director::getInstance()->getVisibleSize().height;
+	float ballY = _ball->getPositionY();
+	if (ballY < gameHeight/2) {
+		this->getScene()->getPhysicsWorld()->setGravity(Vec2(0.0f, -98.0f));
+	}
+	else {
+		this->getScene()->getPhysicsWorld()->setGravity(Vec2(0.0f, 98.0f));
+	}
 
-	//ball->moveNext();
+	if (ballY > gameHeight || ballY < 0) {
+		//give score
+		if (ballY > gameHeight) {
+			_score[TEAM_BOT]++;
+			_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, gameHeight / 2 - 2));
+			if (_score[TEAM_BOT] >= POINTS_TO_WIN) {
+				if (numberOfPlayers > 2)
+				{
+					int winners[] = TEAM_BOT_PLAYERS;
+					endGame(winners, 2);
+				}
+				else {
+					endGame(SHARED_PLAYER2);
+				}
+			}
+		}
+		else {
+			_score[TEAM_TOP]++;
+			_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, gameHeight / 2 + 2));
+			if (_score[TEAM_TOP] >= POINTS_TO_WIN) {
+				if (numberOfPlayers > 3)
+				{
+					int winners[] = TEAM_TOP_PLAYERS;
+					endGame(winners,2);
+				}
+				else {
+					endGame(SHARED_PLAYER1);
+				}
+			}
+		}
+		//reset ball velocity
+		_ball->getPhysicsBody()->setVelocity(Vec2(0,0));
+	}
+	
 }
 
 //This method will be called on the Node entered.
 void Pinball::onEnter() {
 	Node::onEnter();
-	//schedule(SEL_SCHEDULE(Pinball::startGame), 1000);
-	//this->scheduleOnce(schedule_selector(Pinball::startGame), 1.0f);
 }
 
 void Pinball::startGame(float dt) {
@@ -167,10 +228,11 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	case ui::Widget::TouchEventType::BEGAN:
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
+		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
 		/*auto button = static_cast<GameButton*>(sender);
 		button->getBall()->moveNext();
 		_score[button->getPlayer()] ++;
-		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+		
 		if (_score[button->getPlayer()] > TAPS_REQUIRED) {
 			log("player %i should win", button->getPlayer());
 			int winners[] = { button->getPlayer() };

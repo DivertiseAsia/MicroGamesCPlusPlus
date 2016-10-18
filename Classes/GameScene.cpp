@@ -22,6 +22,22 @@ Scene* GameScene::createScene(int numberOfPlayers)
     return scene;
 }
 
+template <class T>
+Scene* GameScene::createSceneWithPhysics(int numberOfPlayers)
+{
+	// 'scene' is an autorelease object
+	auto scene = Scene::createWithPhysics();
+
+	// 'layer' is an autorelease object
+	auto layer = GameScene::create<T>(numberOfPlayers);
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
+}
+
 GameScene::GameScene(int numberOfPlayers)
 {
 	this->numberOfPlayers = numberOfPlayers;
@@ -68,8 +84,11 @@ void GameScene::startGame(float dt){
         this->schedule(schedule_selector(GameScene::updateCounter),1.0f);
     }
 }
-
-void GameScene::endGame(int * winners)
+void GameScene::endGame(int winner) {
+	int winners[] = { winner };
+	endGame(winners, 1);
+}
+void GameScene::endGame(int winners[], int totalWinners)
 {
 	if (gameStatus == GAME_INPROGRESS) {
 		log("game over");
@@ -88,15 +107,23 @@ void GameScene::endGame(int * winners)
 		this->addChild(label, 1);
 
 		//draw winner circles
-		int totalWinners = sizeof(winners) / sizeof(winners[0]);
+		log("%d winenrs",totalWinners);
 		auto colors = SHARED_COLOR_PLAYERS;
 		for (int i = 0; i < totalWinners; i++) {
+			
 			auto dNode = DrawNode::create();
 			int radius = visibleSize.width / 6;
 			dNode->setContentSize(Size(radius * 2, radius * 2));
 			dNode->drawSolidCircle(Vec2(radius, radius), radius, 3.1415968f, 360, colors.begin()[winners[i]]);
-			dNode->setPosition(Vec2(origin.x + visibleSize.width / 2 - dNode->getContentSize().width / 2,
-				origin.y + visibleSize.height / 2 - dNode->getContentSize().height / 2));
+			if (totalWinners == 1) {
+				dNode->setPosition(Vec2(origin.x + visibleSize.width / 2 - dNode->getContentSize().width / 2,
+					origin.y + visibleSize.height / 2 - dNode->getContentSize().height / 2));
+			}
+			else {
+				dNode->setPosition(Vec2(origin.x + visibleSize.width / 2 - dNode->getContentSize().width / 2 - radius*2/totalWinners + radius*2*i,
+					origin.y + visibleSize.height / 2 - dNode->getContentSize().height / 2));
+			}
+			
 			this->addChild(dNode);
 		}
 
@@ -151,4 +178,4 @@ void GameScene::showText(std::string s, float dt){
 
 template Scene* GameScene::createScene<Taprace>(int);
 template Scene* GameScene::createScene<Holdrace>(int);
-template Scene* GameScene::createScene<Pinball>(int);
+template Scene* GameScene::createSceneWithPhysics<Pinball>(int);

@@ -210,8 +210,7 @@ void Holdrace::onBallStopped(){
 }
 
 void Holdrace::showWinner(){
-	int winners[] = { this->getWinner() };
-	this->endGame(winners);
+	this->endGame(this->getWinner());
 }
 
 int Holdrace::getWinner(){
