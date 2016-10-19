@@ -20,6 +20,8 @@ USING_NS_CC;
 #define TEAM_TOP 0
 #define TEAM_BOT 1
 #define BALL_RESET_OFFSET_Y	3
+#define PADDLE_DROP 4
+#define PADDLE_DRAG 5
 
 class Airhockey : public GameScene
 {
@@ -37,6 +39,7 @@ public:
     
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
+    void onDrag();
     using GameScene::GameScene;
     
 private:
@@ -49,8 +52,6 @@ private:
     DrawNode* _drawNode;
     Label* scoreTop;
     Label* scoreBottom;
-    int _remainTime;
-    
 };
 
 #endif /* Airhockey_hpp */

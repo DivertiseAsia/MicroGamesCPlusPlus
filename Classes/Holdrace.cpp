@@ -102,7 +102,7 @@ bool Holdrace::init()
     
     
     this->setName("HoldraceSceneRoot");
-    this->initTouchHandling();
+    //this->initTouchHandling();
     this->scheduleUpdate();
     
     return true;
@@ -140,6 +140,7 @@ void Holdrace::initTouchHandling(){
     // trigger when you push down
     listener1->onTouchBegan = [](Touch* touch, Event* event){
         
+        log("TOUCH!! begin");
         
         auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
         
@@ -156,7 +157,7 @@ void Holdrace::initTouchHandling(){
         }
         return false;
         //return true; // if you are consuming it
-        log("TOUCH!!");
+        
         
     };
     
@@ -179,6 +180,7 @@ void Holdrace::initTouchHandling(){
 void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
     auto button = static_cast<GameButton*>(sender);
     if (this->gameStatus!=GAME_INPROGRESS ||(button->getActionTag() == 10))return;
+    log("onPress->->");
     switch (type)
     {
         case ui::Widget::TouchEventType::BEGAN:{

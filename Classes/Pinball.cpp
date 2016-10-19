@@ -142,8 +142,6 @@ bool Pinball::init()
 		_paddle[i]->setRotation(startAngle);
 		this->addChild(_paddle[i]);
 
-
-
 		this->addChild(_button[i]);
 	}
 

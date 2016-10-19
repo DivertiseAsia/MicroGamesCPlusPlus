@@ -59,8 +59,11 @@
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
+		9606DBD01DB73FCF007BC8D2 /* Pinball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9606DBCE1DB73FCF007BC8D2 /* Pinball.cpp */; };
 		963931DE1D8FED9C00B739F0 /* GameButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 963931DC1D8FED9C00B739F0 /* GameButton.cpp */; };
 		969DA58D1D97B61A00315F6D /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 969DA58B1D97B61A00315F6D /* GameScene.cpp */; };
+		96A455841DB749CB00A377C7 /* Airhockey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96A455821DB749CB00A377C7 /* Airhockey.cpp */; };
+		96A455881DB75F9C00A377C7 /* Shared.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96A455871DB75F9C00A377C7 /* Shared.cpp */; };
 		96C667B91D96733D0091F8C8 /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96C667B71D96733D0091F8C8 /* SoundManager.cpp */; };
 		96C667BB1D9673990091F8C8 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 96C667BA1D9673990091F8C8 /* sounds */; };
 		96C667BD1D967A160091F8C8 /* Taprace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96C667BC1D967A160091F8C8 /* Taprace.cpp */; };
@@ -172,10 +175,15 @@
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		9606DBCE1DB73FCF007BC8D2 /* Pinball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pinball.cpp; sourceTree = "<group>"; };
+		9606DBCF1DB73FCF007BC8D2 /* Pinball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pinball.h; sourceTree = "<group>"; };
 		963931DC1D8FED9C00B739F0 /* GameButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameButton.cpp; sourceTree = "<group>"; };
 		963931DD1D8FED9C00B739F0 /* GameButton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameButton.hpp; sourceTree = "<group>"; };
 		969DA58B1D97B61A00315F6D /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
 		969DA58C1D97B61A00315F6D /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		96A455821DB749CB00A377C7 /* Airhockey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Airhockey.cpp; sourceTree = "<group>"; };
+		96A455831DB749CB00A377C7 /* Airhockey.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Airhockey.hpp; sourceTree = "<group>"; };
+		96A455871DB75F9C00A377C7 /* Shared.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shared.cpp; sourceTree = "<group>"; };
 		96C667B61D96733D0091F8C8 /* Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shared.h; sourceTree = "<group>"; };
 		96C667B71D96733D0091F8C8 /* SoundManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundManager.cpp; sourceTree = "<group>"; };
 		96C667B81D96733D0091F8C8 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
@@ -344,6 +352,9 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				96A455871DB75F9C00A377C7 /* Shared.cpp */,
+				9606DBCE1DB73FCF007BC8D2 /* Pinball.cpp */,
+				9606DBCF1DB73FCF007BC8D2 /* Pinball.h */,
 				969DA58B1D97B61A00315F6D /* GameScene.cpp */,
 				969DA58C1D97B61A00315F6D /* GameScene.h */,
 				96C667B61D96733D0091F8C8 /* Shared.h */,
@@ -368,6 +379,8 @@
 				96E16D2B1D8A7CFF00D732A8 /* Ball.hpp */,
 				963931DC1D8FED9C00B739F0 /* GameButton.cpp */,
 				963931DD1D8FED9C00B739F0 /* GameButton.hpp */,
+				96A455821DB749CB00A377C7 /* Airhockey.cpp */,
+				96A455831DB749CB00A377C7 /* Airhockey.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -583,8 +596,11 @@
 				96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */,
 				963931DE1D8FED9C00B739F0 /* GameButton.cpp in Sources */,
 				96C667BD1D967A160091F8C8 /* Taprace.cpp in Sources */,
+				96A455881DB75F9C00A377C7 /* Shared.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				96A455841DB749CB00A377C7 /* Airhockey.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				9606DBD01DB73FCF007BC8D2 /* Pinball.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

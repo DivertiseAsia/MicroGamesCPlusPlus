@@ -62,19 +62,13 @@ bool Airhockey::init()
     auto drawNode = DrawNode::create();
     drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
     drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
-    auto body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1,.95f,1));
-    body->setDynamic(false);
-    drawNode->addComponent(body);
+    
     drawNode->setPosition(Vec2(0, 0));
     this->addChild(drawNode);
     drawNode = DrawNode::create();
     drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
     drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
-    body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1, .95f, 1));
-    //body->setCategoryBitmask(CAT_MASK_STAT);
-    //body->setCollisionBitmask(CAT_MASK_STAT);
-    body->setDynamic(false);
-    drawNode->addComponent(body);
+    
     this->addChild(drawNode);
     
     //create the ball
@@ -86,15 +80,10 @@ bool Airhockey::init()
     _ball = Ball::create(colors.begin()[0]);
     _ball->setPosition(p);
     
-    body = PhysicsBody::createCircle(DEFAULT_BALL_RADIUS, PhysicsMaterial());
-    body->setGravityEnable(true);
-    //body->setCategoryBitmask(CAT_MASK_BALL);
-    //body->setCollisionBitmask(CAT_MASK_PADDLE);
-    _ball->addComponent(body);
     this->addChild(_ball);
     
     //create the controls and paddles
-    for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
+    for (int i = 0; i < numberOfPlayers; i++) {
         _button[i] = GameButton::create();
         if (numberOfPlayers < 3 && i == SHARED_PLAYER3) {
             _button[i]->changeColor(colors.begin()[SHARED_PLAYER2]);
@@ -108,25 +97,11 @@ bool Airhockey::init()
         _button[i]->setPlayer(i);
         _button[i]->setPosition(buttonPos.begin()[i]);
         _button[i]->setTag(i);  //Set the number to indicate button order.
+        _button[i]->setActionTag(PADDLE_DROP);
         _button[i]->addTouchEventListener(CC_CALLBACK_2(Airhockey::onPress, this));
         
-        
-        body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
-        //body->setCategoryBitmask(CAT_MASK_STAT);
-        //body->setCollisionBitmask(CAT_MASK_STAT);
-        body->setDynamic(false);
-        _button[i]->addComponent(body);
-        
-        
-        int yfix = 1;
-        int xfix = 1;
-        
-        if (buttonPos.begin()[i].x > screenCenter.x) {
-            xfix = -1;
-        }
-        if (buttonPos.begin()[i].y > screenCenter.y) {
-            yfix = -1;
-        }
+        //setSwallow to 'false' to pass touch event to gamescene
+        _button[i]->setSwallowTouches(false);
         
         this->addChild(_button[i]);
     }
@@ -146,22 +121,90 @@ void Airhockey::updateScore(){
     log("Update score--");
 }
 
-void Airhockey::initTouchHandling(){
-    
-}
 
 void Airhockey::update(float dt){
     
 }
 
-void Airhockey::onPress(cocos2d::Ref* r, GameButton::Widget::TouchEventType t){
+void Airhockey::onPress(cocos2d::Ref* sender, GameButton::Widget::TouchEventType type){
+    auto button = static_cast<GameButton*>(sender);
+    if (this->gameStatus!=GAME_INPROGRESS ||(button->getActionTag() == 10))return;
+    
+    switch (type)
+    {
+        case ui::Widget::TouchEventType::BEGAN:{
+            //button->getBall()->setAcceleration(Vec2(0,-BALL_ACCELERATION));
+            button->setActionTag(PADDLE_DRAG);
+            break;
+        }
+        case ui::Widget::TouchEventType::ENDED:{
+            if (button->getActionTag() != 5) { break; }//was never primed properly eg pressed before game start
+            button->setActionTag(PADDLE_DROP);
+            
+            //SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+            
+            break;
+        }
+        default:
+            break;
+    }
+}
+void Airhockey::initTouchHandling(){
+    auto listener1 = EventListenerTouchOneByOne::create();
+    
+    // trigger when you push down
+    listener1->onTouchBegan = [](Touch* touch, Event* event){
+        
+        auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
+        
+        Vector<Node *> children = parentNode->getChildren();
+        Point touchPosition = parentNode->convertTouchToNodeSpace(touch);
+        for (auto iter = children.rbegin(); iter != children.rend(); ++iter) {
+            GameButton* childNode = static_cast<GameButton*>(*iter);
+            if (childNode->getBoundingBox().containsPoint(touchPosition)) {
+                //childNode is the touched Node
+                log(">>%s",childNode->getName().c_str());
+                childNode->setTouch(touch);
+            }
+        }
+        
+        return true;  //Return 'true' to enable onTouchMoved event
+    };
+
+    
+    
+    // trigger when moving touch
+    listener1->onTouchMoved = [this](Touch* touch, Event* event){
+        for(int i=0;i<this->numberOfPlayers;i++){
+            auto b = this->_button[i];
+            if (b->getTouch() != NULL && b->getTouch() == touch){
+                auto tap = touch->getLocation();
+                b->setPosition(tap);
+            }
+        }
+        
+    };
+    
+    listener1->onTouchEnded = [this](Touch* touch, Event* event){
+        for(int i=0;i<this->numberOfPlayers;i++){
+            auto b = this->_button[i];
+            if (b->getTouch() != NULL && b->getTouch() == touch){
+                b->setTouch(NULL);
+            }
+        }
+        
+    };
+    
+    // Add listener
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
     
 }
 
 void Airhockey::onEnter(){
-    
+    Node::onEnter();  //If you forgot this touch won't work.
+    //startGame();
 }
 
 void Airhockey::startGame(float s){
-    
+    GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
