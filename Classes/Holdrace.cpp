@@ -43,28 +43,19 @@ bool Holdrace::init()
     _drawNode = DrawNode::create(10);    //Default line width
     _drawNode->drawLine(Vec2(screenCenter.x,0), Vec2(screenCenter.x,winSize.height), Color4F::GRAY);
     this->addChild(_drawNode);
-    
-    //Position should be based on visibleOrigin and visibleSize properties.
-    auto buttonPos = {
-        Vec2(origin.x,origin.y+screenSize.height),  //0
-        Vec2(origin.x+screenSize.width, origin.y),  //1
-        origin, //2
-        origin+screenSize}; //3
-    auto colors = SHARED_COLOR_PLAYERS;
-    
-    
+
     // Create balls and buttons
     for(int i=0;i<numberOfPlayers;i++){
         auto p = Vec2(screenCenter.x,screenSize.height);
-        _ball[i] = Ball::create(colors.begin()[i]);
+        _ball[i] = Ball::create(Shared::instance()->getPlayerColor(i));
         _ball[i]->setPosition(p);
         _ball[i]->setFricition(Vec2(0,BALL_FRICTION));
         _ball[i]->setTag(i);
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
-        _button[i]->setPosition(buttonPos.begin()[i]);
-        _button[i]->changeColor(colors.begin()[i]);
+        _button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
+        _button[i]->changeColor(Shared::instance()->getPlayerColor(i));
         _button[i]->setTag(i);  //Set the number to indicate button order.
         _button[i]->addTouchEventListener(CC_CALLBACK_2(Holdrace::onPress, this));
         _button[i]->setBall(_ball[i]);

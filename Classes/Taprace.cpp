@@ -43,11 +43,7 @@ bool Taprace::init()
     this->addChild(_drawNode);
     
     //Position should be based on visibleOrigin and visibleSize properties.
-    auto buttonPos = {
-        Vec2(origin.x,origin.y+screenSize.height),  //0
-        Vec2(origin.x+screenSize.width, origin.y),  //1
-        origin, //2
-        origin+screenSize}; //3
+	
     auto colors = SHARED_COLOR_PLAYERS;
 
 	auto ballspeed = screenSize.height / TAPS_REQUIRED;
@@ -62,8 +58,8 @@ bool Taprace::init()
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
-        _button[i]->setPosition(buttonPos.begin()[i]);
-        _button[i]->changeColor(colors.begin()[i]);
+        _button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
+        _button[i]->changeColor(Shared::instance()->getPlayerColor(i));
         _button[i]->setTag(i);  //Set the number to indicate button order.
         _button[i]->addTouchEventListener(CC_CALLBACK_2(Taprace::onPress,this));
         _button[i]->setBall(_ball[i]);
