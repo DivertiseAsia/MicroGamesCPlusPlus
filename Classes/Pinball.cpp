@@ -26,11 +26,7 @@ bool Pinball::init()
 	}
 
 	//http://www.cocos2d-x.org/wiki/Multi_resolution_support
-
-	//auto visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	auto screenSize = Director::getInstance()->getVisibleSize();
-
 
 	Size winSize = Director::getInstance()->getWinSize();
 	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
@@ -39,15 +35,6 @@ bool Pinball::init()
 	_drawNode = DrawNode::create(10);    //Default line width
 	_drawNode->drawLine(Vec2(0, screenCenter.y), Vec2(winSize.width, screenCenter.y), Color4F::GRAY);
 	this->addChild(_drawNode);
-
-	//Position should be based on visibleOrigin and visibleSize properties.
-	auto buttonPos = {
-		Vec2(origin.x,origin.y + screenSize.height),  //0
-		Vec2(origin.x + screenSize.width, origin.y),  //1
-		origin, //2
-		origin + screenSize }; //3
-	auto colors = SHARED_COLOR_PLAYERS;
-
 
 	_score[TEAM_TOP] = 0;
 	_score[TEAM_BOT] = 0;
@@ -74,14 +61,14 @@ bool Pinball::init()
 	drawNode->addComponent(body);
 	drawNode->setPosition(Vec2(0, 0));
 	this->addChild(drawNode);
+
 	drawNode = DrawNode::create();
 	drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
 	drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
 	body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1, .95f, 1));
-	//body->setCategoryBitmask(CAT_MASK_STAT);
-	//body->setCollisionBitmask(CAT_MASK_STAT);
 	body->setDynamic(false);
 	drawNode->addComponent(body);
+	drawNode->setPosition(Vec2(screenSize.width - 3, 0));
 	this->addChild(drawNode);
 
 	//create the ball
@@ -90,7 +77,7 @@ bool Pinball::init()
 		offset = -BALL_RESET_OFFSET_Y;
 	}
 	auto p = Vec2(screenCenter.x, screenCenter.y+offset);
-	_ball = Ball::create(colors.begin()[0]);
+	_ball = Ball::create(Shared::instance()->getPlayerColor(0));
 	_ball->setPosition(p);
 
 	body = PhysicsBody::createCircle(DEFAULT_BALL_RADIUS, PhysicsMaterial());
@@ -104,21 +91,22 @@ bool Pinball::init()
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
 		_button[i] = GameButton::create();
 		if (numberOfPlayers < 3 && i == SHARED_PLAYER3) {
-			_button[i]->changeColor(colors.begin()[SHARED_PLAYER2]);
+			_button[i]->changeColor(Shared::instance()->getPlayerColor(SHARED_PLAYER2));
 		}
 		else if (numberOfPlayers < 4 && i == SHARED_PLAYER4) {
-			_button[i]->changeColor(colors.begin()[SHARED_PLAYER1]);
+			_button[i]->changeColor(Shared::instance()->getPlayerColor(SHARED_PLAYER1));
 		}
 		else {
-			_button[i]->changeColor(colors.begin()[i]);
+			_button[i]->changeColor(Shared::instance()->getPlayerColor(i));
 		}
 		_button[i]->setPlayer(i);
-		_button[i]->setPosition(buttonPos.begin()[i]);
+		auto currentPosition = Shared::instance()->getPlayerPosition(i);
+		_button[i]->setPosition(currentPosition);
 		_button[i]->setTag(i);  //Set the number to indicate button order.
 		_button[i]->addTouchEventListener(CC_CALLBACK_2(Pinball::onPress, this));
 
 
-		body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
+		auto body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
 		//body->setCategoryBitmask(CAT_MASK_STAT);
 		//body->setCollisionBitmask(CAT_MASK_STAT);
 		body->setDynamic(false);
@@ -129,6 +117,7 @@ bool Pinball::init()
 		_paddle[i]->setContentSize(cocos2d::Size(PADDLE_WIDTH_PX, screenSize.width* PADDLE_LENGTH_PERCENT));
 		_paddle[i]->drawSolidRect(Vec2(0, 0), Vec2(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), Color4F::GRAY);
 		auto paddlebody = PhysicsBody::createBox(Size(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), PhysicsMaterial(1, .99f, .5f));
+		paddlebody->setMass(10);
 		paddlebody->setAngularVelocityLimit(10);
 		paddlebody->setVelocityLimit(0);
 		paddlebody->setGravityEnable(false);
@@ -137,25 +126,23 @@ bool Pinball::init()
 		_paddle[i]->addComponent(paddlebody);
 		int yfix = 1;
 		int xfix = 1;
-		
-		if (buttonPos.begin()[i].x > screenCenter.x) {
+
+		if (Shared::instance()->getPlayerPosition(i).x > screenCenter.x) {
 			xfix = -1;
 		}
-		if (buttonPos.begin()[i].y > screenCenter.y) {
+		if (Shared::instance()->getPlayerPosition(i).y > screenCenter.y) {
 			yfix = -1;
 		}
 		float startAngle = getMinPaddleAngle(i);
 		if (i == SHARED_PLAYER3 || i == SHARED_PLAYER4) {
 			startAngle = getMaxPaddleAngle(startAngle);
 		}
-		Vec2 pos = Vec2(buttonPos.begin()[i].x + DEFAULT_BUTTON_RADIUS*xfix, buttonPos.begin()[i].y + DEFAULT_BUTTON_RADIUS*yfix);
+		Vec2 pos = Vec2(Shared::instance()->getPlayerPosition(i).x + DEFAULT_BUTTON_RADIUS*xfix, Shared::instance()->getPlayerPosition(i).y + DEFAULT_BUTTON_RADIUS*yfix);
 		_paddle[i]->setPosition(pos.x, pos.y);
 		_paddle[i]->setRotation(startAngle);
 		this->addChild(_paddle[i]);
-		
 
-		auto joint = PhysicsJointPin::construct(body, paddlebody, pos);
-		joint->setCollisionEnable(false);
+
 
 		this->addChild(_button[i]);
 	}
@@ -166,7 +153,6 @@ bool Pinball::init()
 	this->setName("PinballSceneRoot");
 	this->initTouchHandling();
 	this->scheduleUpdate();
-	this->startGame(3);
 
 	return true;
 }
@@ -255,10 +241,19 @@ void Pinball::lockPaddleAngle(int paddle) {
 //This method will be called on the Node entered.
 void Pinball::onEnter() {
 	Node::onEnter();
+	startGame();
 }
 
-void Pinball::startGame(float dt) {
-	gameStatus = GAME_INPROGRESS;
+void Pinball::startGame() {
+	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
+		auto joint = PhysicsJointPin::construct(_button[i]->getPhysicsBody(), _paddle[i]->getPhysicsBody(), _paddle[i]->getPosition());
+		joint->setCollisionEnable(false);
+
+
+		this->getScene()->getPhysicsWorld()->addJoint(joint);
+	}
+	this->getScene()->getPhysicsWorld()->setGravity(Vec2::ZERO);
+	GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
 
 void Pinball::initTouchHandling() {
@@ -311,9 +306,10 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	switch (type)
 	{
 	case ui::Widget::TouchEventType::BEGAN:
-		lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
+		//lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
+			_paddle[button->getPlayer()]->getPhysicsBody()->applyTorque(100);
+			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
 		}
 		else {
 			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(PADDLE_ANG_VEL);
@@ -322,8 +318,9 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
-		lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
+		//lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
+			_paddle[button->getPlayer()]->getPhysicsBody()->applyTorque(PADDLE_ANG_VEL);
 			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(PADDLE_ANG_VEL);
 		}
 		else {
