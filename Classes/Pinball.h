@@ -14,13 +14,16 @@
 #define TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
 #define MIN_ANGLE {80, 260, 40, 220}
 #define MAX_ANGLE_DIFF 60
-#define PADDLE_LENGTH_PERCENT	0.4
-#define PADDLE_WIDTH_PX	30
+#define PADDLE_LENGTH_PERCENT	0.33
+#define PADDLE_WIDTH_PX	20
 #define PADDLE_ANG_VEL	5
+#define BOX_SIZE		50
+#define BOX_YOFFSET		200
 #define CAT_MASK_PADDLE	0x01
 #define CAT_MASK_STAT	0x02
 #define CAT_MASK_BALL	0x05
 #define BALL_RESET_OFFSET_Y	3
+#define BALL_RESET_OFFSET_X	20
 
 USING_NS_CC;
 
@@ -50,6 +53,8 @@ private:
     Ball* _ball;
     GameButton* _button[4];
 	DrawNode* _paddle[4];
+	DrawNode* _paddleButt[4];
+	Vec2 _positions[4];
 	int _score[2];
     DrawNode* _drawNode;
 	Label* scoreTop;
