@@ -12,9 +12,15 @@
 #define TEAM_BOT 1
 #define TEAM_TOP_PLAYERS {SHARED_PLAYER1, SHARED_PLAYER4}
 #define TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
+#define MIN_ANGLE {80, 260, 40, 220}
+#define MAX_ANGLE_DIFF 60
+#define PADDLE_LENGTH_PERCENT	0.4
+#define PADDLE_WIDTH_PX	30
 #define CAT_MASK_PADDLE	0x01
 #define CAT_MASK_STAT	0x02
 #define CAT_MASK_BALL	0x05
+#define BALL_RESET_OFFSET_Y	3
+
 USING_NS_CC;
 
 class Pinball : public GameScene
@@ -37,7 +43,9 @@ public:
     
 private:
 	void updateScore();
-	void lockPaddle(int, float, float);
+	void lockPaddleAngle(int);
+	float getMaxPaddleAngle(float);
+	float getMinPaddleAngle(int);
     Ball* _ball;
     GameButton* _button[4];
 	DrawNode* _paddle[4];

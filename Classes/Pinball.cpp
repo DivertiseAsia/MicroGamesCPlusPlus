@@ -84,11 +84,14 @@ bool Pinball::init()
 	body->setCollisionBitmask(CAT_MASK_STAT);
 	body->setDynamic(false);
 	drawNode->addComponent(body);
-	drawNode->setPosition(Vec2(screenSize.width - 3, 0));
 	this->addChild(drawNode);
 
 	//create the ball
-	auto p = Vec2(screenCenter.x, screenCenter.y);
+	float offset = BALL_RESET_OFFSET_Y;
+	if (cocos2d::rand_0_1() > 0.5) {
+		offset = -BALL_RESET_OFFSET_Y;
+	}
+	auto p = Vec2(screenCenter.x, screenCenter.y+offset);
 	_ball = Ball::create(colors.begin()[0]);
 	_ball->setPosition(p);
 
@@ -102,10 +105,10 @@ bool Pinball::init()
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
 		_button[i] = GameButton::create();
-		if (numberOfPlayers < 3 && i == 2) {
+		if (numberOfPlayers < 3 && i == SHARED_PLAYER3) {
 			_button[i]->changeColor(colors.begin()[SHARED_PLAYER2]);
 		}
-		else if (numberOfPlayers < 4 && i == 3) {
+		else if (numberOfPlayers < 4 && i == SHARED_PLAYER4) {
 			_button[i]->changeColor(colors.begin()[SHARED_PLAYER1]);
 		}
 		else {
@@ -125,9 +128,9 @@ bool Pinball::init()
 
 		//paddle
 		_paddle[i] = DrawNode::create();
-		_paddle[i]->setContentSize(cocos2d::Size(20, screenSize.width/3));
-		_paddle[i]->drawSolidRect(Vec2(0, 0), Vec2(20, screenSize.width/3), Color4F::BLUE);
-		auto paddlebody = PhysicsBody::createBox(Size(20, screenSize.width/3), PhysicsMaterial(1, .99f, .5f));
+		_paddle[i]->setContentSize(cocos2d::Size(PADDLE_WIDTH_PX, screenSize.width* PADDLE_LENGTH_PERCENT));
+		_paddle[i]->drawSolidRect(Vec2(0, 0), Vec2(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), Color4F::BLUE);
+		auto paddlebody = PhysicsBody::createBox(Size(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), PhysicsMaterial(1, .99f, .5f));
 		paddlebody->setAngularVelocityLimit(10);
 		paddlebody->setVelocityLimit(0);
 		paddlebody->setGravityEnable(false);
@@ -136,14 +139,20 @@ bool Pinball::init()
 		_paddle[i]->addComponent(paddlebody);
 		int yfix = 1;
 		int xfix = 1;
+		
 		if (buttonPos.begin()[i].x > screenCenter.x) {
 			xfix = -1;
 		}
 		if (buttonPos.begin()[i].y > screenCenter.y) {
 			yfix = -1;
 		}
+		float startAngle = getMinPaddleAngle(i);
+		if (i == SHARED_PLAYER3 || i == SHARED_PLAYER4) {
+			startAngle = getMaxPaddleAngle(startAngle);
+		}
 		Vec2 pos = Vec2(buttonPos.begin()[i].x + DEFAULT_BALL_RADIUS*xfix, buttonPos.begin()[i].y + DEFAULT_BUTTON_RADIUS*yfix);
 		_paddle[i]->setPosition(pos.x, pos.y);
+		_paddle[i]->setRotation(startAngle);
 		this->addChild(_paddle[i]);
 		
 
@@ -159,7 +168,7 @@ bool Pinball::init()
 	this->setName("PinballSceneRoot");
 	this->initTouchHandling();
 	this->scheduleUpdate();
-	this->startGame(0);
+	this->startGame(3);
 
 	return true;
 }
@@ -169,6 +178,7 @@ void Pinball::draw(Renderer* renderer, const Mat4& transform, bool transformUpda
 }
 
 void Pinball::update(float dt) {
+	
 	float gameHeight = Director::getInstance()->getVisibleSize().height;
 	float ballY = _ball->getPositionY();
 	if (ballY < gameHeight/2) {
@@ -182,7 +192,7 @@ void Pinball::update(float dt) {
 		//give score
 		if (ballY > gameHeight) {
 			_score[TEAM_BOT]++;
-			_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, gameHeight / 2 - 2));
+			_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, gameHeight / 2 - BALL_RESET_OFFSET_Y));
 			if (_score[TEAM_BOT] >= POINTS_TO_WIN) {
 				if (numberOfPlayers > 2)
 				{
@@ -196,7 +206,7 @@ void Pinball::update(float dt) {
 		}
 		else {
 			_score[TEAM_TOP]++;
-			_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, gameHeight / 2 + 2));
+			_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, gameHeight / 2 + BALL_RESET_OFFSET_Y));
 			if (_score[TEAM_TOP] >= POINTS_TO_WIN) {
 				if (numberOfPlayers > 3)
 				{
@@ -213,14 +223,25 @@ void Pinball::update(float dt) {
 		updateScore();
 	}
 
-	lockPaddle(SHARED_PLAYER1, 80, 140);
-	lockPaddle(SHARED_PLAYER2, 260, 320);
-	lockPaddle(SHARED_PLAYER3, 50, 350);
-	lockPaddle(SHARED_PLAYER4, 170, 230);
+	lockPaddleAngle(SHARED_PLAYER1);
+	lockPaddleAngle(SHARED_PLAYER2);
+	lockPaddleAngle(SHARED_PLAYER3);
+	lockPaddleAngle(SHARED_PLAYER4);
 	
 }
 
-void Pinball::lockPaddle(int paddle, float minAngle, float maxAngle) {
+float Pinball::getMinPaddleAngle(int paddle) {
+	auto angles = MIN_ANGLE;
+	return angles.begin()[paddle];
+}
+
+float Pinball::getMaxPaddleAngle(float minAngle) {
+	return minAngle + MAX_ANGLE_DIFF;
+}
+
+void Pinball::lockPaddleAngle(int paddle) {
+	float minAngle = getMinPaddleAngle(paddle);
+	float maxAngle = getMaxPaddleAngle(minAngle);
 	if (_paddle[paddle]->getPhysicsBody()->getRotation() > maxAngle) {
 		_paddle[paddle]->getPhysicsBody()->setAngularVelocity(0);
 		_paddle[paddle]->setRotation(maxAngle);
