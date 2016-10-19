@@ -192,9 +192,11 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
     {
         case ui::Widget::TouchEventType::BEGAN:{
             button->getBall()->setAcceleration(Vec2(0,-BALL_ACCELERATION));
+			button->setActionTag(5);//prime the button 
             break;
         }
         case ui::Widget::TouchEventType::ENDED:{
+			if (button->getActionTag() != 5) { break; }//was never primed properly eg pressed before game start
             button->setActionTag(10);
             button->getBall()->setAcceleration(Vec2(0,0));
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
