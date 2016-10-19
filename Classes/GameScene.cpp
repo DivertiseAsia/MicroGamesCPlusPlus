@@ -4,6 +4,7 @@
 #include "Pinball.h"
 #include "MainMenuScene.h"
 #include "Shared.h"
+#include "Airhockey.hpp"
 USING_NS_CC;
 
 template <class T>
@@ -179,3 +180,4 @@ void GameScene::showText(std::string s, float dt){
 template Scene* GameScene::createScene<Taprace>(int);
 template Scene* GameScene::createScene<Holdrace>(int);
 template Scene* GameScene::createSceneWithPhysics<Pinball>(int);
+template Scene* GameScene::createScene<Airhockey>(int);
