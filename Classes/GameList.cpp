@@ -3,6 +3,7 @@
 #include "Holdrace.h"
 #include "Pinball.h"
 #include "Taprace.h"
+#include "Airhockey.hpp"
 
 USING_NS_CC;
 
@@ -17,6 +18,8 @@ Scene* GameList::getScene(GameType listing, int numberOfPlayers) {
 		return GameScene::createScene<Holdrace>(numberOfPlayers);
 	case TAPTAP:
 		return GameScene::createScene<Taprace>(numberOfPlayers);
+    case AIRHOCKEY:
+        return GameScene::createScene<Airhockey>(numberOfPlayers);
 	default:
 		return GameScene::createScene<Taprace>(numberOfPlayers);
 	}
