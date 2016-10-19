@@ -91,7 +91,6 @@ void GameScene::endGame(int winner) {
 void GameScene::endGame(int winners[], int totalWinners)
 {
 	if (gameStatus == GAME_INPROGRESS) {
-		log("game over");
 		gameStatus = GAME_OVER;
 
 		Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -107,7 +106,6 @@ void GameScene::endGame(int winners[], int totalWinners)
 		this->addChild(label, 1);
 
 		//draw winner circles
-		log("%d winenrs",totalWinners);
 		auto colors = SHARED_COLOR_PLAYERS;
 		for (int i = 0; i < totalWinners; i++) {
 			
