@@ -35,8 +35,6 @@ bool Pinball::init()
 	Size winSize = Director::getInstance()->getWinSize();
 	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
 
-	// Add object to the scene here.
-
 	//Create drawNode and draw the center line
 	_drawNode = DrawNode::create(10);    //Default line width
 	_drawNode->drawLine(Vec2(0, screenCenter.y), Vec2(winSize.width, screenCenter.y), Color4F::GRAY);
@@ -80,8 +78,8 @@ bool Pinball::init()
 	drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
 	drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
 	body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1, .95f, 1));
-	body->setCategoryBitmask(CAT_MASK_STAT);
-	body->setCollisionBitmask(CAT_MASK_STAT);
+	//body->setCategoryBitmask(CAT_MASK_STAT);
+	//body->setCollisionBitmask(CAT_MASK_STAT);
 	body->setDynamic(false);
 	drawNode->addComponent(body);
 	this->addChild(drawNode);
@@ -97,8 +95,8 @@ bool Pinball::init()
 
 	body = PhysicsBody::createCircle(DEFAULT_BALL_RADIUS, PhysicsMaterial());
 	body->setGravityEnable(true);
-	body->setCategoryBitmask(CAT_MASK_BALL);
-	body->setCollisionBitmask(CAT_MASK_PADDLE);
+	//body->setCategoryBitmask(CAT_MASK_BALL);
+	//body->setCollisionBitmask(CAT_MASK_PADDLE);
 	_ball->addComponent(body);
 	this->addChild(_ball);
 
@@ -121,21 +119,21 @@ bool Pinball::init()
 
 
 		body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
-		body->setCategoryBitmask(CAT_MASK_STAT);
-		body->setCollisionBitmask(CAT_MASK_STAT);
+		//body->setCategoryBitmask(CAT_MASK_STAT);
+		//body->setCollisionBitmask(CAT_MASK_STAT);
 		body->setDynamic(false);
 		_button[i]->addComponent(body);
 
 		//paddle
 		_paddle[i] = DrawNode::create();
 		_paddle[i]->setContentSize(cocos2d::Size(PADDLE_WIDTH_PX, screenSize.width* PADDLE_LENGTH_PERCENT));
-		_paddle[i]->drawSolidRect(Vec2(0, 0), Vec2(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), Color4F::BLUE);
+		_paddle[i]->drawSolidRect(Vec2(0, 0), Vec2(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), Color4F::GRAY);
 		auto paddlebody = PhysicsBody::createBox(Size(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), PhysicsMaterial(1, .99f, .5f));
 		paddlebody->setAngularVelocityLimit(10);
 		paddlebody->setVelocityLimit(0);
 		paddlebody->setGravityEnable(false);
-		paddlebody->setCategoryBitmask(CAT_MASK_PADDLE);
-		paddlebody->setCategoryBitmask(CAT_MASK_BALL);
+		//paddlebody->setCategoryBitmask(CAT_MASK_PADDLE);
+		//paddlebody->setCategoryBitmask(CAT_MASK_BALL);
 		_paddle[i]->addComponent(paddlebody);
 		int yfix = 1;
 		int xfix = 1;
@@ -150,7 +148,7 @@ bool Pinball::init()
 		if (i == SHARED_PLAYER3 || i == SHARED_PLAYER4) {
 			startAngle = getMaxPaddleAngle(startAngle);
 		}
-		Vec2 pos = Vec2(buttonPos.begin()[i].x + DEFAULT_BALL_RADIUS*xfix, buttonPos.begin()[i].y + DEFAULT_BUTTON_RADIUS*yfix);
+		Vec2 pos = Vec2(buttonPos.begin()[i].x + DEFAULT_BUTTON_RADIUS*xfix, buttonPos.begin()[i].y + DEFAULT_BUTTON_RADIUS*yfix);
 		_paddle[i]->setPosition(pos.x, pos.y);
 		_paddle[i]->setRotation(startAngle);
 		this->addChild(_paddle[i]);
@@ -178,7 +176,9 @@ void Pinball::draw(Renderer* renderer, const Mat4& transform, bool transformUpda
 }
 
 void Pinball::update(float dt) {
-	
+	if (gameStatus != GAME_INPROGRESS) {
+		return;
+	}
 	float gameHeight = Director::getInstance()->getVisibleSize().height;
 	float ballY = _ball->getPositionY();
 	if (ballY < gameHeight/2) {
@@ -219,7 +219,7 @@ void Pinball::update(float dt) {
 			}
 		}
 		//reset ball velocity
-		_ball->getPhysicsBody()->setVelocity(Vec2(0,0));
+		_ball->getPhysicsBody()->setVelocity(Vec2::ZERO);
 		updateScore();
 	}
 
@@ -311,21 +311,23 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	switch (type)
 	{
 	case ui::Widget::TouchEventType::BEGAN:
+		lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-5);
+			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
 		}
 		else {
-			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(5);
+			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(PADDLE_ANG_VEL);
 		}
 		
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+		lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(5);
+			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(PADDLE_ANG_VEL);
 		}
 		else {
-			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-5);
+			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
 		}
 		break;
 	}
