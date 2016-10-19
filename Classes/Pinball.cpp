@@ -12,6 +12,7 @@
 #include "GLES-Render/B2DebugDrawLayer.h"
 #include "ui/CocosGUI.h"
 #include "SoundManager.h"
+#include "Box2D/Box2D.h"
 
 USING_NS_CC;
 
@@ -24,6 +25,9 @@ bool Pinball::init()
 	{
 		return false;
 	}
+
+	b2Vec2 gravity = b2Vec2(0.0f, -10.0f);
+	world = new b2World(gravity);
 
 	//http://www.cocos2d-x.org/wiki/Multi_resolution_support
 	auto screenSize = Director::getInstance()->getVisibleSize();
@@ -56,18 +60,18 @@ bool Pinball::init()
 	auto drawNode = DrawNode::create();
 	drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
 	drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
-	auto body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1,.95f,1));
-	body->setDynamic(false);
-	drawNode->addComponent(body);
+	//auto body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1,.95f,1));
+	//body->setDynamic(false);
+	//drawNode->addComponent(body);
 	drawNode->setPosition(Vec2(0, 0));
 	this->addChild(drawNode);
 
 	drawNode = DrawNode::create();
 	drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
 	drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
-	body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1, .95f, 1));
-	body->setDynamic(false);
-	drawNode->addComponent(body);
+	//body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1, .95f, 1));
+	//body->setDynamic(false);
+	//drawNode->addComponent(body);
 	drawNode->setPosition(Vec2(screenSize.width - 3, 0));
 	this->addChild(drawNode);
 
@@ -75,9 +79,9 @@ bool Pinball::init()
 	drawNode = DrawNode::create();
 	drawNode->setContentSize(cocos2d::Size(BOX_SIZE, BOX_SIZE));
 	drawNode->drawSolidRect(Vec2(0, 0), Vec2(BOX_SIZE, BOX_SIZE), Color4F::GRAY);
-	body = PhysicsBody::createBox(Size(BOX_SIZE, BOX_SIZE), PhysicsMaterial(1, .95f, 1));
-	body->setDynamic(false);
-	drawNode->addComponent(body);
+	//body = PhysicsBody::createBox(Size(BOX_SIZE, BOX_SIZE), PhysicsMaterial(1, .95f, 1));
+	//body->setDynamic(false);
+	//drawNode->addComponent(body);
 	drawNode->setPosition(Vec2(screenCenter.x, screenCenter.y-BOX_YOFFSET));
 	drawNode->setRotation(45);
 	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -86,9 +90,9 @@ bool Pinball::init()
 	drawNode = DrawNode::create();
 	drawNode->setContentSize(cocos2d::Size(BOX_SIZE, BOX_SIZE));
 	drawNode->drawSolidRect(Vec2(0, 0), Vec2(BOX_SIZE, BOX_SIZE), Color4F::GRAY);
-	body = PhysicsBody::createBox(Size(BOX_SIZE, BOX_SIZE), PhysicsMaterial(1, .95f, 1));
-	body->setDynamic(false);
-	drawNode->addComponent(body);
+	//body = PhysicsBody::createBox(Size(BOX_SIZE, BOX_SIZE), PhysicsMaterial(1, .95f, 1));
+	//body->setDynamic(false);
+	//drawNode->addComponent(body);
 	drawNode->setPosition(Vec2(screenCenter.x, screenCenter.y + BOX_YOFFSET));
 	drawNode->setRotation(45);
 	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -101,14 +105,31 @@ bool Pinball::init()
 		offset = -BALL_RESET_OFFSET_Y;
 	}
 	auto p = Vec2(screenCenter.x+cocos2d::random(-BALL_RESET_OFFSET_X, BALL_RESET_OFFSET_X), screenCenter.y+offset);
-	_ball = Ball::create(Shared::instance()->getPlayerColor(0));
+	
+	_ball = DrawNode::create();
+	_ball->setContentSize(cocos2d::Size(DEFAULT_BALL_RADIUS*2, DEFAULT_BALL_RADIUS*2));
+	_ball->drawSolidCircle(Vec2(DEFAULT_BALL_RADIUS, DEFAULT_BALL_RADIUS), DEFAULT_BALL_RADIUS, 360, 100, Color4F::MAGENTA);
 	_ball->setPosition(p);
-
-	body = PhysicsBody::createCircle(DEFAULT_BALL_RADIUS, PhysicsMaterial(.5,1,.5));
-	body->setGravityEnable(true);
+	b2FixtureDef ballFixture;
+	ballFixture.density = 10;
+	ballFixture.friction = 0.8;
+	ballFixture.restitution = 0.6;
+	b2CircleShape ballShape;
+	ballShape.m_radius = DEFAULT_BALL_RADIUS / SCALE_RATIO;
+	ballFixture.shape = &ballShape;
+	b2BodyDef ballBodyDef;
+	ballBodyDef.type = b2BodyType::b2_dynamicBody;
+	ballBodyDef.userData = _ball;
+	ballBodyDef.position.Set(_ball->getPosition().x / SCALE_RATIO, _ball->getPosition().y / SCALE_RATIO);
+	
+	auto ballBody = world->CreateBody(&ballBodyDef);
+	ballBody->CreateFixture(&ballFixture);
+	ballBody->SetGravityScale(10);
+	//body = PhysicsBody::createCircle(DEFAULT_BALL_RADIUS, PhysicsMaterial(.5,1,.5));
+	//body->setGravityEnable(true);
 	//body->setCategoryBitmask(CAT_MASK_BALL);
 	//body->setCollisionBitmask(CAT_MASK_PADDLE);
-	_ball->addComponent(body);
+	//_ball->addComponent(body);
 	this->addChild(_ball);
 
 	//create the controls and paddles
@@ -130,24 +151,24 @@ bool Pinball::init()
 		_button[i]->addTouchEventListener(CC_CALLBACK_2(Pinball::onPress, this));
 
 
-		auto body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
+		//auto body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
 		//body->setCategoryBitmask(CAT_MASK_STAT);
 		//body->setCollisionBitmask(CAT_MASK_STAT);
-		body->setDynamic(false);
-		_button[i]->addComponent(body);
+		//body->setDynamic(false);
+		//_button[i]->addComponent(body);
 
 		//paddle
 		_paddle[i] = DrawNode::create();
 		_paddle[i]->setContentSize(cocos2d::Size(PADDLE_WIDTH_PX, screenSize.width* PADDLE_LENGTH_PERCENT));
 		_paddle[i]->drawSolidRect(Vec2(0, 0), Vec2(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), Color4F::GRAY);
-		auto paddlebody = PhysicsBody::createBox(Size(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), PhysicsMaterial(1, .99f, .5f));
+		//auto paddlebody = PhysicsBody::createBox(Size(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), PhysicsMaterial(1, .99f, .5f));
 		//paddlebody->setMass(10);
-		paddlebody->setAngularVelocityLimit(10);
+		//paddlebody->setAngularVelocityLimit(10);
 		//paddlebody->setVelocityLimit(0);
-		paddlebody->setGravityEnable(false);
+		//paddlebody->setGravityEnable(false);
 		//paddlebody->setCategoryBitmask(CAT_MASK_PADDLE);
 		//paddlebody->setCategoryBitmask(CAT_MASK_BALL);
-		_paddle[i]->addComponent(paddlebody);
+		//_paddle[i]->addComponent(paddlebody);
 		int yfix = 1;
 		int xfix = 1;
 
@@ -172,9 +193,9 @@ bool Pinball::init()
 		_paddleButt[i] = DrawNode::create();
 		_paddleButt[i]->setContentSize(cocos2d::Size(90, 90));
 		_paddleButt[i]->drawSolidCircle(Vec2(45,45), 45, 360, 100, Color4F::MAGENTA);
-		body = PhysicsBody::createCircle(45, PhysicsMaterial(1, .95f, 1));
-		body->setDynamic(false);
-		_paddleButt[i]->addComponent(body);
+		//body = PhysicsBody::createCircle(45, PhysicsMaterial(1, .95f, 1));
+		//body->setDynamic(false);
+		//_paddleButt[i]->addComponent(body);
 		_paddleButt[i]->setPosition(Vec2(_positions[i].x+xfix * -10,_positions[i].y));
 		if (i == SHARED_PLAYER2 || i == SHARED_PLAYER4) {
 			_paddleButt[i]->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
@@ -208,13 +229,34 @@ void Pinball::update(float dt) {
 	if (gameStatus != GAME_INPROGRESS) {
 		return;
 	}
+
+	int positionIterations = 10;
+	int velocityIterations = 10;
+
+	deltaTime = dt;
+	world->Step(dt, velocityIterations, positionIterations);
+
+	for (b2Body *body = world->GetBodyList(); body != NULL; body = body->GetNext()) {
+		if (body->GetUserData())
+		{
+			DrawNode *sprite = (DrawNode *)body->GetUserData();
+			sprite->setPosition(ccp(body->GetPosition().x * SCALE_RATIO, body->GetPosition().y * SCALE_RATIO));
+			sprite->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
+
+
+
+		}
+	}
+	world->ClearForces();
+	world->DrawDebugData();
+
 	float gameHeight = Director::getInstance()->getVisibleSize().height;
 	float ballY = _ball->getPositionY();
 	if (ballY < gameHeight/2) {
-		this->getScene()->getPhysicsWorld()->setGravity(Vec2(0.0f, -98.0f));
+		//this->getScene()->getPhysicsWorld()->setGravity(Vec2(0.0f, -98.0f));
 	}
 	else {
-		this->getScene()->getPhysicsWorld()->setGravity(Vec2(0.0f, 98.0f));
+		//this->getScene()->getPhysicsWorld()->setGravity(Vec2(0.0f, 98.0f));
 	}
 
 	if (ballY > gameHeight || ballY < 0) {
@@ -256,11 +298,10 @@ void Pinball::update(float dt) {
 		_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2 + offset_x,
 			gameHeight / 2 + offsetYModifier*BALL_RESET_OFFSET_Y));
 		//reset ball velocity
-		_ball->getPhysicsBody()->setAngularVelocity(0);
-		_ball->getPhysicsBody()->setVelocity(Vec2::ZERO);
+		//_ball->getPhysicsBody()->setAngularVelocity(0);
+		//_ball->getPhysicsBody()->setVelocity(Vec2::ZERO);
 		updateScore();
 	}
-	_paddle[SHARED_PLAYER3]->getPhysicsBody()->applyForce(Vec2(PADDLE_ANG_VEL, PADDLE_ANG_VEL), Vec2(0, 50));
 	/*lockPaddleAngle(SHARED_PLAYER1);
 	lockPaddleAngle(SHARED_PLAYER2);
 	lockPaddleAngle(SHARED_PLAYER3);
@@ -300,7 +341,7 @@ void Pinball::startGame() {
 	Size winSize = Director::getInstance()->getWinSize();
 	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
 
-	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
+	/*for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
 		int xfix = 1;
 		int yfix = 1;
 		if (Shared::instance()->getPlayerPosition(i).x > screenCenter.x) {
@@ -313,19 +354,20 @@ void Pinball::startGame() {
 		if (i == SHARED_PLAYER3 || i == SHARED_PLAYER4) {
 			startAngle = getMaxPaddleAngle(startAngle);
 		}
-		Vec2 pos = Vec2(Shared::instance()->getPlayerPosition(i).x + (DEFAULT_BUTTON_RADIUS+5)*xfix, Shared::instance()->getPlayerPosition(i).y + (DEFAULT_BUTTON_RADIUS+5)*yfix);
-		auto joint = PhysicsJointDistance::construct(_paddleButt[i]->getPhysicsBody(), _paddle[i]->getPhysicsBody(), Vec2(0, 0), Vec2(0, 0));
+		//Vec2 pos = Vec2(Shared::instance()->getPlayerPosition(i).x + (DEFAULT_BUTTON_RADIUS+5)*xfix, Shared::instance()->getPlayerPosition(i).y + (DEFAULT_BUTTON_RADIUS+5)*yfix);
+		//auto joint = PhysicsJointDistance::construct(_paddleButt[i]->getPhysicsBody(), _paddle[i]->getPhysicsBody(), Vec2(0, 0), Vec2(0, 0));
 		//auto joint = PhysicsJointLimit::construct(_paddleButt[i]->getPhysicsBody(), _paddle[i]->getPhysicsBody(), Vec2(0,0),Vec2(0,0));
-		joint->createConstraints();
-		joint->setDistance(30);
+		//joint->createConstraints();
+		//joint->setDistance(30);
 		//joint->setMax(30);
 		//joint->setMaxForce(10);
 		//joint->setMin(100);
-		joint->setCollisionEnable(false);	
+		//joint->setCollisionEnable(false);	
 
-		this->getScene()->getPhysicsWorld()->addJoint(joint);
+		//this->getScene()->getPhysicsWorld()->addJoint(joint);
 	}
 	this->getScene()->getPhysicsWorld()->setGravity(Vec2::ZERO);
+	*/
 	GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
 
@@ -381,11 +423,9 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	case ui::Widget::TouchEventType::BEGAN:
 		//lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			_paddle[button->getPlayer()]->getPhysicsBody()->applyTorque(100);
 			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
 		}
 		else {
-			_paddle[button->getPlayer()]->getPhysicsBody()->applyForce(Vec2(PADDLE_ANG_VEL, PADDLE_ANG_VEL),Vec2(50,0));
 			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(PADDLE_ANG_VEL);
 		}
 		
@@ -394,11 +434,10 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
 		//lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			_paddle[button->getPlayer()]->getPhysicsBody()->applyTorque(-20);
 			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(PADDLE_ANG_VEL);
 		}
 		else {
-			_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
+			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
 		}
 		break;
 	}

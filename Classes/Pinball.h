@@ -6,6 +6,7 @@
 #include "Ball.hpp"
 #include "GameButton.hpp"
 #include "GameScene.h"
+#include <Box2D/Box2D.h>
 
 #define POINTS_TO_WIN 10
 #define TEAM_TOP 0
@@ -25,9 +26,11 @@
 #define BALL_RESET_OFFSET_Y	3
 #define BALL_RESET_OFFSET_X	20
 
+#define SCALE_RATIO 32.0
+
 USING_NS_CC;
 
-class Pinball : public GameScene
+class Pinball : public GameScene, public b2ContactListener
 {
 public:
     
@@ -44,13 +47,14 @@ public:
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
 	using GameScene::GameScene;
-    
+	b2World *world;
+	float deltaTime;
 private:
 	void updateScore();
 	void lockPaddleAngle(int);
 	float getMaxPaddleAngle(float);
 	float getMinPaddleAngle(int);
-    Ball* _ball;
+    DrawNode* _ball;
     GameButton* _button[4];
 	DrawNode* _paddle[4];
 	DrawNode* _paddleButt[4];
