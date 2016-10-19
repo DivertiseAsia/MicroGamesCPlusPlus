@@ -137,8 +137,8 @@ void Holdrace::onEnter(){
 }
 
 void Holdrace::startGame(){
-    GameScene::startGame(4);
-    for(int i=0;i<4;i++)
+    GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
+    for(int i=0;i<SHARED_MAX_PLAYERS;i++)
         _moved[i] = false;
     _moveCount = 0;
 }
