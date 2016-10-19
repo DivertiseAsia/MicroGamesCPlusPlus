@@ -22,7 +22,7 @@ public:
     void onEnter() override;
     
     // Our game custom functions
-    void startGame(float);
+    void startGame();
     void initTouchHandling();
     
     //Event handling

@@ -15,6 +15,8 @@
 
 #define SHARED_MAX_PLAYERS 4
 
+#define SHARED_COUNTDOWN_LENGTH 4
+
 #define SHARED_GAME_NAME "MicroGames"
 
 

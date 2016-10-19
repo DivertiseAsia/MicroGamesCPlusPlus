@@ -79,7 +79,6 @@ bool Taprace::init()
     this->setName("TapraceSceneRoot");
     this->initTouchHandling();
     this->scheduleUpdate();
-	this->startGame(0);
     
     return true;
 }
@@ -96,12 +95,11 @@ void Taprace::update(float dt){
 //This method will be called on the Node entered.
 void Taprace::onEnter(){
     Node::onEnter();
-    //schedule(SEL_SCHEDULE(Taprace::startGame), 1000);
-    //this->scheduleOnce(schedule_selector(Taprace::startGame), 1.0f);
+	startGame();
 }
 
-void Taprace::startGame(float dt){
-	gameStatus = GAME_INPROGRESS;
+void Taprace::startGame(){
+	GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
 
 void Taprace::initTouchHandling(){
