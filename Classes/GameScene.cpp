@@ -106,13 +106,12 @@ void GameScene::endGame(int winners[], int totalWinners)
 		this->addChild(label, 1);
 
 		//draw winner circles
-		auto colors = SHARED_COLOR_PLAYERS;
 		for (int i = 0; i < totalWinners; i++) {
 			
 			auto dNode = DrawNode::create();
 			int radius = visibleSize.width / 6;
 			dNode->setContentSize(Size(radius * 2, radius * 2));
-			dNode->drawSolidCircle(Vec2(radius, radius), radius, 3.1415968f, 360, colors.begin()[winners[i]]);
+			dNode->drawSolidCircle(Vec2(radius, radius), radius, 3.1415968f, 360, Shared::instance()->getPlayerColor(winners[i]));
 			if (totalWinners == 1) {
 				dNode->setPosition(Vec2(origin.x + visibleSize.width / 2 - dNode->getContentSize().width / 2,
 					origin.y + visibleSize.height / 2 - dNode->getContentSize().height / 2));
