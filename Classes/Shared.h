@@ -1,6 +1,8 @@
 #ifndef __SHARED_H__
 #define __SHARED_H__
 
+#include "cocos2d.h"
+
 #define SHARED_FONT_FILE_TITLE	"fonts/font-title.fnt"
 #define SHARED_FONT_FILE_MENU	"fonts/font-menu.fnt"
 #define SHARED_FONT_FILE_INGAME	"fonts/font-ingame.fnt"
@@ -18,6 +20,19 @@
 #define SHARED_COUNTDOWN_LENGTH 4
 
 #define SHARED_GAME_NAME "MicroGames"
+
+class Shared
+{
+public:
+	static Shared* instance();
+	cocos2d::Color4F getPlayerColor(int);
+	cocos2d::Vec2 getPlayerPosition(int);
+private:
+	Shared() {};
+	static Shared* minstance;
+	std::vector<cocos2d::Color4F> colors;
+	std::vector<cocos2d::Vec2> buttonPositions;
+};
 
 
 #endif // __SHARED_H__
