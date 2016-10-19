@@ -8,6 +8,7 @@
 #include "GameScene.h"
 #include <Box2D/Box2D.h>
 
+#define GRAVITY 10.0f
 #define POINTS_TO_WIN 10
 #define TEAM_TOP 0
 #define TEAM_BOT 1
@@ -55,9 +56,9 @@ private:
 	float getMaxPaddleAngle(float);
 	float getMinPaddleAngle(int);
     DrawNode* _ball;
+	b2Body* ballBody;
     GameButton* _button[4];
 	DrawNode* _paddle[4];
-	DrawNode* _paddleButt[4];
 	Vec2 _positions[4];
 	int _score[2];
     DrawNode* _drawNode;

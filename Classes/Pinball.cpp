@@ -26,7 +26,7 @@ bool Pinball::init()
 		return false;
 	}
 
-	b2Vec2 gravity = b2Vec2(0.0f, -10.0f);
+	b2Vec2 gravity = b2Vec2(0.0f, -GRAVITY);
 	world = new b2World(gravity);
 
 	//http://www.cocos2d-x.org/wiki/Multi_resolution_support
@@ -110,6 +110,8 @@ bool Pinball::init()
 	_ball->setContentSize(cocos2d::Size(DEFAULT_BALL_RADIUS*2, DEFAULT_BALL_RADIUS*2));
 	_ball->drawSolidCircle(Vec2(DEFAULT_BALL_RADIUS, DEFAULT_BALL_RADIUS), DEFAULT_BALL_RADIUS, 360, 100, Color4F::MAGENTA);
 	_ball->setPosition(p);
+	this->addChild(_ball);
+
 	b2FixtureDef ballFixture;
 	ballFixture.density = 10;
 	ballFixture.friction = 0.8;
@@ -122,15 +124,9 @@ bool Pinball::init()
 	ballBodyDef.userData = _ball;
 	ballBodyDef.position.Set(_ball->getPosition().x / SCALE_RATIO, _ball->getPosition().y / SCALE_RATIO);
 	
-	auto ballBody = world->CreateBody(&ballBodyDef);
+	ballBody = world->CreateBody(&ballBodyDef);
 	ballBody->CreateFixture(&ballFixture);
-	ballBody->SetGravityScale(10);
-	//body = PhysicsBody::createCircle(DEFAULT_BALL_RADIUS, PhysicsMaterial(.5,1,.5));
-	//body->setGravityEnable(true);
-	//body->setCategoryBitmask(CAT_MASK_BALL);
-	//body->setCollisionBitmask(CAT_MASK_PADDLE);
-	//_ball->addComponent(body);
-	this->addChild(_ball);
+	ballBody->SetGravityScale(1);
 
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
@@ -190,7 +186,7 @@ bool Pinball::init()
 		this->addChild(_paddle[i]);
 
 
-		_paddleButt[i] = DrawNode::create();
+		/*_paddleButt[i] = DrawNode::create();
 		_paddleButt[i]->setContentSize(cocos2d::Size(90, 90));
 		_paddleButt[i]->drawSolidCircle(Vec2(45,45), 45, 360, 100, Color4F::MAGENTA);
 		//body = PhysicsBody::createCircle(45, PhysicsMaterial(1, .95f, 1));
@@ -205,8 +201,7 @@ bool Pinball::init()
 		}
 		
 		this->addChild(_paddleButt[i]);
-
-
+		*/
 
 		this->addChild(_button[i]);
 	}
@@ -253,10 +248,10 @@ void Pinball::update(float dt) {
 	float gameHeight = Director::getInstance()->getVisibleSize().height;
 	float ballY = _ball->getPositionY();
 	if (ballY < gameHeight/2) {
-		//this->getScene()->getPhysicsWorld()->setGravity(Vec2(0.0f, -98.0f));
+		world->SetGravity(b2Vec2(0.0f, -GRAVITY));
 	}
 	else {
-		//this->getScene()->getPhysicsWorld()->setGravity(Vec2(0.0f, 98.0f));
+		world->SetGravity(b2Vec2(0.0f, GRAVITY));
 	}
 
 	if (ballY > gameHeight || ballY < 0) {
@@ -297,9 +292,10 @@ void Pinball::update(float dt) {
 		}
 		_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2 + offset_x,
 			gameHeight / 2 + offsetYModifier*BALL_RESET_OFFSET_Y));
-		//reset ball velocity
-		//_ball->getPhysicsBody()->setAngularVelocity(0);
-		//_ball->getPhysicsBody()->setVelocity(Vec2::ZERO);
+		//reset ball transform & velocity
+		ballBody->SetTransform(b2Vec2(_ball->getPosition().x / SCALE_RATIO, _ball->getPosition().y / SCALE_RATIO),0);
+		ballBody->SetLinearVelocity(b2Vec2_zero);
+		ballBody->SetAngularVelocity(0);
 		updateScore();
 	}
 	/*lockPaddleAngle(SHARED_PLAYER1);
