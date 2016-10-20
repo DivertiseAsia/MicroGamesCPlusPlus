@@ -14,13 +14,14 @@
 #define TEAM_BOT 1
 #define TEAM_TOP_PLAYERS {SHARED_PLAYER1, SHARED_PLAYER4}
 #define TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
-#define MIN_ANGLE {80, 260, 40, 220}
+#define MIN_ANGLE {100, 280, 20, 200}//{80, 260, 40, 220}
 #define MAX_ANGLE_DIFF 60
 #define PADDLE_LENGTH_PERCENT	0.33
 #define PADDLE_WIDTH_PX	20
 #define PADDLE_ANG_VEL	5
 #define BOX_SIZE		50.0f
 #define BOX_YOFFSET		200
+#define WALL_WIDTH		5.0f
 #define CAT_MASK_PADDLE	0x01
 #define CAT_MASK_STAT	0x02
 #define CAT_MASK_BALL	0x05
@@ -53,6 +54,8 @@ public:
 private:
 	void createBox(Vec2);
 	void createWall(Vec2, float);
+	GameButton* addButtonForPlayer(int);
+	DrawNode* addPaddleForPlayer(int, cocos2d::Size, cocos2d::Vec2);
 	void updateScore();
 	void lockPaddleAngle(int);
 	float getMaxPaddleAngle(float);

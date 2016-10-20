@@ -63,7 +63,7 @@ bool Pinball::init()
 
 	//create the walls
 	createWall(Vec2(0, 0),screenSize.height);
-	createWall(Vec2(winSize.width - 5, 0), screenSize.height);
+	createWall(Vec2(winSize.width - WALL_WIDTH, 0), screenSize.height);
 
 	//boxes of fun
 	createBox(Vec2(screenCenter.x, screenCenter.y - BOX_YOFFSET));
@@ -101,80 +101,8 @@ bool Pinball::init()
 
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
-		_button[i] = GameButton::create();
-		if (numberOfPlayers < 3 && i == SHARED_PLAYER3) {
-			_button[i]->changeColor(Shared::instance()->getPlayerColor(SHARED_PLAYER2));
-		}
-		else if (numberOfPlayers < 4 && i == SHARED_PLAYER4) {
-			_button[i]->changeColor(Shared::instance()->getPlayerColor(SHARED_PLAYER1));
-		}
-		else {
-			_button[i]->changeColor(Shared::instance()->getPlayerColor(i));
-		}
-		_button[i]->setPlayer(i);
-		auto currentPosition = Shared::instance()->getPlayerPosition(i);
-		_button[i]->setPosition(currentPosition);
-		_button[i]->setTag(i);  //Set the number to indicate button order.
-		_button[i]->addTouchEventListener(CC_CALLBACK_2(Pinball::onPress, this));
-
-
-		//auto body = PhysicsBody::createCircle(DEFAULT_BUTTON_RADIUS, PhysicsMaterial());
-		//body->setCategoryBitmask(CAT_MASK_STAT);
-		//body->setCollisionBitmask(CAT_MASK_STAT);
-		//body->setDynamic(false);
-		//_button[i]->addComponent(body);
-
-		//paddle
-		_paddle[i] = DrawNode::create();
-		_paddle[i]->setContentSize(cocos2d::Size(PADDLE_WIDTH_PX, screenSize.width* PADDLE_LENGTH_PERCENT));
-		_paddle[i]->drawSolidRect(Vec2(0, 0), Vec2(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), Color4F::GRAY);
-		//auto paddlebody = PhysicsBody::createBox(Size(PADDLE_WIDTH_PX, screenSize.width * PADDLE_LENGTH_PERCENT), PhysicsMaterial(1, .99f, .5f));
-		//paddlebody->setMass(10);
-		//paddlebody->setAngularVelocityLimit(10);
-		//paddlebody->setVelocityLimit(0);
-		//paddlebody->setGravityEnable(false);
-		//paddlebody->setCategoryBitmask(CAT_MASK_PADDLE);
-		//paddlebody->setCategoryBitmask(CAT_MASK_BALL);
-		//_paddle[i]->addComponent(paddlebody);
-		int yfix = 1;
-		int xfix = 1;
-
-		if (Shared::instance()->getPlayerPosition(i).x > screenCenter.x) {
-			xfix = -1;
-		}
-		if (Shared::instance()->getPlayerPosition(i).y > screenCenter.y) {
-			yfix = -1;
-		}
-		float startAngle = getMinPaddleAngle(i);
-		if (i == SHARED_PLAYER3 || i == SHARED_PLAYER4) {
-			startAngle = getMaxPaddleAngle(startAngle);
-			
-		}
-		_paddle[i]->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-		_positions[i] = Vec2(Shared::instance()->getPlayerPosition(i).x + (DEFAULT_BUTTON_RADIUS)*xfix, Shared::instance()->getPlayerPosition(i).y + (DEFAULT_BUTTON_RADIUS)*yfix);
-		_paddle[i]->setPosition(_positions[i]);
-		_paddle[i]->setRotation(startAngle);
-		this->addChild(_paddle[i]);
-
-
-		/*_paddleButt[i] = DrawNode::create();
-		_paddleButt[i]->setContentSize(cocos2d::Size(90, 90));
-		_paddleButt[i]->drawSolidCircle(Vec2(45,45), 45, 360, 100, Color4F::MAGENTA);
-		//body = PhysicsBody::createCircle(45, PhysicsMaterial(1, .95f, 1));
-		//body->setDynamic(false);
-		//_paddleButt[i]->addComponent(body);
-		_paddleButt[i]->setPosition(Vec2(_positions[i].x+xfix * -10,_positions[i].y));
-		if (i == SHARED_PLAYER2 || i == SHARED_PLAYER4) {
-			_paddleButt[i]->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-		}
-		else {
-			_paddleButt[i]->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
-		}
-		
-		this->addChild(_paddleButt[i]);
-		*/
-
-		this->addChild(_button[i]);
+		_button[i] = addButtonForPlayer(i);
+		_paddle[i] = addPaddleForPlayer(i,screenSize,screenCenter);
 	}
 
 	//Debug Layer
@@ -187,23 +115,108 @@ bool Pinball::init()
 	return true;
 }
 
-void Pinball::createWall(Vec2 position, float height) {
-	auto drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(5, height));
-	drawNode->drawSolidRect(position, Vec2(position.x+5, height), Color4F::RED);
-	drawNode->setPosition(position);
+DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCenter) {
+	auto paddle = DrawNode::create();
+	auto paddleLength = screenSize.width* PADDLE_LENGTH_PERCENT;
+	paddle->setContentSize(cocos2d::Size(PADDLE_WIDTH_PX, paddleLength));
+	paddle->drawSolidRect(Vec2(0, 0), Vec2(PADDLE_WIDTH_PX, paddleLength), Color4F::GRAY);
+
+	int yfix = 1;
+	int xfix = 1;
+
+	if (Shared::instance()->getPlayerPosition(player).x > screenCenter.x) {
+		xfix = -1;
+	}
+	if (Shared::instance()->getPlayerPosition(player).y > screenCenter.y) {
+		yfix = -1;
+	}
+	float startAngle = getMinPaddleAngle(player);
+	if (player == SHARED_PLAYER3 || player == SHARED_PLAYER4) {
+		startAngle = getMaxPaddleAngle(startAngle);
+
+	}
+	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (DEFAULT_BUTTON_RADIUS)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
+	paddle->setPosition(_positions[player]);
+	paddle->setRotation(startAngle);
+	this->addChild(paddle);
+	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
 	b2FixtureDef boxFixture;
 	boxFixture.density = 10;
 	boxFixture.friction = 0.8;
 	boxFixture.restitution = 0.6;
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(5.0f / SCALE_RATIO, height / SCALE_RATIO);
+	boxShape.SetAsBox(PADDLE_WIDTH_PX / 2 / SCALE_RATIO, paddleLength / 2 / SCALE_RATIO);
+	boxFixture.shape = &boxShape;
+	b2BodyDef boxBodyDef;
+	boxBodyDef.type = b2BodyType::b2_kinematicBody;
+	boxBodyDef.userData = paddle;
+	boxBodyDef.position.Set(paddle->getPosition().x / SCALE_RATIO, paddle->getPosition().y / SCALE_RATIO);
+	boxBodyDef.angle = CC_DEGREES_TO_RADIANS(paddle->getRotation());
+
+	auto boxBody1 = world->CreateBody(&boxBodyDef);
+	boxBody1->CreateFixture(&boxFixture);
+
+	return paddle;
+}
+
+GameButton* Pinball::addButtonForPlayer(int player) {
+	auto button = GameButton::create();
+	if (numberOfPlayers < 3 && player == SHARED_PLAYER3) {
+		button->changeColor(Shared::instance()->getPlayerColor(SHARED_PLAYER2));
+	}
+	else if (numberOfPlayers < 4 && player == SHARED_PLAYER4) {
+		button->changeColor(Shared::instance()->getPlayerColor(SHARED_PLAYER1));
+	}
+	else {
+		button->changeColor(Shared::instance()->getPlayerColor(player));
+	}
+	button->setPlayer(player);
+	auto currentPosition = Shared::instance()->getPlayerPosition(player);
+	button->setPosition(currentPosition);
+	button->setTag(player);  //Set the number to indicate button order.
+	button->addTouchEventListener(CC_CALLBACK_2(Pinball::onPress, this));
+	this->addChild(button);
+
+	b2FixtureDef circleFixture;
+	circleFixture.density = 10;
+	circleFixture.friction = 0.8;
+	circleFixture.restitution = 0.6;
+	b2CircleShape circleShape;
+	circleShape.m_radius = DEFAULT_BUTTON_RADIUS / SCALE_RATIO;
+	circleFixture.shape = &circleShape;
+	b2BodyDef buttonBodyDef;
+	buttonBodyDef.type = b2BodyType::b2_staticBody;
+	buttonBodyDef.userData = NULL;
+	buttonBodyDef.position.Set(button->getPosition().x / SCALE_RATIO, button->getPosition().y / SCALE_RATIO);
+
+	auto buttonBody = world->CreateBody(&buttonBodyDef);
+	buttonBody->CreateFixture(&circleFixture);
+
+	return button;
+}
+
+void Pinball::createWall(Vec2 position, float height) {
+	auto drawNode = DrawNode::create();
+	drawNode->setContentSize(cocos2d::Size(WALL_WIDTH, height));
+	drawNode->drawSolidRect(position, Vec2(position.x+ WALL_WIDTH, height), Color4F::RED);
+	drawNode->setPosition(position);
+
+	b2FixtureDef boxFixture;
+	boxFixture.density = 10;
+	boxFixture.friction = 0.8f;
+	boxFixture.restitution = 0.6f;
+	b2PolygonShape boxShape;
+	boxShape.SetAsBox(WALL_WIDTH / 2 / SCALE_RATIO, height / SCALE_RATIO);
 	boxFixture.shape = &boxShape;
 	b2BodyDef boxBodyDef;
 	boxBodyDef.type = b2BodyType::b2_staticBody;
 	boxBodyDef.userData = drawNode;
 	boxBodyDef.position.Set(drawNode->getPosition().x / SCALE_RATIO, drawNode->getPosition().y / SCALE_RATIO);
+
+	auto boxBody1 = world->CreateBody(&boxBodyDef);
+	boxBody1->CreateFixture(&boxFixture);
 	
 	this->addChild(drawNode);
 }
@@ -221,7 +234,7 @@ void Pinball::createBox(Vec2 position) {
 	boxFixture.friction = 0.8;
 	boxFixture.restitution = 0.6;
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(BOX_SIZE / SCALE_RATIO, BOX_SIZE / SCALE_RATIO);
+	boxShape.SetAsBox(BOX_SIZE / 2 / SCALE_RATIO, BOX_SIZE / 2 / SCALE_RATIO);
 	boxFixture.shape = &boxShape;
 	b2BodyDef boxBodyDef;
 	boxBodyDef.type = b2BodyType::b2_staticBody;
