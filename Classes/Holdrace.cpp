@@ -22,7 +22,7 @@ bool Holdrace::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !GameScene::init() )
+	if (!GameScene::initWithColor(Color4B(SHARED_COLOR_BACKGROUND)))
     {
         return false;
     }
