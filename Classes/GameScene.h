@@ -5,7 +5,7 @@
 
 USING_NS_CC;
 
-class GameScene : public cocos2d::Layer
+class GameScene : public cocos2d::LayerColor
 {
 public:
 	enum GameStatus { GAME_START, GAME_INPROGRESS, GAME_OVER };

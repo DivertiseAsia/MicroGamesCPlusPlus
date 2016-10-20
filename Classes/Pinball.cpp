@@ -21,13 +21,18 @@ bool Pinball::init()
 {
 	//////////////////////////////
 	// 1. super init first
-	if (!GameScene::init())
+	if (!GameScene::initWithColor(Color4B(SHARED_COLOR_BACKGROUND)))
 	{
 		return false;
 	}
 
 	b2Vec2 gravity = b2Vec2(0.0f, -GRAVITY);
 	world = new b2World(gravity);
+	b2Draw *debugDraw = new GLESDebugDraw(SCALE_RATIO);
+
+	debugDraw->SetFlags(GLESDebugDraw::e_shapeBit);
+
+	world->SetDebugDraw(debugDraw);
 
 	//http://www.cocos2d-x.org/wiki/Multi_resolution_support
 	auto screenSize = Director::getInstance()->getVisibleSize();
@@ -57,47 +62,12 @@ bool Pinball::init()
 	updateScore();
 
 	//create the walls
-	auto drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
-	drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
-	//auto body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1,.95f,1));
-	//body->setDynamic(false);
-	//drawNode->addComponent(body);
-	drawNode->setPosition(Vec2(0, 0));
-	this->addChild(drawNode);
-
-	drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
-	drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
-	//body = PhysicsBody::createBox(Size(3, screenSize.height), PhysicsMaterial(1, .95f, 1));
-	//body->setDynamic(false);
-	//drawNode->addComponent(body);
-	drawNode->setPosition(Vec2(screenSize.width - 3, 0));
-	this->addChild(drawNode);
+	createWall(Vec2(0, 0),screenSize.height);
+	createWall(Vec2(winSize.width - 5, 0), screenSize.height);
 
 	//boxes of fun
-	drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(BOX_SIZE, BOX_SIZE));
-	drawNode->drawSolidRect(Vec2(0, 0), Vec2(BOX_SIZE, BOX_SIZE), Color4F::GRAY);
-	//body = PhysicsBody::createBox(Size(BOX_SIZE, BOX_SIZE), PhysicsMaterial(1, .95f, 1));
-	//body->setDynamic(false);
-	//drawNode->addComponent(body);
-	drawNode->setPosition(Vec2(screenCenter.x, screenCenter.y-BOX_YOFFSET));
-	drawNode->setRotation(45);
-	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	this->addChild(drawNode);
-
-	drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(BOX_SIZE, BOX_SIZE));
-	drawNode->drawSolidRect(Vec2(0, 0), Vec2(BOX_SIZE, BOX_SIZE), Color4F::GRAY);
-	//body = PhysicsBody::createBox(Size(BOX_SIZE, BOX_SIZE), PhysicsMaterial(1, .95f, 1));
-	//body->setDynamic(false);
-	//drawNode->addComponent(body);
-	drawNode->setPosition(Vec2(screenCenter.x, screenCenter.y + BOX_YOFFSET));
-	drawNode->setRotation(45);
-	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	this->addChild(drawNode);
-
+	createBox(Vec2(screenCenter.x, screenCenter.y - BOX_YOFFSET));
+	createBox(Vec2(screenCenter.x, screenCenter.y + BOX_YOFFSET));
 
 	//create the ball
 	float offset = BALL_RESET_OFFSET_Y;
@@ -109,6 +79,7 @@ bool Pinball::init()
 	_ball = DrawNode::create();
 	_ball->setContentSize(cocos2d::Size(DEFAULT_BALL_RADIUS*2, DEFAULT_BALL_RADIUS*2));
 	_ball->drawSolidCircle(Vec2(DEFAULT_BALL_RADIUS, DEFAULT_BALL_RADIUS), DEFAULT_BALL_RADIUS, 360, 100, Color4F::MAGENTA);
+	_ball->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	_ball->setPosition(p);
 	this->addChild(_ball);
 
@@ -207,7 +178,7 @@ bool Pinball::init()
 	}
 
 	//Debug Layer
-	//this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
+	this->addChild(B2DebugDrawLayer::create(world, SCALE_RATIO), 1000);
 
 	this->setName("PinballSceneRoot");
 	this->initTouchHandling();
@@ -216,8 +187,57 @@ bool Pinball::init()
 	return true;
 }
 
-void Pinball::draw(Renderer* renderer, const Mat4& transform, bool transformUpdated) {
+void Pinball::createWall(Vec2 position, float height) {
+	auto drawNode = DrawNode::create();
+	drawNode->setContentSize(cocos2d::Size(5, height));
+	drawNode->drawSolidRect(position, Vec2(position.x+5, height), Color4F::RED);
+	drawNode->setPosition(position);
 
+	b2FixtureDef boxFixture;
+	boxFixture.density = 10;
+	boxFixture.friction = 0.8;
+	boxFixture.restitution = 0.6;
+	b2PolygonShape boxShape;
+	boxShape.SetAsBox(5.0f / SCALE_RATIO, height / SCALE_RATIO);
+	boxFixture.shape = &boxShape;
+	b2BodyDef boxBodyDef;
+	boxBodyDef.type = b2BodyType::b2_staticBody;
+	boxBodyDef.userData = drawNode;
+	boxBodyDef.position.Set(drawNode->getPosition().x / SCALE_RATIO, drawNode->getPosition().y / SCALE_RATIO);
+	
+	this->addChild(drawNode);
+}
+
+void Pinball::createBox(Vec2 position) {
+	auto drawNode = DrawNode::create();
+	drawNode->setContentSize(cocos2d::Size(BOX_SIZE, BOX_SIZE));
+	drawNode->drawSolidRect(Vec2(0, 0), Vec2(BOX_SIZE, BOX_SIZE), Color4F::GRAY);;
+	drawNode->setPosition(position);
+	drawNode->setRotation(45);
+	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+
+	b2FixtureDef boxFixture;
+	boxFixture.density = 10;
+	boxFixture.friction = 0.8;
+	boxFixture.restitution = 0.6;
+	b2PolygonShape boxShape;
+	boxShape.SetAsBox(BOX_SIZE / SCALE_RATIO, BOX_SIZE / SCALE_RATIO);
+	boxFixture.shape = &boxShape;
+	b2BodyDef boxBodyDef;
+	boxBodyDef.type = b2BodyType::b2_staticBody;
+	boxBodyDef.userData = drawNode;
+	boxBodyDef.angle = CC_DEGREES_TO_RADIANS(drawNode->getRotation());
+	boxBodyDef.position.Set(drawNode->getPosition().x / SCALE_RATIO, drawNode->getPosition().y / SCALE_RATIO);
+
+	auto boxBody1 = world->CreateBody(&boxBodyDef);
+	boxBody1->CreateFixture(&boxFixture);
+
+	this->addChild(drawNode);
+}
+
+void Pinball::draw(Renderer* renderer, const Mat4& transform, bool transformUpdated) {
+	Layer::draw();
+	world->DrawDebugData();
 }
 
 void Pinball::update(float dt) {
@@ -237,9 +257,6 @@ void Pinball::update(float dt) {
 			DrawNode *sprite = (DrawNode *)body->GetUserData();
 			sprite->setPosition(ccp(body->GetPosition().x * SCALE_RATIO, body->GetPosition().y * SCALE_RATIO));
 			sprite->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
-
-
-
 		}
 	}
 	world->ClearForces();

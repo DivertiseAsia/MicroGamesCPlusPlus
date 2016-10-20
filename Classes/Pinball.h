@@ -19,7 +19,7 @@
 #define PADDLE_LENGTH_PERCENT	0.33
 #define PADDLE_WIDTH_PX	20
 #define PADDLE_ANG_VEL	5
-#define BOX_SIZE		50
+#define BOX_SIZE		50.0f
 #define BOX_YOFFSET		200
 #define CAT_MASK_PADDLE	0x01
 #define CAT_MASK_STAT	0x02
@@ -51,6 +51,8 @@ public:
 	b2World *world;
 	float deltaTime;
 private:
+	void createBox(Vec2);
+	void createWall(Vec2, float);
 	void updateScore();
 	void lockPaddleAngle(int);
 	float getMaxPaddleAngle(float);
