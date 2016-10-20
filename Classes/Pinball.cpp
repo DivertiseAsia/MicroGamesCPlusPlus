@@ -398,44 +398,7 @@ void Pinball::startGame() {
 }
 
 void Pinball::initTouchHandling() {
-	auto listener1 = EventListenerTouchOneByOne::create();
 
-	// trigger when you push down
-	listener1->onTouchBegan = [](Touch* touch, Event* event) {
-
-
-		auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
-
-		Vector<Node *> children = parentNode->getChildren();
-		Point touchPosition = parentNode->convertTouchToNodeSpace(touch);
-		for (auto iter = children.rbegin(); iter != children.rend(); ++iter) {
-			Node *childNode = *iter;
-			if (childNode->getBoundingBox().containsPoint(touchPosition)) {
-				//childNode is the touched Node
-				//do the stuff here
-				log(">>%s", childNode->getName().c_str());
-				return true;
-			}
-		}
-		return false;
-		//return true; // if you are consuming it
-		log("TOUCH!!");
-
-	};
-
-	// trigger when moving touch
-	listener1->onTouchMoved = [](Touch* touch, Event* event) {
-		log("MOVE");
-	};
-
-	// trigger when you let up
-	listener1->onTouchEnded = [=](Touch* touch, Event* event) {
-		// your code
-		log("TOUCH ENDED");
-	};
-
-	// Add listener
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
 }
 
 void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
