@@ -28,11 +28,7 @@ bool Pinball::init()
 
 	b2Vec2 gravity = b2Vec2(0.0f, -GRAVITY);
 	world = new b2World(gravity);
-	b2Draw *debugDraw = new GLESDebugDraw(SCALE_RATIO);
-
-	debugDraw->SetFlags(GLESDebugDraw::e_shapeBit);
-
-	world->SetDebugDraw(debugDraw);
+	
 
 	//http://www.cocos2d-x.org/wiki/Multi_resolution_support
 	auto screenSize = Director::getInstance()->getVisibleSize();
@@ -84,9 +80,9 @@ bool Pinball::init()
 	this->addChild(_ball);
 
 	b2FixtureDef ballFixture;
-	ballFixture.density = 10;
-	ballFixture.friction = 0.8;
-	ballFixture.restitution = 0.6;
+	ballFixture.density = DEFAULT_DENSITY;
+	ballFixture.friction = DEFAULT_FRICTION;
+	ballFixture.restitution = DEFAULT_RESTITUTION;
 	b2CircleShape ballShape;
 	ballShape.m_radius = DEFAULT_BALL_RADIUS / SCALE_RATIO;
 	ballFixture.shape = &ballShape;
@@ -106,7 +102,12 @@ bool Pinball::init()
 	}
 
 	//Debug Layer
-	this->addChild(B2DebugDrawLayer::create(world, SCALE_RATIO), 1000);
+	if (Shared::instance()->isDebugMode()) {
+		b2Draw *debugDraw = new GLESDebugDraw(SCALE_RATIO);
+		debugDraw->SetFlags(GLESDebugDraw::e_shapeBit || GLESDebugDraw::e_jointBit);
+		world->SetDebugDraw(debugDraw);
+		this->addChild(B2DebugDrawLayer::create(world, SCALE_RATIO), 1000);
+	}
 
 	this->setName("PinballSceneRoot");
 	this->initTouchHandling();
@@ -130,33 +131,61 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 	if (Shared::instance()->getPlayerPosition(player).y > screenCenter.y) {
 		yfix = -1;
 	}
-	float startAngle = getMinPaddleAngle(player);
-	if (player == SHARED_PLAYER3 || player == SHARED_PLAYER4) {
-		startAngle = getMaxPaddleAngle(startAngle);
-
-	}
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (DEFAULT_BUTTON_RADIUS)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
+	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (150+DEFAULT_BUTTON_RADIUS)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
 	paddle->setPosition(_positions[player]);
-	paddle->setRotation(startAngle);
 	this->addChild(paddle);
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = 10;
-	boxFixture.friction = 0.8;
-	boxFixture.restitution = 0.6;
+	boxFixture.density = DEFAULT_DENSITY;
+	boxFixture.friction = DEFAULT_FRICTION;
+	boxFixture.restitution = DEFAULT_RESTITUTION;
 	b2PolygonShape boxShape;
 	boxShape.SetAsBox(PADDLE_WIDTH_PX / 2 / SCALE_RATIO, paddleLength / 2 / SCALE_RATIO);
+	boxShape.m_centroid = b2Vec2(0, 0);
 	boxFixture.shape = &boxShape;
 	b2BodyDef boxBodyDef;
-	boxBodyDef.type = b2BodyType::b2_kinematicBody;
+	boxBodyDef.type = b2BodyType::b2_dynamicBody;
 	boxBodyDef.userData = paddle;
 	boxBodyDef.position.Set(paddle->getPosition().x / SCALE_RATIO, paddle->getPosition().y / SCALE_RATIO);
-	boxBodyDef.angle = CC_DEGREES_TO_RADIANS(paddle->getRotation());
 
-	auto boxBody1 = world->CreateBody(&boxBodyDef);
-	boxBody1->CreateFixture(&boxFixture);
+	auto pB = world->CreateBody(&boxBodyDef);
+	pB->CreateFixture(&boxFixture);
+	
+	
+
+	auto padControl = DrawNode::create();
+	padControl->setContentSize(cocos2d::Size(PADDLE_CONTROL_RAD * 2, PADDLE_CONTROL_RAD * 2));
+	padControl->drawSolidCircle(Vec2(PADDLE_CONTROL_RAD, PADDLE_CONTROL_RAD), PADDLE_CONTROL_RAD, 360, 100, Shared::instance()->getPlayerColor(player));
+	padControl->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	padControl->setPosition(_positions[player]);
+	this->addChild(padControl);
+	b2FixtureDef circleFixture;
+	circleFixture.density = DEFAULT_DENSITY;
+	circleFixture.friction = DEFAULT_FRICTION;
+	circleFixture.restitution = DEFAULT_RESTITUTION;
+	b2CircleShape circleShape;
+	circleShape.m_radius = PADDLE_CONTROL_RAD / SCALE_RATIO;
+	circleFixture.shape = &circleShape;
+	b2BodyDef buttonBodyDef;
+	buttonBodyDef.type = b2BodyType::b2_kinematicBody;
+	buttonBodyDef.userData = NULL;
+	buttonBodyDef.position.Set(_positions[player].x / SCALE_RATIO, _positions[player].y / SCALE_RATIO);
+	auto bb = world->CreateBody(&buttonBodyDef);
+	bb->CreateFixture(&circleFixture);
+
+	paddleControlBody[player] = bb;
+
+	b2WeldJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = bb;
+	revoluteJointDef.bodyB = pB;
+
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.localAnchorA.Set(0, 0);//the center
+	revoluteJointDef.localAnchorB.Set(-PADDLE_WIDTH_PX / 2 / SCALE_RATIO, 0);//center of the circle
+
+	world->CreateJoint(&revoluteJointDef);
 
 	return paddle;
 }
@@ -180,9 +209,9 @@ GameButton* Pinball::addButtonForPlayer(int player) {
 	this->addChild(button);
 
 	b2FixtureDef circleFixture;
-	circleFixture.density = 10;
-	circleFixture.friction = 0.8;
-	circleFixture.restitution = 0.6;
+	circleFixture.density = DEFAULT_DENSITY;
+	circleFixture.friction = DEFAULT_FRICTION;
+	circleFixture.restitution = DEFAULT_RESTITUTION;
 	b2CircleShape circleShape;
 	circleShape.m_radius = DEFAULT_BUTTON_RADIUS / SCALE_RATIO;
 	circleFixture.shape = &circleShape;
@@ -191,8 +220,8 @@ GameButton* Pinball::addButtonForPlayer(int player) {
 	buttonBodyDef.userData = NULL;
 	buttonBodyDef.position.Set(button->getPosition().x / SCALE_RATIO, button->getPosition().y / SCALE_RATIO);
 
-	auto buttonBody = world->CreateBody(&buttonBodyDef);
-	buttonBody->CreateFixture(&circleFixture);
+	auto bb = world->CreateBody(&buttonBodyDef);
+	bb->CreateFixture(&circleFixture);
 
 	return button;
 }
@@ -204,9 +233,9 @@ void Pinball::createWall(Vec2 position, float height) {
 	drawNode->setPosition(position);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = 10;
-	boxFixture.friction = 0.8f;
-	boxFixture.restitution = 0.6f;
+	boxFixture.density = DEFAULT_DENSITY;
+	boxFixture.friction = DEFAULT_FRICTION;
+	boxFixture.restitution = DEFAULT_RESTITUTION;
 	b2PolygonShape boxShape;
 	boxShape.SetAsBox(WALL_WIDTH / 2 / SCALE_RATIO, height / SCALE_RATIO);
 	boxFixture.shape = &boxShape;
@@ -230,9 +259,9 @@ void Pinball::createBox(Vec2 position) {
 	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = 10;
-	boxFixture.friction = 0.8;
-	boxFixture.restitution = 0.6;
+	boxFixture.density = DEFAULT_DENSITY;
+	boxFixture.friction = DEFAULT_FRICTION;
+	boxFixture.restitution = DEFAULT_RESTITUTION;
 	b2PolygonShape boxShape;
 	boxShape.SetAsBox(BOX_SIZE / 2 / SCALE_RATIO, BOX_SIZE / 2 / SCALE_RATIO);
 	boxFixture.shape = &boxShape;
@@ -268,7 +297,7 @@ void Pinball::update(float dt) {
 		if (body->GetUserData())
 		{
 			DrawNode *sprite = (DrawNode *)body->GetUserData();
-			sprite->setPosition(ccp(body->GetPosition().x * SCALE_RATIO, body->GetPosition().y * SCALE_RATIO));
+			sprite->setPosition(Vec2(body->GetPosition().x * SCALE_RATIO, body->GetPosition().y * SCALE_RATIO));
 			sprite->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
 		}
 	}
@@ -328,33 +357,7 @@ void Pinball::update(float dt) {
 		ballBody->SetAngularVelocity(0);
 		updateScore();
 	}
-	/*lockPaddleAngle(SHARED_PLAYER1);
-	lockPaddleAngle(SHARED_PLAYER2);
-	lockPaddleAngle(SHARED_PLAYER3);
-	lockPaddleAngle(SHARED_PLAYER4);*/
 	
-}
-
-float Pinball::getMinPaddleAngle(int paddle) {
-	auto angles = MIN_ANGLE;
-	return angles.begin()[paddle];
-}
-
-float Pinball::getMaxPaddleAngle(float minAngle) {
-	return minAngle + MAX_ANGLE_DIFF;
-}
-
-void Pinball::lockPaddleAngle(int paddle) {
-	float minAngle = getMinPaddleAngle(paddle);
-	float maxAngle = getMaxPaddleAngle(minAngle);
-	if (_paddle[paddle]->getPhysicsBody()->getRotation() > maxAngle) {
-		_paddle[paddle]->getPhysicsBody()->setAngularVelocity(0);
-		_paddle[paddle]->setRotation(maxAngle);
-	}
-	else if (_paddle[paddle]->getPhysicsBody()->getRotation() < minAngle) {
-		_paddle[paddle]->getPhysicsBody()->setAngularVelocity(0);
-		_paddle[paddle]->setRotation(minAngle);
-	}
 }
 
 //This method will be called on the Node entered.
@@ -364,36 +367,6 @@ void Pinball::onEnter() {
 }
 
 void Pinball::startGame() {
-	Size winSize = Director::getInstance()->getWinSize();
-	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
-
-	/*for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
-		int xfix = 1;
-		int yfix = 1;
-		if (Shared::instance()->getPlayerPosition(i).x > screenCenter.x) {
-			xfix = -1;
-		}
-		if (Shared::instance()->getPlayerPosition(i).y > screenCenter.y) {
-			yfix = -1;
-		}
-		float startAngle = getMinPaddleAngle(i);
-		if (i == SHARED_PLAYER3 || i == SHARED_PLAYER4) {
-			startAngle = getMaxPaddleAngle(startAngle);
-		}
-		//Vec2 pos = Vec2(Shared::instance()->getPlayerPosition(i).x + (DEFAULT_BUTTON_RADIUS+5)*xfix, Shared::instance()->getPlayerPosition(i).y + (DEFAULT_BUTTON_RADIUS+5)*yfix);
-		//auto joint = PhysicsJointDistance::construct(_paddleButt[i]->getPhysicsBody(), _paddle[i]->getPhysicsBody(), Vec2(0, 0), Vec2(0, 0));
-		//auto joint = PhysicsJointLimit::construct(_paddleButt[i]->getPhysicsBody(), _paddle[i]->getPhysicsBody(), Vec2(0,0),Vec2(0,0));
-		//joint->createConstraints();
-		//joint->setDistance(30);
-		//joint->setMax(30);
-		//joint->setMaxForce(10);
-		//joint->setMin(100);
-		//joint->setCollisionEnable(false);	
-
-		//this->getScene()->getPhysicsWorld()->addJoint(joint);
-	}
-	this->getScene()->getPhysicsWorld()->setGravity(Vec2::ZERO);
-	*/
 	GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
 
@@ -410,23 +383,21 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	switch (type)
 	{
 	case ui::Widget::TouchEventType::BEGAN:
-		//lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(-PADDLE_ANG_VEL);
 		}
 		else {
-			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(PADDLE_ANG_VEL);
 		}
 		
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
-		//lockPaddleAngle(button->getPlayer());//fix paddle angle if necessary
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(PADDLE_ANG_VEL);
 		}
 		else {
-			//_paddle[button->getPlayer()]->getPhysicsBody()->setAngularVelocity(-PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(-PADDLE_ANG_VEL);
 		}
 		break;
 	}

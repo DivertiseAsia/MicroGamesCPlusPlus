@@ -8,6 +8,7 @@ Shared * Shared::instance() {
 	if (!minstance) {
 		minstance = new Shared();
 		minstance->colors = SHARED_COLOR_PLAYERS;
+		minstance->debug = false;
 		
 		Vec2 origin = Director::getInstance()->getVisibleOrigin();
 		auto screenSize = Director::getInstance()->getVisibleSize();
@@ -35,4 +36,12 @@ Color4F Shared::getPlayerColor(int player) {
 	}
 	
 	return Color4F::WHITE;
+}
+
+bool Shared::isDebugMode() {
+	return debug;
+}
+
+void Shared::setDebugMode(bool val) {
+	debug = val;
 }
