@@ -12,13 +12,24 @@ LOCAL_MODULE := MyGame_shared
 LOCAL_MODULE_FILENAME := libMyGame
 
 LOCAL_SRC_FILES := hellocpp/main.cpp \
+                   ../../Classes/GLES-Render/B2DebugDrawLayer.cpp \
+                   ../../Classes/GLES-Render/GB2ShapeCacheX.cpp \
+                   ../../Classes/GLES-Render/GLESRender.cpp \
+                   ../../Classes/GLES-Render/VisibleRect.cpp \
                    ../../Classes/AppDelegate.cpp \
+                   ../../Classes/Airhockey.cpp \
 									 ../../Classes/Ball.cpp \
-									 ../../Classes/GameList.cpp \
+									 ../../Classes/GameButton.cpp \
+                   ../../Classes/GameList.cpp \
+                   ../../Classes/GameScene.cpp \
 									 ../../Classes/Holdrace.cpp \
 									 ../../Classes/MainMenuScene.cpp \
+                   ../../Classes/Pinball.cpp \
 									 ../../Classes/PlayerMenuScene.cpp \
-									 ../../Classes/SplashScene.cpp
+                   ../../Classes/Shared.cpp \
+                   ../../Classes/SoundManager.cpp \
+									 ../../Classes/SplashScene.cpp \
+                   ../../Classes/Taprace.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 
