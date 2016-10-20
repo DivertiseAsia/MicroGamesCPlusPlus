@@ -1,138 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="win32">
-      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resource">
-      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\GLES-Render">
-      <UniqueIdentifier>{727b7da7-cb2f-450d-af01-cce9e7f945ad}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SplashScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MainMenuScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\PlayerMenuScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\GameList.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Ball.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Holdrace.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\GameButton.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SoundManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Taprace.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\GameScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Pinball.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Shared.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Airhockey.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\Airhockey.cpp" />
+    <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\Ball.cpp" />
+    <ClCompile Include="..\Classes\GameButton.cpp" />
+    <ClCompile Include="..\Classes\GameList.cpp" />
+    <ClCompile Include="..\Classes\GameScene.cpp" />
+    <ClCompile Include="..\Classes\Holdrace.cpp" />
+    <ClCompile Include="..\Classes\MainMenuScene.cpp" />
+    <ClCompile Include="..\Classes\Pinball.cpp" />
+    <ClCompile Include="..\Classes\PlayerMenuScene.cpp" />
+    <ClCompile Include="..\Classes\Shared.cpp" />
+    <ClCompile Include="..\Classes\SoundManager.cpp" />
+    <ClCompile Include="..\Classes\SplashScene.cpp" />
+    <ClCompile Include="..\Classes\Taprace.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="..\Classes\GLES-Render\B2DebugDrawLayer.cpp">
-      <Filter>src\GLES-Render</Filter>
+      <Filter>GLES-Render</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GLES-Render\GB2ShapeCacheX.cpp">
-      <Filter>src\GLES-Render</Filter>
+      <Filter>GLES-Render</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GLES-Render\GLESRender.cpp">
-      <Filter>src\GLES-Render</Filter>
+      <Filter>GLES-Render</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GLES-Render\VisibleRect.cpp">
-      <Filter>src\GLES-Render</Filter>
+      <Filter>GLES-Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="main.h">
-      <Filter>win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SplashScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MainMenuScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\PlayerMenuScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\GameList.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Ball.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Holdrace.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Shared.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\GameButton.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SoundManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Taprace.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\GameScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Pinball.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Airhockey.hpp">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Airhockey.hpp" />
+    <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\Ball.hpp" />
+    <ClInclude Include="..\Classes\GameButton.hpp" />
+    <ClInclude Include="..\Classes\GameList.h" />
+    <ClInclude Include="..\Classes\GameScene.h" />
+    <ClInclude Include="..\Classes\Holdrace.h" />
+    <ClInclude Include="..\Classes\MainMenuScene.h" />
+    <ClInclude Include="..\Classes\Pinball.h" />
+    <ClInclude Include="..\Classes\PlayerMenuScene.h" />
+    <ClInclude Include="..\Classes\Shared.h" />
+    <ClInclude Include="..\Classes\SoundManager.h" />
+    <ClInclude Include="..\Classes\SplashScene.h" />
+    <ClInclude Include="..\Classes\Taprace.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="..\Classes\GLES-Render\B2DebugDrawLayer.h">
-      <Filter>src\GLES-Render</Filter>
+      <Filter>GLES-Render</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GLES-Render\GB2ShapeCacheX.h">
-      <Filter>src\GLES-Render</Filter>
+      <Filter>GLES-Render</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GLES-Render\GLESRender.h">
-      <Filter>src\GLES-Render</Filter>
+      <Filter>GLES-Render</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GLES-Render\VisibleRect.h">
-      <Filter>src\GLES-Render</Filter>
+      <Filter>GLES-Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="game.rc">
-      <Filter>resource</Filter>
-    </ResourceCompile>
+    <ResourceCompile Include="game.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GLES-Render">
+      <UniqueIdentifier>{c3fd7851-83c3-4c3c-b4d4-b08d4ca5cdcb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
