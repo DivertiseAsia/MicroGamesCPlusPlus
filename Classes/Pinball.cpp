@@ -31,7 +31,7 @@ bool Pinball::init()
 	
 
 	//http://www.cocos2d-x.org/wiki/Multi_resolution_support
-	auto screenSize = Director::getInstance()->getVisibleSize();
+	//auto screenSize = Director::getInstance()->getVisibleSize();
 
 	Size winSize = Director::getInstance()->getWinSize();
 	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
@@ -58,8 +58,8 @@ bool Pinball::init()
 	updateScore();
 
 	//create the walls
-	createWall(Vec2(0, 0),screenSize.height);
-	createWall(Vec2(winSize.width - WALL_WIDTH, 0), screenSize.height);
+	createWall(Vec2(0, 0),winSize.height);
+	createWall(Vec2(winSize.width - WALL_WIDTH, 0), winSize.height);
 
 	//boxes of fun
 	createBox(Vec2(screenCenter.x, screenCenter.y - BOX_YOFFSET));
@@ -98,7 +98,7 @@ bool Pinball::init()
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
 		_button[i] = addButtonForPlayer(i);
-		_paddle[i] = addPaddleForPlayer(i,screenSize,screenCenter);
+		_paddle[i] = addPaddleForPlayer(i,winSize,screenCenter);
 	}
 
 	//Debug Layer
