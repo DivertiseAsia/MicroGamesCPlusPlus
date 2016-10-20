@@ -27,11 +27,14 @@ public:
 	static Shared* instance();
 	cocos2d::Color4F getPlayerColor(int);
 	cocos2d::Vec2 getPlayerPosition(int);
+	bool isDebugMode();
+	void setDebugMode(bool);
 private:
 	Shared() {};
 	static Shared* minstance;
 	std::vector<cocos2d::Color4F> colors;
 	std::vector<cocos2d::Vec2> buttonPositions;
+	bool debug;
 };
 
 

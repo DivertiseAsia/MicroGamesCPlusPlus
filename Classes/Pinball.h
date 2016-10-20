@@ -6,28 +6,36 @@
 #include "Ball.hpp"
 #include "GameButton.hpp"
 #include "GameScene.h"
+#include <Box2D/Box2D.h>
 
-#define POINTS_TO_WIN 10
+#define GRAVITY 10.0f
+#define POINTS_TO_WIN 4
 #define TEAM_TOP 0
 #define TEAM_BOT 1
 #define TEAM_TOP_PLAYERS {SHARED_PLAYER1, SHARED_PLAYER4}
 #define TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
-#define MIN_ANGLE {80, 260, 40, 220}
-#define MAX_ANGLE_DIFF 60
 #define PADDLE_LENGTH_PERCENT	0.33
 #define PADDLE_WIDTH_PX	20
 #define PADDLE_ANG_VEL	5
-#define BOX_SIZE		50
+#define PADDLE_CONTROL_RAD 30.0f
+#define BOX_SIZE		50.0f
 #define BOX_YOFFSET		200
+#define WALL_WIDTH		5.0f
 #define CAT_MASK_PADDLE	0x01
 #define CAT_MASK_STAT	0x02
 #define CAT_MASK_BALL	0x05
 #define BALL_RESET_OFFSET_Y	3
 #define BALL_RESET_OFFSET_X	20
 
+#define DEFAULT_DENSITY		10.0f
+#define DEFAULT_FRICTION	0.8f
+#define DEFAULT_RESTITUTION 0.6f
+
+#define SCALE_RATIO 32.0
+
 USING_NS_CC;
 
-class Pinball : public GameScene
+class Pinball : public GameScene, public b2ContactListener
 {
 public:
     
@@ -44,16 +52,19 @@ public:
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
 	using GameScene::GameScene;
-    
+	b2World *world;
+	float deltaTime;
 private:
+	void createBox(Vec2);
+	void createWall(Vec2, float);
+	GameButton* addButtonForPlayer(int);
+	DrawNode* addPaddleForPlayer(int, cocos2d::Size, cocos2d::Vec2);
 	void updateScore();
-	void lockPaddleAngle(int);
-	float getMaxPaddleAngle(float);
-	float getMinPaddleAngle(int);
-    Ball* _ball;
+    DrawNode* _ball;
+	b2Body* ballBody;
     GameButton* _button[4];
 	DrawNode* _paddle[4];
-	DrawNode* _paddleButt[4];
+	b2Body* paddleControlBody[4];
 	Vec2 _positions[4];
 	int _score[2];
     DrawNode* _drawNode;

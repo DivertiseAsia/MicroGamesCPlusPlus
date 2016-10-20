@@ -13,7 +13,7 @@ Scene* GameList::getScene(GameType listing, int numberOfPlayers) {
 	switch (listing) 
 	{
 	case PINBALL:
-		return GameScene::createSceneWithPhysics<Pinball>(numberOfPlayers);
+		return GameScene::createScene<Pinball>(numberOfPlayers);
 	case OVERSHOOT:
 		return GameScene::createScene<Holdrace>(numberOfPlayers);
 	case TAPTAP:

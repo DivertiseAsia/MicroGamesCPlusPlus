@@ -176,5 +176,5 @@ void GameScene::showText(std::string s, float dt){
 
 template Scene* GameScene::createScene<Taprace>(int);
 template Scene* GameScene::createScene<Holdrace>(int);
-template Scene* GameScene::createSceneWithPhysics<Pinball>(int);
 template Scene* GameScene::createScene<Airhockey>(int);
+template Scene* GameScene::createScene<Pinball>(int);
