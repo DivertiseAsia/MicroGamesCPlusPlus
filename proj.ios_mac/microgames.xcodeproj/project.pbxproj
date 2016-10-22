@@ -68,13 +68,16 @@
 		96C667BB1D9673990091F8C8 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 96C667BA1D9673990091F8C8 /* sounds */; };
 		96C667BD1D967A160091F8C8 /* Taprace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96C667BC1D967A160091F8C8 /* Taprace.cpp */; };
 		96E16D2C1D8A7CFF00D732A8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */; };
-		96E16D2F1D8AEDB500D732A8 /* GLES-Render in Resources */ = {isa = PBXBuildFile; fileRef = 96E16D2E1D8AEDB500D732A8 /* GLES-Render */; };
 		96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D321D8C4A2600D732A8 /* GameList.cpp */; };
 		96E16D361D8D114E00D732A8 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E16D351D8D114E00D732A8 /* splash.png */; };
 		96F2C8B01D8842A100EED92B /* Holdrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8AE1D8842A100EED92B /* Holdrace.cpp */; };
 		96F2C8BA1D88432700EED92B /* MainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8B41D88432700EED92B /* MainMenuScene.cpp */; };
 		96F2C8BB1D88432700EED92B /* PlayerMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8B61D88432700EED92B /* PlayerMenuScene.cpp */; };
 		96F2C8BC1D88432700EED92B /* SplashScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8B81D88432700EED92B /* SplashScene.cpp */; };
+		96FD62821DB8A30A00FFC430 /* B2DebugDrawLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96FD627A1DB8A30A00FFC430 /* B2DebugDrawLayer.cpp */; };
+		96FD62831DB8A30A00FFC430 /* GB2ShapeCacheX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96FD627C1DB8A30A00FFC430 /* GB2ShapeCacheX.cpp */; };
+		96FD62841DB8A30A00FFC430 /* GLESRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96FD627E1DB8A30A00FFC430 /* GLESRender.cpp */; };
+		96FD62851DB8A30A00FFC430 /* VisibleRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96FD62801DB8A30A00FFC430 /* VisibleRect.cpp */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -192,7 +195,6 @@
 		96C667BE1D967B1E0091F8C8 /* Taprace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Taprace.h; sourceTree = "<group>"; };
 		96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		96E16D2B1D8A7CFF00D732A8 /* Ball.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
-		96E16D2E1D8AEDB500D732A8 /* GLES-Render */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "GLES-Render"; sourceTree = "<group>"; };
 		96E16D321D8C4A2600D732A8 /* GameList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameList.cpp; sourceTree = "<group>"; };
 		96E16D331D8C4A2600D732A8 /* GameList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameList.h; sourceTree = "<group>"; };
 		96E16D351D8D114E00D732A8 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
@@ -204,6 +206,14 @@
 		96F2C8B71D88432700EED92B /* PlayerMenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerMenuScene.h; sourceTree = "<group>"; };
 		96F2C8B81D88432700EED92B /* SplashScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SplashScene.cpp; sourceTree = "<group>"; };
 		96F2C8B91D88432700EED92B /* SplashScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashScene.h; sourceTree = "<group>"; };
+		96FD627A1DB8A30A00FFC430 /* B2DebugDrawLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = B2DebugDrawLayer.cpp; path = "GLES-Render/B2DebugDrawLayer.cpp"; sourceTree = "<group>"; };
+		96FD627B1DB8A30A00FFC430 /* B2DebugDrawLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = B2DebugDrawLayer.h; path = "GLES-Render/B2DebugDrawLayer.h"; sourceTree = "<group>"; };
+		96FD627C1DB8A30A00FFC430 /* GB2ShapeCacheX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GB2ShapeCacheX.cpp; path = "GLES-Render/GB2ShapeCacheX.cpp"; sourceTree = "<group>"; };
+		96FD627D1DB8A30A00FFC430 /* GB2ShapeCacheX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GB2ShapeCacheX.h; path = "GLES-Render/GB2ShapeCacheX.h"; sourceTree = "<group>"; };
+		96FD627E1DB8A30A00FFC430 /* GLESRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLESRender.cpp; path = "GLES-Render/GLESRender.cpp"; sourceTree = "<group>"; };
+		96FD627F1DB8A30A00FFC430 /* GLESRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLESRender.h; path = "GLES-Render/GLESRender.h"; sourceTree = "<group>"; };
+		96FD62801DB8A30A00FFC430 /* VisibleRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VisibleRect.cpp; path = "GLES-Render/VisibleRect.cpp"; sourceTree = "<group>"; };
+		96FD62811DB8A30A00FFC430 /* VisibleRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VisibleRect.h; path = "GLES-Render/VisibleRect.h"; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -352,6 +362,7 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				96FD62791DB8A2EB00FFC430 /* GLES-Render */,
 				96A455871DB75F9C00A377C7 /* Shared.cpp */,
 				9606DBCE1DB73FCF007BC8D2 /* Pinball.cpp */,
 				9606DBCF1DB73FCF007BC8D2 /* Pinball.h */,
@@ -362,7 +373,6 @@
 				96C667B81D96733D0091F8C8 /* SoundManager.h */,
 				96E16D321D8C4A2600D732A8 /* GameList.cpp */,
 				96E16D331D8C4A2600D732A8 /* GameList.h */,
-				96E16D2E1D8AEDB500D732A8 /* GLES-Render */,
 				96F2C8B41D88432700EED92B /* MainMenuScene.cpp */,
 				96F2C8B51D88432700EED92B /* MainMenuScene.h */,
 				96F2C8B61D88432700EED92B /* PlayerMenuScene.cpp */,
@@ -432,6 +442,21 @@
 			name = Icons;
 			path = ios;
 			sourceTree = SOURCE_ROOT;
+		};
+		96FD62791DB8A2EB00FFC430 /* GLES-Render */ = {
+			isa = PBXGroup;
+			children = (
+				96FD627A1DB8A30A00FFC430 /* B2DebugDrawLayer.cpp */,
+				96FD627B1DB8A30A00FFC430 /* B2DebugDrawLayer.h */,
+				96FD627C1DB8A30A00FFC430 /* GB2ShapeCacheX.cpp */,
+				96FD627D1DB8A30A00FFC430 /* GB2ShapeCacheX.h */,
+				96FD627E1DB8A30A00FFC430 /* GLESRender.cpp */,
+				96FD627F1DB8A30A00FFC430 /* GLESRender.h */,
+				96FD62801DB8A30A00FFC430 /* VisibleRect.cpp */,
+				96FD62811DB8A30A00FFC430 /* VisibleRect.h */,
+			);
+			name = "GLES-Render";
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -548,7 +573,6 @@
 				96E16D361D8D114E00D732A8 /* splash.png in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
-				96E16D2F1D8AEDB500D732A8 /* GLES-Render in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
 				50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */,
@@ -587,12 +611,16 @@
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				96C667B91D96733D0091F8C8 /* SoundManager.cpp in Sources */,
 				96F2C8BC1D88432700EED92B /* SplashScene.cpp in Sources */,
+				96FD62831DB8A30A00FFC430 /* GB2ShapeCacheX.cpp in Sources */,
 				96E16D2C1D8A7CFF00D732A8 /* Ball.cpp in Sources */,
+				96FD62851DB8A30A00FFC430 /* VisibleRect.cpp in Sources */,
 				969DA58D1D97B61A00315F6D /* GameScene.cpp in Sources */,
 				96F2C8BA1D88432700EED92B /* MainMenuScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				96F2C8BB1D88432700EED92B /* PlayerMenuScene.cpp in Sources */,
 				96F2C8B01D8842A100EED92B /* Holdrace.cpp in Sources */,
+				96FD62841DB8A30A00FFC430 /* GLESRender.cpp in Sources */,
+				96FD62821DB8A30A00FFC430 /* B2DebugDrawLayer.cpp in Sources */,
 				96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */,
 				963931DE1D8FED9C00B739F0 /* GameButton.cpp in Sources */,
 				96C667BD1D967A160091F8C8 /* Taprace.cpp in Sources */,

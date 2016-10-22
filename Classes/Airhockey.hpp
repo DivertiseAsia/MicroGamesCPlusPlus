@@ -14,6 +14,7 @@
 #include "Ball.hpp"
 #include "GameButton.hpp"
 #include "GameScene.h"
+#include <Box2D/Box2D.h>
 
 USING_NS_CC;
 
@@ -22,6 +23,9 @@ USING_NS_CC;
 #define BALL_RESET_OFFSET_Y	3
 #define PADDLE_DROP 4
 #define PADDLE_DRAG 5
+
+#define PTM_RATIO 32.0
+
 
 class Airhockey : public GameScene
 {
@@ -47,11 +51,14 @@ private:
     
     Ball* _ball;
     GameButton* _button[4];
-    DrawNode* _paddle[4];
-    int _score[2];
+    
     DrawNode* _drawNode;
     Label* scoreTop;
     Label* scoreBottom;
+    
+    b2Body* _ballBody;
+    b2World* _world;
 };
+
 
 #endif /* Airhockey_hpp */

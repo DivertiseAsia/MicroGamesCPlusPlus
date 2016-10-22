@@ -26,6 +26,7 @@ public:
 
     virtual bool init();
     
+    void setRadius(float);
     void changeColor(Color4F color);
     CC_SYNTHESIZE(Ball*, _ball, Ball);
     CC_SYNTHESIZE(Touch*, _touch, Touch); //a property to hold touch

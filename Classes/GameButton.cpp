@@ -34,9 +34,14 @@ void GameButton::changeColor(Color4F color){
     this->loadTextureNormal(createSpriteFrame());
 }
 
+void GameButton::setRadius(float r){
+    _radius = r;
+}
+
 void GameButton::setPlayer(int player)
 {
 	_player = player;
+    this->loadTextureNormal(createSpriteFrame());
 }
 
 int GameButton::getPlayer()

@@ -21,6 +21,8 @@
 
 #define SHARED_GAME_NAME "MicroGames"
 
+#define DEBUG_MODE
+
 class Shared
 {
 public:
