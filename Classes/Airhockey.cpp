@@ -31,7 +31,7 @@ bool Airhockey::init()
     auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
     
     
-    b2Vec2 gravity = b2Vec2(0.0f, -0.2f);    //No gravity
+    b2Vec2 gravity = b2Vec2(0.0f, 0.0f);    //No gravity
     _world = new b2World(gravity);  //Create a physic world.
     
     
@@ -102,45 +102,9 @@ bool Airhockey::init()
     b2FixtureDef ballShapeDef;
     ballShapeDef.shape = &circle;
     ballShapeDef.density = 1.0f;
-    ballShapeDef.friction = 0.f;
-    ballShapeDef.restitution = 1.0f;
+    ballShapeDef.friction = 0.3f;
+    ballShapeDef.restitution = 0.8f;
     _ballBody->CreateFixture(&ballShapeDef);
-    
-    //////////////////////////////////////////
-    //Create world bounds
-    /*
-    b2FixtureDef boxFixture;
-    boxFixture.density = 0;
-    boxFixture.friction = 0;
-    boxFixture.restitution = 1;
-    b2PolygonShape boxShape;
-    boxShape.SetAsBox(screenSize.width/2 / PTM_RATIO, screenSize.height/2/ PTM_RATIO);
-    boxFixture.shape = &boxShape;
-    
-    b2BodyDef boxBodyDef;
-    boxBodyDef.type = b2BodyType::b2_staticBody;
-    //Position has to be calculated by "visible origin" or "screenCenter".
-    auto center= origin+screenSize/2;
-    auto bottom = origin+Vec2(screenSize.width/2,-screenSize.height/2+10); //+10 for offset to be visible
-    boxBodyDef.position.Set(bottom.x/PTM_RATIO,bottom.y/PTM_RATIO);
-    auto boxBody1 = _world->CreateBody(&boxBodyDef);
-    boxBody1->CreateFixture(&boxFixture);
-    _boxBody=boxBody1;
-    
-    auto top = origin+Vec2(screenSize.width/2,screenSize.height+screenSize.height/2-10); //-10 for offset to be visible
-    boxBodyDef.position.Set(top.x/PTM_RATIO, top.y/PTM_RATIO);
-    _world->CreateBody(&boxBodyDef)->CreateFixture(&boxFixture);
-    
-    auto left = origin+Vec2(-screenSize.width/2+10,screenSize.height/2); //+10 for offset to be visible
-    boxBodyDef.position.Set(left.x/PTM_RATIO, left.y/PTM_RATIO);
-    _world->CreateBody(&boxBodyDef)->CreateFixture(&boxFixture);
-    
-    auto right = origin+Vec2(screenSize.width+screenSize.width/2-10,screenSize.height/2); //-10 for offset to be visible
-    boxBodyDef.position.Set(right.x/PTM_RATIO, right.y/PTM_RATIO);
-    _world->CreateBody(&boxBodyDef)->CreateFixture(&boxFixture);
-    */
-
-    //////////////////////////////////////////
     
     createWall();
     
@@ -183,8 +147,8 @@ bool Airhockey::init()
         b2FixtureDef btnShapeDef;
         btnShapeDef.shape = &circle;
         btnShapeDef.density = 10.0f;
-        btnShapeDef.friction = 0.f;
-        btnShapeDef.restitution = 1.0f;
+        btnShapeDef.friction = 1.0f;
+        btnShapeDef.restitution = 0.5f;
         btnBody->CreateFixture(&btnShapeDef);
         
         _button[i]->setUserData(btnBody);
@@ -357,30 +321,33 @@ void Airhockey::startGame(float s){
 
 void Airhockey::createWall() {
     //auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    Size winSize = Director::getInstance()->getWinSize();
-    auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
+    Vec2 origin = Director::getInstance()->getVisibleOrigin() * 1.0/PTM_RATIO;
+    Size visibleSize = Director::getInstance()->getVisibleSize() * 1.0/PTM_RATIO;
+    
+    auto margin = 0.1;
+    
+    origin += Vec2(+margin,+margin);
+    visibleSize = visibleSize - Size(margin*2,margin*2);
     
     // Create edges around the entire screen
     b2BodyDef boxBodyDef;
-    boxBodyDef.position.Set(0,0);
+    boxBodyDef.position.Set(origin.x,origin.y);
     _boxBody = _world->CreateBody(&boxBodyDef);
     
     b2EdgeShape groundBox;
     b2FixtureDef groundBoxDef;
     groundBoxDef.shape = &groundBox;
     
-    groundBox.Set(b2Vec2(0,0), b2Vec2(winSize.width/PTM_RATIO, 0));
+    groundBox.Set(b2Vec2(0,0), b2Vec2(visibleSize.width, 0));    //bottom
     _boxBody->CreateFixture(&groundBoxDef);
     
-    groundBox.Set(b2Vec2(0,0), b2Vec2(0, winSize.height/PTM_RATIO));
+    groundBox.Set(b2Vec2(0,0), b2Vec2(0, visibleSize.height));   //left
     _boxBody->CreateFixture(&groundBoxDef);
     
-    groundBox.Set(b2Vec2(0, winSize.height/PTM_RATIO), b2Vec2(winSize.width/PTM_RATIO,
-                                                              winSize.height/PTM_RATIO));
+    groundBox.Set(b2Vec2(0, visibleSize.height), b2Vec2(visibleSize.width,visibleSize.height));//top
     _boxBody->CreateFixture(&groundBoxDef);
     
-    groundBox.Set(b2Vec2(winSize.width/PTM_RATIO, winSize.height/PTM_RATIO),
-                  b2Vec2(winSize.width/PTM_RATIO, 0));
+    groundBox.Set(b2Vec2(visibleSize.width, visibleSize.height), b2Vec2(visibleSize.width, 0)); //right
     _boxBody->CreateFixture(&groundBoxDef);
+    
 }
