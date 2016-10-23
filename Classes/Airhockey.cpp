@@ -182,7 +182,7 @@ bool Airhockey::init()
         // Create shape definition and add to body
         b2FixtureDef btnShapeDef;
         btnShapeDef.shape = &circle;
-        btnShapeDef.density = 1.0f;
+        btnShapeDef.density = 10.0f;
         btnShapeDef.friction = 0.f;
         btnShapeDef.restitution = 1.0f;
         btnBody->CreateFixture(&btnShapeDef);
@@ -280,14 +280,14 @@ void Airhockey::initTouchHandling(){
                     
                     log(">>CreateJoint!!!<<");
                     auto body = (b2Body*)childNode->getUserData();
-                    auto locationWorld = b2Vec2(touchPosition.x/PTM_RATIO, touchPosition.y/PTM_RATIO);
+                    //auto locationWorld = b2Vec2(touchPosition.x/PTM_RATIO, touchPosition.y/PTM_RATIO);
                     
                     b2MouseJointDef md;
                     md.bodyA = this->_boxBody;
                     md.bodyB = body;
-                    md.target = locationWorld;
+                    md.target = body->GetWorldCenter();
                     md.collideConnected = true;
-                    md.maxForce = 1000.0f * body->GetMass();
+                    md.maxForce = 10000.0f * body->GetMass(); //more force, less bouncing effect.
                     
                     _mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
                     body->SetAwake(true);
