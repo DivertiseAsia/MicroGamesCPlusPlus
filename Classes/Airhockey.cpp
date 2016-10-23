@@ -31,7 +31,7 @@ bool Airhockey::init()
     auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
     
     
-    b2Vec2 gravity = b2Vec2(0.0f, -0.0f);    //No gravity
+    b2Vec2 gravity = b2Vec2(0.0f, -0.2f);    //No gravity
     _world = new b2World(gravity);  //Create a physic world.
     
     
@@ -108,6 +108,7 @@ bool Airhockey::init()
     
     //////////////////////////////////////////
     //Create world bounds
+    /*
     b2FixtureDef boxFixture;
     boxFixture.density = 0;
     boxFixture.friction = 0;
@@ -124,6 +125,7 @@ bool Airhockey::init()
     boxBodyDef.position.Set(bottom.x/PTM_RATIO,bottom.y/PTM_RATIO);
     auto boxBody1 = _world->CreateBody(&boxBodyDef);
     boxBody1->CreateFixture(&boxFixture);
+    _boxBody=boxBody1;
     
     auto top = origin+Vec2(screenSize.width/2,screenSize.height+screenSize.height/2-10); //-10 for offset to be visible
     boxBodyDef.position.Set(top.x/PTM_RATIO, top.y/PTM_RATIO);
@@ -136,9 +138,11 @@ bool Airhockey::init()
     auto right = origin+Vec2(screenSize.width+screenSize.width/2-10,screenSize.height/2); //-10 for offset to be visible
     boxBodyDef.position.Set(right.x/PTM_RATIO, right.y/PTM_RATIO);
     _world->CreateBody(&boxBodyDef)->CreateFixture(&boxFixture);
-    
+    */
 
     //////////////////////////////////////////
+    
+    createWall();
     
     
     //create the controls and paddles
@@ -190,11 +194,13 @@ bool Airhockey::init()
     
     //Debug Layer
 #ifdef DEBUG_MODE
-        log("DEBUG MODE!!!");
-        b2Draw *debugDraw = new GLESDebugDraw(PTM_RATIO);
-        debugDraw->SetFlags(GLESDebugDraw::e_shapeBit || GLESDebugDraw::e_jointBit);
-        _world->SetDebugDraw(debugDraw);
-        this->addChild(B2DebugDrawLayer::create(_world, PTM_RATIO), 1000);
+    log("DEBUG MODE!!!");
+    b2Draw *debugDraw = new GLESDebugDraw(PTM_RATIO);
+    debugDraw->SetFlags(GLESDebugDraw::e_shapeBit || GLESDebugDraw::e_jointBit);
+    _world->SetDebugDraw(debugDraw);
+    auto debugLayer = B2DebugDrawLayer::create(_world, PTM_RATIO);
+    debugLayer->setTag(12345);
+    this->addChild(debugLayer, 1000);
 #endif
     
     this->setName("AirhockeySceneRoot");
@@ -256,7 +262,7 @@ void Airhockey::initTouchHandling(){
     auto listener1 = EventListenerTouchOneByOne::create();
     
     // trigger when you push down
-    listener1->onTouchBegan = [](Touch* touch, Event* event){
+    listener1->onTouchBegan = [this](Touch* touch, Event* event){
         
         auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
         
@@ -265,10 +271,27 @@ void Airhockey::initTouchHandling(){
         for (auto iter = children.rbegin(); iter != children.rend(); ++iter) {
             GameButton* childNode = static_cast<GameButton*>(*iter);
             log("Locked! touch:%i", touch->getID());
-            if (childNode->getBoundingBox().containsPoint(touchPosition)) {
+            if (childNode->getTag()!= 12345 && childNode->getBoundingBox().containsPoint(touchPosition)) {
                 //childNode is the touched Node
                 log(">>%s",childNode->getName().c_str());
                 childNode->setTouch(touch);
+                
+                if (childNode->getUserData()){
+                    
+                    log(">>CreateJoint!!!<<");
+                    auto body = (b2Body*)childNode->getUserData();
+                    auto locationWorld = b2Vec2(touchPosition.x/PTM_RATIO, touchPosition.y/PTM_RATIO);
+                    
+                    b2MouseJointDef md;
+                    md.bodyA = this->_boxBody;
+                    md.bodyB = body;
+                    md.target = locationWorld;
+                    md.collideConnected = true;
+                    md.maxForce = 1000.0f * body->GetMass();
+                    
+                    _mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
+                    body->SetAwake(true);
+                }
             }
         }
         
@@ -287,13 +310,14 @@ void Airhockey::initTouchHandling(){
                 auto tap = touch->getLocation();
                 
                 if (b->getUserData()){
-                    auto body = (b2Body*)b->getUserData();
-                    //b2Vec2 pos = b2Vec2(tap.x/PTM_RATIO,tap.y/PTM_RATIO);
+                    //auto body = (b2Body*)b->getUserData();
+                    b2Vec2 pos = b2Vec2(tap.x/PTM_RATIO,tap.y/PTM_RATIO);
                     //body->SetTransform(pos, 0);
-                    auto f = touch->getLocation() - touch->getPreviousLocation();
-                    b2Vec2 force = b2Vec2(f.x, f.y);
-                    body->ApplyLinearImpulse(force, body->GetWorldCenter(),true);
-                    log("Apply force %.2f,%.2f", force.x, force.y);
+                    //auto f = touch->getLocation() - touch->getPreviousLocation();
+                    //b2Vec2 force = b2Vec2(f.x, f.y);
+                    //body->ApplyLinearImpulse(force, body->GetWorldCenter(),true);
+                    //log("Apply force %.2f,%.2f", force.x, force.y);
+                    _mouseJoint->SetTarget(pos);
                 }else{
                     b->setPosition(tap);
                 }
@@ -308,6 +332,10 @@ void Airhockey::initTouchHandling(){
             if (b->getTouch() != NULL && b->getTouch() == touch){
                 b->setTouch(NULL);
                 log("UnLocked!touch:%i", touch->getID());
+                if (_mouseJoint) {
+                    _world->DestroyJoint(_mouseJoint);
+                    _mouseJoint = NULL;
+                }
             }
         }
         
@@ -327,24 +355,32 @@ void Airhockey::startGame(float s){
     GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
 
-void createWall(Vec2 position, float height, b2World* world) {
-    /*auto drawNode = DrawNode::create();
-    drawNode->setContentSize(cocos2d::Size(WALL_WIDTH, height));
-    drawNode->drawSolidRect(position, Vec2(position.x+ WALL_WIDTH, height), Color4F::RED);
-    drawNode->setPosition(position);
-     */
+void Airhockey::createWall() {
+    //auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Size winSize = Director::getInstance()->getWinSize();
+    auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
     
-    b2FixtureDef boxFixture;
-    boxFixture.density = 0;
-    boxFixture.friction = 0;
-    boxFixture.restitution = 1;
-    b2PolygonShape boxShape;
-    boxShape.SetAsBox(1000 / 2 / PTM_RATIO, height / PTM_RATIO);
-    boxFixture.shape = &boxShape;
+    // Create edges around the entire screen
     b2BodyDef boxBodyDef;
-    boxBodyDef.type = b2BodyType::b2_staticBody;
-    boxBodyDef.position.Set(position.x / PTM_RATIO, position.y / PTM_RATIO);
+    boxBodyDef.position.Set(0,0);
+    _boxBody = _world->CreateBody(&boxBodyDef);
     
-    auto boxBody1 = world->CreateBody(&boxBodyDef);
-    boxBody1->CreateFixture(&boxFixture);
+    b2EdgeShape groundBox;
+    b2FixtureDef groundBoxDef;
+    groundBoxDef.shape = &groundBox;
+    
+    groundBox.Set(b2Vec2(0,0), b2Vec2(winSize.width/PTM_RATIO, 0));
+    _boxBody->CreateFixture(&groundBoxDef);
+    
+    groundBox.Set(b2Vec2(0,0), b2Vec2(0, winSize.height/PTM_RATIO));
+    _boxBody->CreateFixture(&groundBoxDef);
+    
+    groundBox.Set(b2Vec2(0, winSize.height/PTM_RATIO), b2Vec2(winSize.width/PTM_RATIO,
+                                                              winSize.height/PTM_RATIO));
+    _boxBody->CreateFixture(&groundBoxDef);
+    
+    groundBox.Set(b2Vec2(winSize.width/PTM_RATIO, winSize.height/PTM_RATIO),
+                  b2Vec2(winSize.width/PTM_RATIO, 0));
+    _boxBody->CreateFixture(&groundBoxDef);
 }

@@ -40,6 +40,7 @@ public:
     // Our game custom functions
     void startGame(float);
     void initTouchHandling();
+    void createWall();
     
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
@@ -56,8 +57,10 @@ private:
     Label* scoreTop;
     Label* scoreBottom;
     
+    b2Body* _boxBody;
     b2Body* _ballBody;
     b2World* _world;
+    b2MouseJoint* _mouseJoint;
 };
 
 
