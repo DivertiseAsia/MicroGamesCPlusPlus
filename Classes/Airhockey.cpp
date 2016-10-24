@@ -104,6 +104,8 @@ bool Airhockey::init()
     ballShapeDef.density = 1.0f;
     ballShapeDef.friction = 0.3f;
     ballShapeDef.restitution = 0.8f;
+    ballShapeDef.filter.categoryBits = PUCK;
+    log("center catBits>>> %i, maskBits>>>>%i", ballShapeDef.filter.categoryBits, ballShapeDef.filter.maskBits);
     _ballBody->CreateFixture(&ballShapeDef);
     
     createWall();
@@ -349,5 +351,12 @@ void Airhockey::createWall() {
     
     groundBox.Set(b2Vec2(visibleSize.width, visibleSize.height), b2Vec2(visibleSize.width, 0)); //right
     _boxBody->CreateFixture(&groundBoxDef);
+    
+    
+    groundBox.Set(b2Vec2(0, visibleSize.height/2), b2Vec2(visibleSize.width, visibleSize.height/2)); //center line
+    groundBoxDef.filter.maskBits = ~PUCK;
+    log("center catBits>>> %i, maskBits>>>>%i", groundBoxDef.filter.categoryBits, groundBoxDef.filter.maskBits);
+    _boxBody->CreateFixture(&groundBoxDef);
+    
     
 }
