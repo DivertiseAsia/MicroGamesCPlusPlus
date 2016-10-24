@@ -25,8 +25,9 @@ USING_NS_CC;
 #define PADDLE_DRAG 5
 
 #define PTM_RATIO 32.0
+#define GRAVITY b2Vec2(0.0f, 0.0f)
 
-#define BIT_MASK_PUCK 0x0001
+#define BIT_MASK_PUCK 0x0002
 
 
 class Airhockey : public GameScene
@@ -43,6 +44,10 @@ public:
     void startGame(float);
     void initTouchHandling();
     void createWall();
+    void drawBoard();
+    void addScores();
+    void placePuck();
+    void addMallet(int playerNo, Vec2 pos, Color4F color);
     
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
@@ -56,13 +61,17 @@ private:
     GameButton* _button[4];
     
     DrawNode* _drawNode;
-    Label* scoreTop;
-    Label* scoreBottom;
+    Label* _scoreTop;
+    Label* _scoreBottom;
     
     b2Body* _boxBody;
     b2Body* _ballBody;
     b2World* _world;
     b2MouseJoint* _mouseJoint;
+    
+    Vec2 _screenOrigin;
+    Size _screenSize;
+    Vec2 _screenCenter;
 };
 
 

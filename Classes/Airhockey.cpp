@@ -24,140 +24,46 @@ bool Airhockey::init()
     //http://www.cocos2d-x.org/wiki/Multi_resolution_support
     
     //auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    auto screenSize = Director::getInstance()->getVisibleSize();
+    _screenOrigin = Director::getInstance()->getVisibleOrigin();
+    _screenSize = Director::getInstance()->getVisibleSize();
     
     Size winSize = Director::getInstance()->getWinSize();
-    auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
+    _screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
     
-    
-    b2Vec2 gravity = b2Vec2(0.0f, 0.0f);    //No gravity
-    _world = new b2World(gravity);  //Create a physic world.
-    
+    _world = new b2World(GRAVITY);  //Create a physic world.
     
     //Create drawNode and draw the center line
     _drawNode = DrawNode::create(10);    //Default line width
-    _drawNode->drawLine(Vec2(0, screenCenter.y), Vec2(winSize.width, screenCenter.y), Color4F::GRAY);
     this->addChild(_drawNode);
+    
+    drawBoard();
+    createWall();
+    placePuck();
     
     Vec2 buttonOffset = Vec2(80,80);
     //Position should be based on visibleOrigin and visibleSize properties.
     auto buttonPos = {
-        Vec2(origin.x+buttonOffset.x,origin.y + screenSize.height-buttonOffset.y),  //0
-        Vec2(origin.x + screenSize.width - buttonOffset.x, origin.y+ buttonOffset.y),  //1
-        origin+buttonOffset, //2
-        origin + screenSize - buttonOffset}; //3
+        Vec2(_screenOrigin.x+buttonOffset.x,_screenOrigin.y + _screenSize.height-buttonOffset.y),  //0
+        Vec2(_screenOrigin.x + _screenSize.width - buttonOffset.x, _screenOrigin.y+ buttonOffset.y),  //1
+        _screenOrigin+buttonOffset, //2
+        _screenOrigin + _screenSize - buttonOffset}; //3
     auto colors = SHARED_COLOR_PLAYERS;
-    
-    scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
-    scoreBottom->setBMFontSize(64);
-    scoreBottom->setPosition(Vec2(50, screenCenter.y - 50));
-    scoreBottom->setRotation(90);
-    scoreBottom->setUserData(0); //Use UserData to store score
-    this->addChild(scoreBottom, 1);
-    
-    scoreTop = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
-    scoreTop->setBMFontSize(64);
-    scoreTop->setPosition(Vec2(50, screenCenter.y + 50));
-    scoreTop->setRotation(90);
-    scoreTop->setUserData(0); //Use UserData to store score
-    this->addChild(scoreTop, 1);
-    updateScore();
-    
-    //create the walls
-    auto drawNode = DrawNode::create();
-    drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
-    drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
-    
-    drawNode->setPosition(Vec2(0, 0));
-    this->addChild(drawNode);
-    drawNode = DrawNode::create();
-    drawNode->setContentSize(cocos2d::Size(3, screenSize.height));
-    drawNode->drawSolidRect(Vec2(0, 0), Vec2(3, screenSize.height), Color4F::RED);
-    
-    this->addChild(drawNode);
-    
-    //create the ball
-    float offset = BALL_RESET_OFFSET_Y;
-    if (cocos2d::rand_0_1() > 0.5) {
-        offset = -BALL_RESET_OFFSET_Y;
-    }
-    _ball = Ball::create(colors.begin()[0]);
-    _ball->setPosition(Vec2(screenCenter.x, screenCenter.y+offset));
-    this->addChild(_ball);
-    
-    // Create _ballBody
-    b2BodyDef ballBodyDef;
-    ballBodyDef.type = b2_dynamicBody;
-    auto ballPosInWorld = _ball->getPosition()/PTM_RATIO;
-    ballBodyDef.position.Set(ballPosInWorld.x, ballPosInWorld.y);
-    ballBodyDef.userData = _ball;
-    _ballBody = _world->CreateBody(&ballBodyDef);
-    
-    // Define a shape for the _ballBody(tangible)
-    b2CircleShape circle;
-    circle.m_radius = _ball->getContentSize().width/2/PTM_RATIO;
-    
-    // Create shape definition and add to body
-    b2FixtureDef ballShapeDef;
-    ballShapeDef.shape = &circle;
-    ballShapeDef.density = 1.0f;
-    ballShapeDef.friction = 0.9f;
-    ballShapeDef.restitution = 0.5f;
-    ballShapeDef.filter.categoryBits = BIT_MASK_PUCK;   //Set the shape to belong to PUCK cat
-    
-    _ballBody->CreateFixture(&ballShapeDef);
-    _ballBody->SetLinearDamping(0.3f);  //How fast the ball losing its velocity
-    _ballBody->SetAngularDamping(0.2f); //How fast it loses angular speed
-    
-    createWall();
     
     
     //create the controls and paddles
     for (int i = 0; i < numberOfPlayers; i++) {
-        _button[i] = GameButton::create();
+        Color4F c;
         if (numberOfPlayers < 3 && i == SHARED_PLAYER3) {
-            _button[i]->changeColor(colors.begin()[SHARED_PLAYER2]);
+            c = colors.begin()[SHARED_PLAYER2];
         }
         else if (numberOfPlayers < 4 && i == SHARED_PLAYER4) {
-            _button[i]->changeColor(colors.begin()[SHARED_PLAYER1]);
+            c = colors.begin()[SHARED_PLAYER1];
         }
         else {
-            _button[i]->changeColor(colors.begin()[i]);
+            c = colors.begin()[i];
         }
-        _button[i]->setRadius(50);
-        _button[i]->setPlayer(i);
-        _button[i]->setPosition(buttonPos.begin()[i]);
-        _button[i]->setTag(i);  //Set the number to indicate button order.
-        _button[i]->setActionTag(PADDLE_DROP);
-        _button[i]->addTouchEventListener(CC_CALLBACK_2(Airhockey::onPress, this));
-        //setSwallow to 'false' to pass touch event to gamescene
-        _button[i]->setSwallowTouches(false);
         
-        
-        // Create _buttonBody
-        b2BodyDef btnBodyDef;
-        btnBodyDef.type = b2_dynamicBody;
-        auto btnPosInWorld = _button[i]->getPosition()/PTM_RATIO;
-        btnBodyDef.position.Set(btnPosInWorld.x, btnPosInWorld.y);
-        btnBodyDef.userData = _button[i];
-        auto btnBody = _world->CreateBody(&btnBodyDef);
-        
-        // Define a shape for the _ballBody(tangible)
-        b2CircleShape circle;
-        circle.m_radius = _button[i]->getContentSize().width/2/PTM_RATIO;
-        
-        // Create shape definition and add to body
-        b2FixtureDef btnShapeDef;
-        btnShapeDef.shape = &circle;
-        btnShapeDef.density = 10.0f;
-        btnShapeDef.friction = 1.0f;
-        btnShapeDef.restitution = 0.5f;
-        btnBody->CreateFixture(&btnShapeDef);
-        
-        _button[i]->setUserData(btnBody);
-        
-        this->addChild(_button[i]);
+        addMallet(i, buttonPos.begin()[i], c);
     }
     
     //Debug Layer
@@ -256,6 +162,8 @@ void Airhockey::initTouchHandling(){
                     md.target = body->GetWorldCenter();
                     md.collideConnected = true;
                     md.maxForce = 10000.0f * body->GetMass(); //more force, less bouncing effect.
+                    
+                    md.frequencyHz = 1000;
                     
                     _mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
                     body->SetAwake(true);
@@ -359,6 +267,112 @@ void Airhockey::createWall() {
     groundBoxDef.filter.maskBits = ~BIT_MASK_PUCK;  //Allow PUCK to pass
     
     _boxBody->CreateFixture(&groundBoxDef);
+}
+
+void Airhockey::drawBoard(){
+    //Draw Board frame
+    _drawNode->drawRect(_screenOrigin+Vec2(2,2), Vec2(_screenSize)+_screenOrigin-Vec2(4,4), Color4F::GRAY);
+
+    _drawNode->drawLine(Vec2(_screenOrigin.x, _screenCenter.y), Vec2(_screenSize.width+_screenOrigin.x, _screenCenter.y), Color4F::GRAY);   //Add center line
+    
+    addScores();
+}
+
+void Airhockey::addScores(){
+    _scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
+    _scoreBottom->setBMFontSize(64);
+    _scoreBottom->setPosition(Vec2(50, _screenCenter.y - 50));
+    _scoreBottom->setRotation(90);
+    _scoreBottom->setUserData(0); //Use UserData to store score
+    this->addChild(_scoreBottom, 1);
+    
+    _scoreTop = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
+    _scoreTop->setBMFontSize(64);
+    _scoreTop->setPosition(Vec2(50, _screenCenter.y + 50));
+    _scoreTop->setRotation(90);
+    _scoreTop->setUserData(0); //Use UserData to store score
+    this->addChild(_scoreTop, 1);
+    updateScore();
+}
+
+void Airhockey::placePuck(){
+    //create the ball
+    float offset = BALL_RESET_OFFSET_Y;
+    if (cocos2d::rand_0_1() > 0.5) {
+        offset = -BALL_RESET_OFFSET_Y;
+    }
+    auto colors = SHARED_COLOR_PLAYERS;
+    _ball = Ball::create(colors.begin()[0]);
+    _ball->setPosition(Vec2(_screenCenter.x, _screenCenter.y+offset));
+    this->addChild(_ball);
+    
+    // Create _ballBody
+    b2BodyDef ballBodyDef;
+    ballBodyDef.type = b2_dynamicBody;
+    auto ballPosInWorld = _ball->getPosition()/PTM_RATIO;
+    ballBodyDef.position.Set(ballPosInWorld.x, ballPosInWorld.y);
+    ballBodyDef.userData = _ball;
+    ballBodyDef.bullet = true; //Enable CCD
+    _ballBody = _world->CreateBody(&ballBodyDef);
+    
+    // Define a shape for the _ballBody(tangible)
+    b2CircleShape circle;
+    circle.m_radius = _ball->getContentSize().width/2/PTM_RATIO;
+    
+    // Create shape definition and add to body
+    b2FixtureDef ballShapeDef;
+    ballShapeDef.shape = &circle;
+    ballShapeDef.density = 1.0f;
+    ballShapeDef.friction = 0.9f;
+    ballShapeDef.restitution = 0.5f;
+    ballShapeDef.filter.categoryBits = BIT_MASK_PUCK;   //Set the shape to belong to PUCK cat
+    
+    _ballBody->CreateFixture(&ballShapeDef);
+    _ballBody->SetLinearDamping(0.3f);  //How fast the ball losing its velocity
+    _ballBody->SetAngularDamping(0.2f); //How fast it loses angular speed
+}
+
+void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
+    _button[playerNo] = GameButton::create();
+    auto m = _button[playerNo];
+    
+    m->changeColor(color);
+    m->setRadius(40);
+    m->setPlayer(playerNo);
+    m->setPosition(pos);
+    m->setTag(playerNo);  //Set the number to indicate button order.
+    m->setActionTag(PADDLE_DROP);
+    m->setPressedActionEnabled(false); // Disable zoom action on pressed
+    m->setZoomScale(0.0f);
+    m->addTouchEventListener(CC_CALLBACK_2(Airhockey::onPress, this));
+    //setSwallow to 'false' to pass touch event to gamescene
+    m->setSwallowTouches(false);
     
     
+    // Create _buttonBody
+    b2BodyDef btnBodyDef;
+    btnBodyDef.type = b2_dynamicBody;
+    auto btnPosInWorld = m->getPosition()/PTM_RATIO;
+    btnBodyDef.position.Set(btnPosInWorld.x, btnPosInWorld.y);
+    btnBodyDef.userData = m;
+    btnBodyDef.bullet = true; //Enable CCD
+    auto btnBody = _world->CreateBody(&btnBodyDef);
+    
+    // Define a shape for the _ballBody(tangible)
+    b2CircleShape circle;
+    circle.m_radius = m->getContentSize().width/2/PTM_RATIO;
+    
+    // Create shape definition and add to body
+    b2FixtureDef btnShapeDef;
+    btnShapeDef.shape = &circle;
+    btnShapeDef.density = 10.0f;
+    btnShapeDef.friction = 1.0f;
+    btnShapeDef.restitution = 0.5f;
+    btnBody->CreateFixture(&btnShapeDef);
+    btnBody->SetAngularDamping(0.6f);
+    btnBody->SetLinearDamping(0.7f);
+    
+    m->setUserData(btnBody);
+    
+    this->addChild(m);
 }

@@ -52,7 +52,9 @@ bool Ball::init(){
     
     
     auto rect = this->getBoundingBox();
+#ifdef DEBUG_MODE
     this->drawRect( rect.origin, rect.origin+rect.size, Color4F::RED); //For debugging propose
+#endif
     this->setName("Ball");
     this->setAnchorPoint(Vec2(0.5,0.5));
     
