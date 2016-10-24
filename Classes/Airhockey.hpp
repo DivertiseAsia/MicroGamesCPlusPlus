@@ -26,12 +26,7 @@ USING_NS_CC;
 
 #define PTM_RATIO 32.0
 
-enum entityCategory {
-    BOUNDARY =      0x0001,
-    CENTER_LINE =   0x0002,
-    PUCK      =     0x0004,
-    MULLET      =   0x0008,
-};
+#define BIT_MASK_PUCK 0x0001
 
 
 class Airhockey : public GameScene

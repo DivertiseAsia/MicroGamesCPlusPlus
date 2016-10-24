@@ -102,11 +102,13 @@ bool Airhockey::init()
     b2FixtureDef ballShapeDef;
     ballShapeDef.shape = &circle;
     ballShapeDef.density = 1.0f;
-    ballShapeDef.friction = 0.3f;
-    ballShapeDef.restitution = 0.8f;
-    ballShapeDef.filter.categoryBits = PUCK;
-    log("center catBits>>> %i, maskBits>>>>%i", ballShapeDef.filter.categoryBits, ballShapeDef.filter.maskBits);
+    ballShapeDef.friction = 0.9f;
+    ballShapeDef.restitution = 0.5f;
+    ballShapeDef.filter.categoryBits = BIT_MASK_PUCK;   //Set the shape to belong to PUCK cat
+    
     _ballBody->CreateFixture(&ballShapeDef);
+    _ballBody->SetLinearDamping(0.3f);  //How fast the ball losing its velocity
+    _ballBody->SetAngularDamping(0.2f); //How fast it loses angular speed
     
     createWall();
     
@@ -354,8 +356,8 @@ void Airhockey::createWall() {
     
     
     groundBox.Set(b2Vec2(0, visibleSize.height/2), b2Vec2(visibleSize.width, visibleSize.height/2)); //center line
-    groundBoxDef.filter.maskBits = ~PUCK;
-    log("center catBits>>> %i, maskBits>>>>%i", groundBoxDef.filter.categoryBits, groundBoxDef.filter.maskBits);
+    groundBoxDef.filter.maskBits = ~BIT_MASK_PUCK;  //Allow PUCK to pass
+    
     _boxBody->CreateFixture(&groundBoxDef);
     
     
