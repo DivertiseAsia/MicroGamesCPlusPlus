@@ -4,6 +4,11 @@
 #include "cocos2d.h"
 #include "GameList.h"
 
+#define MMS_TITLE_WIDTH_PERCENT .9f
+#define MMS_MENU_WIDTH_PERCENT .3f
+
+#define MMS_MENU_HEIGHT_PERCENT .8f
+
 class MainMenu : public cocos2d::LayerColor
 {
 public:

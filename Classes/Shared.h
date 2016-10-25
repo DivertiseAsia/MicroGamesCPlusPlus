@@ -27,6 +27,7 @@ class Shared
 {
 public:
 	static Shared* instance();
+	static std::string intToString(int);
 	cocos2d::Color4F getPlayerColor(int);
 	cocos2d::Vec2 getPlayerPosition(int);
 	bool isDebugMode();

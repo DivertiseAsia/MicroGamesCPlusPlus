@@ -50,11 +50,30 @@ bool MainMenu::init()
 
 	MenuItems.pushBack(closeItem);
 
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE_TITLE, SHARED_GAME_NAME);
+	// position the label on the center of the screen
+	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height - label->getContentSize().height));
+	float currentScale = label->getContentSize().width / visibleSize.width;
+	label->setScale(MMS_TITLE_WIDTH_PERCENT / currentScale);
+	// add the label as a child to this layer
+	this->addChild(label, 1);
+
+	currentScale = 0;
+
+	float startY = origin.y + visibleSize.height * MMS_MENU_HEIGHT_PERCENT - label->getContentSize().height*2;
+	float availableArea = visibleSize.height * MMS_MENU_HEIGHT_PERCENT - label->getContentSize().height * 2;
+
 	for (int i = 0; i < GameList::instance()->numberOfAvailableGames(); i++) {
 		auto gameListingLabel = Label::createWithBMFont(SHARED_FONT_FILE_MENU, GameList::getGameName(GameList::instance ()->AVAILABLE_GAMES[i]));
 		auto gameListing = MenuItemLabel::create(gameListingLabel, CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
 		gameListing->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height / 8 * (GameList::instance()->numberOfAvailableGames() - i)));
+			startY - availableArea/GameList::instance()->numberOfAvailableGames() * i));
+
+		if (currentScale == 0) {
+			currentScale = gameListing->getContentSize().width / visibleSize.width;
+		}
+		gameListing->setScale(MMS_MENU_WIDTH_PERCENT / currentScale);
 		MenuItems.pushBack(gameListing);
 	}
 
@@ -62,18 +81,6 @@ bool MainMenu::init()
 	auto menu = Menu::createWithArray(MenuItems);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-    
-	auto label = Label::createWithBMFont(SHARED_FONT_FILE_TITLE, SHARED_GAME_NAME);
-    
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
     
     return true;
 }

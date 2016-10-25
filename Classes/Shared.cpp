@@ -45,3 +45,9 @@ bool Shared::isDebugMode() {
 void Shared::setDebugMode(bool val) {
 	debug = val;
 }
+
+std::string Shared::intToString(int number) {
+	std::stringstream out;
+	out << number;
+	return out.str();
+}

@@ -51,16 +51,30 @@ bool PlayerMenu::init()
 
 	MenuItems.pushBack(closeItem);
 
-	for (int i = 2; i <= 4; i++) {
-		std::string s;
-		std::stringstream out;
-		out << i;
-		s = out.str();
+	//Title
 
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "Choose the number of players");
+	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height - label->getContentSize().height));
+	float currentScale = label->getContentSize().width / visibleSize.width;
+	label->setScale(PMS_TITLE_WIDTH_PERCENT / currentScale);
+	this->addChild(label, 1);
+
+	currentScale = 0;
+
+	float startY = origin.y + visibleSize.height * PMS_MENU_HEIGHT_PERCENT - label->getContentSize().height * 2;
+	float availableArea = visibleSize.height * PMS_MENU_HEIGHT_PERCENT - label->getContentSize().height * 2;
+
+	for (int i = 2; i <= 4; i++) {
+		auto s = Shared::intToString(i);
 		auto item1 = Label::createWithBMFont(SHARED_FONT_FILE_MENU, s);
 		auto game1 = MenuItemLabel::create(item1, CC_CALLBACK_1(PlayerMenu::startGame, this, i));
 		game1->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height /2 + visibleSize.height / 10 * (4-i)));
+			startY - availableArea / 3 * (i-2)));
+		if (currentScale == 0) {
+			currentScale = game1->getContentSize().width / visibleSize.width;
+		}
+		game1->setScale(PMS_MENU_WIDTH_PERCENT / currentScale);
 		MenuItems.pushBack(game1);
 	}
 	
@@ -69,18 +83,6 @@ bool PlayerMenu::init()
 	auto menu = Menu::createWithArray(MenuItems);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
-
-	/////////////////////////////
-	// 3. add your codes below...
-
-	auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "Choose the number of players");
-
-	// position the label on the center of the screen
-	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height - label->getContentSize().height));
-
-	// add the label as a child to this layer
-	this->addChild(label, 1);
 
 	return true;
 }
