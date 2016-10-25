@@ -10,13 +10,14 @@ Shared * Shared::instance() {
 		minstance->colors = SHARED_COLOR_PLAYERS;
 		minstance->debug = false;
 		
-		auto screenSize = Director::getInstance()->getWinSize();
+		auto screenSize = Director::getInstance()->getVisibleSize();
+		auto screenOrigin = Director::getInstance()->getVisibleOrigin();
 
 		minstance->buttonPositions = {
-			Vec2(0,screenSize.height),  //0
-			Vec2(screenSize.width,0),  //1
-			Vec2(0,0), //2
-			Vec2(screenSize.width, screenSize.height) }; //3
+			Vec2(screenOrigin.x,screenOrigin.y+screenSize.height),  //0
+			Vec2(screenOrigin.x+screenSize.width,screenOrigin.y),  //1
+			screenOrigin, //2
+			(screenOrigin+screenSize) }; //3
 	}
 	return minstance;
 }

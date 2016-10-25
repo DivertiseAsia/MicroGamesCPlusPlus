@@ -25,6 +25,9 @@ bool Pinball::init()
 	{
 		return false;
 	}
+	Device::setAccelerometerEnabled(true);
+	auto listener = EventListenerAcceleration::create(CC_CALLBACK_2(Pinball::onShake, this));
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	b2Vec2 gravity = b2Vec2(0.0f, -GRAVITY);
 	world = new b2World(gravity);
@@ -33,12 +36,14 @@ bool Pinball::init()
 	//http://www.cocos2d-x.org/wiki/Multi_resolution_support
 	//auto screenSize = Director::getInstance()->getVisibleSize();
 
-	Size winSize = Director::getInstance()->getWinSize();
-	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
+	Size screenSize = Director::getInstance()->getVisibleSize();
+	Size fullSize = Director::getInstance()->getWinSize();
+	auto screenOrigin = Director::getInstance()->getVisibleOrigin();
+	auto screenCenter = Vec2(fullSize.width / 2, fullSize.height / 2);
 
 	//Create drawNode and draw the center line
 	_drawNode = DrawNode::create(10);    //Default line width
-	_drawNode->drawLine(Vec2(0, screenCenter.y), Vec2(winSize.width, screenCenter.y), Color4F::GRAY);
+	_drawNode->drawLine(Vec2(screenOrigin.x, screenCenter.y), Vec2(screenOrigin.x + screenSize.width, screenCenter.y), Color4F::GRAY);
 	this->addChild(_drawNode);
 
 	_score[TEAM_TOP] = 0;
@@ -46,20 +51,20 @@ bool Pinball::init()
 
 	scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
 	scoreBottom->setBMFontSize(64);
-	scoreBottom->setPosition(Vec2(50, screenCenter.y - 50));
+	scoreBottom->setPosition(Vec2(screenOrigin.x+SCORE_OFFSET_X, screenCenter.y - SCORE_OFFSET_Y));
 	scoreBottom->setRotation(90);
 	this->addChild(scoreBottom, 1);
 
 	scoreTop = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
 	scoreTop->setBMFontSize(64);
-	scoreTop->setPosition(Vec2(50, screenCenter.y + 50));
+	scoreTop->setPosition(Vec2(screenOrigin.x + SCORE_OFFSET_X, screenCenter.y + SCORE_OFFSET_Y));
 	scoreTop->setRotation(90);
 	this->addChild(scoreTop, 1);
 	updateScore();
 
 	//create the walls
-	createWall(Vec2(0, 0),winSize.height);
-	createWall(Vec2(winSize.width - WALL_WIDTH, 0), winSize.height);
+	createWall(screenOrigin,screenSize.height);
+	createWall(Vec2(screenOrigin.x + screenSize.width - WALL_WIDTH, screenOrigin.y), screenSize.height);
 
 	//boxes of fun
 	createBox(Vec2(screenCenter.x, screenCenter.y - BOX_YOFFSET));
@@ -98,7 +103,7 @@ bool Pinball::init()
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
 		_button[i] = addButtonForPlayer(i);
-		_paddle[i] = addPaddleForPlayer(i,winSize,screenCenter);
+		_paddle[i] = addPaddleForPlayer(i,screenSize,screenCenter);
 	}
 
 	//Debug Layer
@@ -132,7 +137,7 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 		yfix = -1;
 	}
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (150+DEFAULT_BUTTON_RADIUS)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
+	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
 	paddle->setPosition(_positions[player]);
 	this->addChild(paddle);
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -226,10 +231,16 @@ GameButton* Pinball::addButtonForPlayer(int player) {
 	return button;
 }
 
+void Pinball::onShake(cocos2d::Acceleration *acc, cocos2d::Event *event) {
+	if (ballBody->GetLinearVelocity().Length() == 0) {
+		ballBody->ApplyLinearImpulse(b2Vec2(acc->x*100, acc->y*100),ballBody->GetWorldCenter(),true);
+	}
+}
+
 void Pinball::createWall(Vec2 position, float height) {
 	auto drawNode = DrawNode::create();
 	drawNode->setContentSize(cocos2d::Size(WALL_WIDTH, height));
-	drawNode->drawSolidRect(position, Vec2(position.x+ WALL_WIDTH, height), Color4F::RED);
+	drawNode->drawSolidRect(Vec2::ZERO, Vec2(WALL_WIDTH, height), Color4F::GRAY);
 	drawNode->setPosition(position);
 
 	b2FixtureDef boxFixture;
@@ -253,7 +264,7 @@ void Pinball::createWall(Vec2 position, float height) {
 void Pinball::createBox(Vec2 position) {
 	auto drawNode = DrawNode::create();
 	drawNode->setContentSize(cocos2d::Size(BOX_SIZE, BOX_SIZE));
-	drawNode->drawSolidRect(Vec2(0, 0), Vec2(BOX_SIZE, BOX_SIZE), Color4F::GRAY);;
+	drawNode->drawSolidRect(Vec2::ZERO, Vec2(BOX_SIZE, BOX_SIZE), Color4F::GRAY);;
 	drawNode->setPosition(position);
 	drawNode->setRotation(45);
 	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
