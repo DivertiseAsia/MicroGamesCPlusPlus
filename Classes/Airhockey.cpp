@@ -431,7 +431,7 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     auto m = _button[playerNo];
     
     m->changeColor(color);
-    m->setRadius(40);
+    m->setRadius(50);
     m->setPlayer(playerNo);
     m->setPosition(pos);
     m->setTag(playerNo);  //Set the number to indicate button order.
