@@ -7,7 +7,7 @@
 #include "GameButton.hpp"
 #include "GameScene.h"
 
-#define TAPS_REQUIRED 30
+#define TR_TAPS_REQUIRED 30
 
 USING_NS_CC;
 
@@ -23,7 +23,6 @@ public:
     
     // Our game custom functions
     void startGame();
-    void initTouchHandling();
     
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);

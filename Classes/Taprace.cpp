@@ -41,18 +41,14 @@ bool Taprace::init()
     _drawNode = DrawNode::create(10);    //Default line width
     _drawNode->drawLine(Vec2(screenCenter.x,0), Vec2(screenCenter.x,winSize.height), Color4F::GRAY);
     this->addChild(_drawNode);
-    
-    //Position should be based on visibleOrigin and visibleSize properties.
-	
-    auto colors = SHARED_COLOR_PLAYERS;
 
-	auto ballspeed = screenSize.height / TAPS_REQUIRED;
+	auto ballspeed = screenSize.height / TR_TAPS_REQUIRED;
     
     
     // Create balls
     for(int i=0;i<numberOfPlayers;i++){
         auto p = Vec2(screenCenter.x,screenSize.height);
-        _ball[i] = Ball::create(colors.begin()[i]);
+        _ball[i] = Ball::create(Shared::instance()->getPlayerColor(i));
         _ball[i]->setPosition(p);
         _ball[i]->setVelocity(Vec2(0,-1*ballspeed));
         this->addChild(_ball[i]);
@@ -73,7 +69,6 @@ bool Taprace::init()
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
     
     this->setName("TapraceSceneRoot");
-    this->initTouchHandling();
     this->scheduleUpdate();
     
     return true;
@@ -85,7 +80,6 @@ void Taprace::draw(Renderer* renderer, const Mat4& transform, bool transformUpda
 
 void Taprace::update(float dt){
     
-    //ball->moveNext();
 }
 
 //This method will be called on the Node entered.
@@ -96,48 +90,6 @@ void Taprace::onEnter(){
 
 void Taprace::startGame(){
 	GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
-}
-
-void Taprace::initTouchHandling(){
-    auto listener1 = EventListenerTouchOneByOne::create();
-    
-    // trigger when you push down
-    listener1->onTouchBegan = [](Touch* touch, Event* event){
-        
-        
-        auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
-        
-        Vector<Node *> children = parentNode->getChildren();
-        Point touchPosition = parentNode->convertTouchToNodeSpace(touch);
-        for (auto iter = children.rbegin(); iter != children.rend(); ++iter) {
-            Node *childNode = *iter;
-            if (childNode->getBoundingBox().containsPoint(touchPosition)) {
-                //childNode is the touched Node
-                //do the stuff here
-                log(">>%s",childNode->getName().c_str());
-                return true;
-            }
-        }
-        return false;
-        //return true; // if you are consuming it
-        log("TOUCH!!");
-        
-    };
-    
-    // trigger when moving touch
-    listener1->onTouchMoved = [](Touch* touch, Event* event){
-        log("MOVE");
-    };
-    
-    // trigger when you let up
-    listener1->onTouchEnded = [=](Touch* touch, Event* event){
-        // your code
-        log("TOUCH ENDED");
-    };
-    
-    // Add listener
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
-    
 }
 
 void Taprace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
@@ -153,8 +105,8 @@ void Taprace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
             button->getBall()->moveNext();
 			_score[button->getPlayer()] ++;
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
-			if (_score[button->getPlayer()] > TAPS_REQUIRED) {
-				log("player %i should win", button->getPlayer());
+
+			if (_score[button->getPlayer()] > TR_TAPS_REQUIRED) {
 				endGame(button->getPlayer());
 			}
             break;
