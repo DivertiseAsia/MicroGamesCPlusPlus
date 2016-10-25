@@ -5,6 +5,7 @@
 #include "MainMenuScene.h"
 #include "Shared.h"
 #include "Airhockey.hpp"
+
 USING_NS_CC;
 
 template <class T>
@@ -21,22 +22,6 @@ Scene* GameScene::createScene(int numberOfPlayers)
     
     // return the scene
     return scene;
-}
-
-template <class T>
-Scene* GameScene::createSceneWithPhysics(int numberOfPlayers)
-{
-	// 'scene' is an autorelease object
-	auto scene = Scene::createWithPhysics();
-
-	// 'layer' is an autorelease object
-	auto layer = GameScene::create<T>(numberOfPlayers);
-
-	// add layer as a child to scene
-	scene->addChild(layer);
-
-	// return the scene
-	return scene;
 }
 
 GameScene::GameScene(int numberOfPlayers)
@@ -69,12 +54,9 @@ void GameScene::updateCounter(float dt){
         _counter = 0;
         gameStatus = GAME_INPROGRESS;
         log("Game started!");
-        showText("Go!", 1.0f);
+        showText(GS_GO_TEXT, 1.0f);
     } else{
-        std::ostringstream ss;
-        ss << _counter;
-        std::string s(ss.str());
-        showText(s, 1.0f);
+        showText(Shared::intToString(_counter), 1.0f);
     }
 }
 
@@ -97,11 +79,15 @@ void GameScene::endGame(int winners[], int totalWinners)
 		Vec2 origin = Director::getInstance()->getVisibleOrigin();
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 
-		auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "WINNER");
+		auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, GS_WINNER_TEXT);
 
 		// position the label on the center of the screen
 		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height - label->getContentSize().height));
+			origin.y + visibleSize.height - label->getContentSize().height - GS_WINNER_TEXT_OFFSET_Y));
+
+		auto currentScale = label->getContentSize().width / visibleSize.width;
+
+		label->setScale(GS_WINNER_TEXT_WIDTH_PERCENT / currentScale);
 
 		// add the label as a child to this layer
 		this->addChild(label, 1);
@@ -133,11 +119,15 @@ void GameScene::showReturnMenu(float dt) {
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "Press anywhere to go home");
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, GS_RETURN_TEXT);
 
 	// position the label on the center of the screen
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
 		origin.y + label->getContentSize().height));
+
+	auto currentScale = label->getContentSize().width / visibleSize.width;
+
+	label->setScale(GS_RETURN_TEXT_WIDTH_PERCENT / currentScale);
 
 	// add the label as a child to this layer
 	this->addChild(label, 1);
@@ -160,13 +150,22 @@ void GameScene::showReturnMenu(float dt) {
 void GameScene::showText(std::string s, float dt){
     log("showText %s", s.c_str());
     auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, s);
-    label->setBMFontSize(64);
+    label->setBMFontSize(128);
     
     // position the label on the center of the screen
     Size winSize = Director::getInstance()->getWinSize();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
     label->setPosition(screenCenter);
-    
+
+	auto currentScale = label->getContentSize().width / visibleSize.width;
+
+	if (s.length() == 1) {
+		label->setScale(GS_COUNTDOWN_TEXT_WIDTH_PERCENT / currentScale);
+	}
+	else {
+		label->setScale(GS_GO_TEXT_WIDTH_PERCENT / currentScale);
+	}
     // add the label as a child to this layer
     this->addChild(label, 1);
     

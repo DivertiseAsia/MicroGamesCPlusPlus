@@ -1,6 +1,15 @@
 #ifndef __GameScene_SCENE_H__
 #define __GameScene_SCENE_H__
 
+#define GS_WINNER_TEXT_OFFSET_Y 20
+#define GS_GO_TEXT_WIDTH_PERCENT .5f
+#define GS_COUNTDOWN_TEXT_WIDTH_PERCENT .08f
+#define GS_WINNER_TEXT_WIDTH_PERCENT .85f
+#define GS_RETURN_TEXT_WIDTH_PERCENT .95f
+#define GS_WINNER_TEXT	"Winner"
+#define GS_RETURN_TEXT	"Press anywhere to go home"
+#define GS_GO_TEXT		"Go!"
+
 #include "cocos2d.h"
 
 USING_NS_CC;
@@ -11,7 +20,6 @@ public:
 	enum GameStatus { GAME_START, GAME_INPROGRESS, GAME_OVER };
 	GameScene(int numberOfPlayers);
 	template <class T> static Scene* createScene(int numberOfPlayers); //Create the scene which holds the root node.
-	template <class T> static Scene* createSceneWithPhysics(int numberOfPlayers); //Create the scene which holds the root node.
     
     // implement the "static create()" method manually
 	template <class T> static GameScene* create(int numberOfPlayers);
