@@ -18,6 +18,7 @@
 #define PADDLE_WIDTH_PX	20
 #define PADDLE_ANG_VEL	5
 #define PADDLE_CONTROL_RAD 30.0f
+#define PADDLE_OFFSET_X_PERCENT .325f
 #define BOX_SIZE		50.0f
 #define BOX_YOFFSET		200
 #define WALL_WIDTH		5.0f
@@ -26,6 +27,9 @@
 #define CAT_MASK_BALL	0x05
 #define BALL_RESET_OFFSET_Y	3
 #define BALL_RESET_OFFSET_X	20
+
+#define SCORE_OFFSET_X 50
+#define SCORE_OFFSET_Y 50
 
 #define DEFAULT_DENSITY		10.0f
 #define DEFAULT_FRICTION	0.8f
@@ -57,6 +61,7 @@ public:
 private:
 	void createBox(Vec2);
 	void createWall(Vec2, float);
+	void onShake(cocos2d::Acceleration *, cocos2d::Event *);
 	GameButton* addButtonForPlayer(int);
 	DrawNode* addPaddleForPlayer(int, cocos2d::Size, cocos2d::Vec2);
 	void updateScore();
