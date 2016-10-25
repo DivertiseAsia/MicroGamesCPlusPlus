@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include "Ball.hpp"
 #include "GameButton.hpp"
+#include "SoundManager.h"
 #include "GameScene.h"
 
 #define TR_TAPS_REQUIRED 30

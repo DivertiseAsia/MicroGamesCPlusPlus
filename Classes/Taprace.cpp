@@ -7,11 +7,7 @@
 //
 
 #include "Taprace.h"
-#include "Ball.hpp"
-#include "GameButton.hpp"
 #include "GLES-Render/B2DebugDrawLayer.h"
-#include "ui/CocosGUI.h"
-#include "SoundManager.h"
 
 USING_NS_CC;
 
