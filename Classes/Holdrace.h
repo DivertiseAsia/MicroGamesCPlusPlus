@@ -6,10 +6,10 @@
 #include "Ball.hpp"
 #include "GameButton.hpp"
 #include "GameScene.h"
+#include "SoundManager.h"
 
-#define BALL_SPEEDMAX 5
-#define BALL_ACCELERATION 0.01
-#define BALL_FRICTION 1.01
+#define HR_BALL_ACCELERATION 0.01
+#define HR_BALL_FRICTION 1.01
 
 USING_NS_CC;
 
@@ -25,13 +25,10 @@ public:
     
     // Our game custom functions
     void startGame();
-    void initTouchHandling();
     void showWinner();
     
-    
     //Event handling
-    void onPress(Ref*, GameButton::Widget::TouchEventType);
-    void onBallStopped();
+	void onPress(Ref*, GameButton::Widget::TouchEventType);
     
 	using GameScene::GameScene;
 private:
@@ -40,8 +37,6 @@ private:
     Ball* _ball[4];
     GameButton* _button[4];
     DrawNode* _drawNode;
-    
-    int getWinner();
 };
 
 #endif // __HOLDRACE_SCENE_H__

@@ -7,12 +7,7 @@
 //
 
 #include "Holdrace.h"
-#include "SimpleAudioEngine.h"
-#include "Ball.hpp"
-#include "GameButton.hpp"
 #include "GLES-Render/B2DebugDrawLayer.h"
-#include "ui/CocosGUI.h"
-#include "SoundManager.h"
 
 USING_NS_CC;
 
@@ -26,10 +21,7 @@ bool Holdrace::init()
     {
         return false;
     }
-    
-    //http://www.cocos2d-x.org/wiki/Multi_resolution_support
-    
-    //auto visibleSize = Director::getInstance()->getVisibleSize();
+
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     auto screenSize = Director::getInstance()->getVisibleSize();
     
@@ -49,7 +41,7 @@ bool Holdrace::init()
         auto p = Vec2(screenCenter.x,screenSize.height);
         _ball[i] = Ball::create(Shared::instance()->getPlayerColor(i));
         _ball[i]->setPosition(p);
-        _ball[i]->setFricition(Vec2(0,BALL_FRICTION));
+        _ball[i]->setFricition(Vec2(0,HR_BALL_FRICTION));
         _ball[i]->setTag(i);
         this->addChild(_ball[i]);
         
@@ -80,29 +72,7 @@ bool Holdrace::init()
         }
     });
     
-    //Listen to ball_move event
-    auto eventNameBallMove = "ball_move";
-    _eventDispatcher->addCustomEventListener(eventNameBallMove, [=](EventCustom* event){
-        auto ball = static_cast<Ball*>(event->getUserData());
-        //log("ball-%i is moving", ballID);
-        auto ballID = ball->getTag();
-        if (ball->getPositionY() < 0){
-            ball->setPositionY(-DEFAULT_BALL_RADIUS);
-            ball->setVelocity(Vec2::ZERO);
-            ball->setAcceleration(Vec2::ZERO);
-            _moved[ballID] = true;
-            _moveCount++;
-            if (_moveCount == numberOfPlayers){
-                log("All players played");
-                this->showWinner();
-            }
-        }
-        
-    });
-    
-    
     this->setName("HoldraceSceneRoot");
-    //this->initTouchHandling();
     this->scheduleUpdate();
     
     return true;
@@ -113,8 +83,7 @@ void Holdrace::draw(Renderer* renderer, const Mat4& transform, bool transformUpd
 }
 
 void Holdrace::update(float dt){
-    
-    //ball->moveNext();
+
     for(int i=0;i<numberOfPlayers;i++){
         if (!_moved[i])
             _ball[i]->moveNext();
@@ -129,62 +98,20 @@ void Holdrace::onEnter(){
 
 void Holdrace::startGame(){
     GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
-    for(int i=0;i<SHARED_MAX_PLAYERS;i++)
-        _moved[i] = false;
+	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
+		_moved[i] = false;
+	}
     _moveCount = 0;
-}
-
-void Holdrace::initTouchHandling(){
-    auto listener1 = EventListenerTouchOneByOne::create();
-    
-    // trigger when you push down
-    listener1->onTouchBegan = [](Touch* touch, Event* event){
-        
-        log("TOUCH!! begin");
-        
-        auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
-        
-        Vector<Node *> children = parentNode->getChildren();
-        Point touchPosition = parentNode->convertTouchToNodeSpace(touch);
-        for (auto iter = children.rbegin(); iter != children.rend(); ++iter) {
-            Node *childNode = *iter;
-            if (childNode->getBoundingBox().containsPoint(touchPosition)) {
-                //childNode is the touched Node
-                //do the stuff here
-                log(">>%s",childNode->getName().c_str());
-                return true;
-            }
-        }
-        return false;
-        //return true; // if you are consuming it
-        
-        
-    };
-    
-    // trigger when moving touch
-    listener1->onTouchMoved = [](Touch* touch, Event* event){
-        log("MOVE");
-    };
-    
-    // trigger when you let up
-    listener1->onTouchEnded = [=](Touch* touch, Event* event){
-        // your code
-        log("TOUCH ENDED");
-    };
-    
-    // Add listener
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
-    
 }
 
 void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
     auto button = static_cast<GameButton*>(sender);
-    if (this->gameStatus!=GAME_INPROGRESS ||(button->getActionTag() == 10))return;
+	if (this->gameStatus != GAME_INPROGRESS || (button->getActionTag() == 10)) { return; }
     log("onPress->->");
     switch (type)
     {
         case ui::Widget::TouchEventType::BEGAN:{
-            button->getBall()->setAcceleration(Vec2(0,-BALL_ACCELERATION));
+            button->getBall()->setAcceleration(Vec2(0,-HR_BALL_ACCELERATION));
 			button->setActionTag(5);//prime the button 
             break;
         }
@@ -200,22 +127,14 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
     }
 }
 
-void Holdrace::onBallStopped(){
-    log("ball stopped");
-}
-
 void Holdrace::showWinner(){
-	this->endGame(this->getWinner());
-}
-
-int Holdrace::getWinner(){
-    float closest = Director::getInstance()->getVisibleSize().height;
-    int winner = -1;
-    for(int i=0;i<numberOfPlayers;i++){
-        if(_ball[i]->getPositionY() < closest && _ball[i]->getPositionY() >= 0){
-            closest = _ball[i]->getPositionY();
-            winner = i;
-        }
-    }
-    return winner;
+	float closest = Director::getInstance()->getVisibleSize().height;
+	int winner = -1;
+	for (int i = 0; i<numberOfPlayers; i++) {
+		if (_ball[i]->getPositionY() < closest && _ball[i]->getPositionY() >= 0) {
+			closest = _ball[i]->getPositionY();
+			winner = i;
+		}
+	}
+	this->endGame(winner);
 }
