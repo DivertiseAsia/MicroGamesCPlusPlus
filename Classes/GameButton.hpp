@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 #include "Ball.hpp"
+#include <Box2D/Box2D.h>
 
 #define DEFAULT_BUTTON_RADIUS 100
 #define DEFAULT_BUTTON_COLOR Color4F(1,0.5f,0.5f,0.8f)
@@ -30,6 +31,7 @@ public:
     void changeColor(Color4F color);
     CC_SYNTHESIZE(Ball*, _ball, Ball);
     CC_SYNTHESIZE(Touch*, _touch, Touch); //a property to hold touch
+    CC_SYNTHESIZE(b2MouseJoint*, _mouseJoint, b2MouseJoint);
 
 	void setPlayer(int player);
 	int getPlayer();

@@ -25,7 +25,6 @@ USING_NS_CC;
 #define PADDLE_DRAG 5
 
 #define PTM_RATIO 32.0
-#define GRAVITY b2Vec2(0.0f, 0.0f)
 
 #define BIT_MASK_PUCK 0x0002
 

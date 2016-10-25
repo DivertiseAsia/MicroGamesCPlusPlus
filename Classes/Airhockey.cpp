@@ -30,7 +30,7 @@ bool Airhockey::init()
     Size winSize = Director::getInstance()->getWinSize();
     _screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
     
-    _world = new b2World(GRAVITY);  //Create a physic world.
+    _world = new b2World(b2Vec2(0.0f, 0.0f));  //Create a physic world.
     
     //Create drawNode and draw the center line
     _drawNode = DrawNode::create(10);    //Default line width
@@ -134,20 +134,72 @@ void Airhockey::onPress(cocos2d::Ref* sender, GameButton::Widget::TouchEventType
 }
 void Airhockey::initTouchHandling(){
     auto listener1 = EventListenerTouchOneByOne::create();
+    auto touchListener = EventListenerTouchAllAtOnce::create();
+    
+    touchListener->onTouchesBegan = [this](const std::vector<Touch *> & 	touches,
+                                           Event * 	event){
+        auto touchSurface = static_cast<Airhockey*>(event->getCurrentTarget());
+        auto objects = touchSurface->getChildren();    //all objects in the SceneRoot
+        
+        //Loop through each touch
+        for(auto iter=touches.rbegin(); iter != touches.rend(); ++iter){
+            Touch* t = static_cast<Touch*>(*iter);
+            Point touchPoint = touchSurface->convertTouchToNodeSpace(t); //re calculate position to the
+            
+            log("Touch %i", t->getID());
+            
+            //Loop through each object on the scene
+            for(auto obj = objects.rbegin(); obj != objects.rend(); obj++){
+                GameButton* btn = dynamic_cast<GameButton*>(*obj);
+                
+                if (btn && btn->getBoundingBox().containsPoint(touchPoint)){
+#ifdef DEBUG_MODE
+                    log("Button %i is touched at position %.2f,%.2f", btn->getTag(), btn->getPosition().x, btn->getPosition().y);
+#endif
+                    
+                    btn->setTouch(t);
+                    
+                    if (btn->getUserData()){
+                        
+                        log(">>CreateJoint!!!<<");
+                        auto body = (b2Body*)btn->getUserData();
+                        
+                        b2MouseJointDef md;
+                        md.bodyA = this->_boxBody;
+                        md.bodyB = body;
+                        md.target = body->GetWorldCenter();
+                        md.collideConnected = true;
+                        md.maxForce = 10000.0f * body->GetMass(); //more force, less bouncing effect.
+                        
+                        md.frequencyHz = 1000;
+                        
+                        //_mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
+                        btn->setb2MouseJoint((b2MouseJoint *)_world->CreateJoint(&md));
+                        body->SetAwake(true);
+                    }
+                }
+            }
+        }
+        
+    };
     
     // trigger when you push down
     listener1->onTouchBegan = [this](Touch* touch, Event* event){
         
         auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
         
-        Vector<Node *> children = parentNode->getChildren();
-        Point touchPosition = parentNode->convertTouchToNodeSpace(touch);
+        log("ParentNode that takes touch is %s", parentNode->getName().c_str());
+        
+        Vector<Node *> children = parentNode->getChildren();    //all objects in the SceneRoot
+        Point touchPosition = parentNode->convertTouchToNodeSpace(touch); //re calculate position to the parentNode's origin.
+        
+        
         for (auto iter = children.rbegin(); iter != children.rend(); ++iter) {
-            GameButton* childNode = static_cast<GameButton*>(*iter);
+            GameButton* childNode = dynamic_cast<GameButton*>(*iter);
             log("Locked! touch:%i", touch->getID());
-            if (childNode->getTag()!= 12345 && childNode->getBoundingBox().containsPoint(touchPosition)) {
+            if (childNode && childNode->getBoundingBox().containsPoint(touchPosition)) {
                 //childNode is the touched Node
-                log(">>%s",childNode->getName().c_str());
+                log(">>%s>>%i",childNode->getName().c_str(),childNode->getTag());
                 childNode->setTouch(touch);
                 
                 if (childNode->getUserData()){
@@ -173,6 +225,29 @@ void Airhockey::initTouchHandling(){
         
         return true;  //Return 'true' to enable onTouchMoved event
     };
+    
+    touchListener->onTouchesMoved = [this](const std::vector<Touch *> & touches,
+                                           Event * 	event){
+        //Loop through each touch
+        for(auto iter=touches.rbegin(); iter != touches.rend(); ++iter){
+            Touch* t = static_cast<Touch*>(*iter);
+            //Point touchPoint = touchSurface->convertTouchToNodeSpace(t); //re calculate position to the
+            
+            //For each button test it agianst the touch.
+            for (int i=0;i<this->numberOfPlayers;i++){
+                auto b = this->_button[i];
+                
+                //Test if the touch is snapped on the button
+                if (b->getTouch() && b->getTouch() == t){
+                    auto tap = t->getLocation();
+                    
+                    b2Vec2 pos = b2Vec2(tap.x/PTM_RATIO,tap.y/PTM_RATIO);
+                    b->getb2MouseJoint()->SetTarget(pos);
+                    break;
+                }
+            }
+        }
+    };
 
     
     
@@ -182,17 +257,12 @@ void Airhockey::initTouchHandling(){
         for(int i=0;i<this->numberOfPlayers;i++){
             auto b = this->_button[i];
             if (b->getTouch() != NULL && b->getTouch() == touch){
-                log("moved! touch:%i", touch->getID());
+                //log("moved! touch:%i", touch->getID());
                 auto tap = touch->getLocation();
                 
                 if (b->getUserData()){
-                    //auto body = (b2Body*)b->getUserData();
                     b2Vec2 pos = b2Vec2(tap.x/PTM_RATIO,tap.y/PTM_RATIO);
-                    //body->SetTransform(pos, 0);
-                    //auto f = touch->getLocation() - touch->getPreviousLocation();
-                    //b2Vec2 force = b2Vec2(f.x, f.y);
-                    //body->ApplyLinearImpulse(force, body->GetWorldCenter(),true);
-                    //log("Apply force %.2f,%.2f", force.x, force.y);
+                    
                     _mouseJoint->SetTarget(pos);
                 }else{
                     b->setPosition(tap);
@@ -200,6 +270,30 @@ void Airhockey::initTouchHandling(){
             }
         }
         
+    };
+    
+    
+    touchListener->onTouchesEnded = [this](const std::vector<Touch *> & touches,
+                                           Event * 	event){
+        //Loop through each touch
+        for(auto iter=touches.rbegin(); iter != touches.rend(); ++iter){
+            Touch* t = static_cast<Touch*>(*iter);
+            //Point touchPoint = touchSurface->convertTouchToNodeSpace(t); //re calculate position to the
+            
+            for (int i=0;i<this->numberOfPlayers;i++){
+                auto b = this->_button[i];
+                
+                //Test if the touch is snapped on the button
+                if (b->getTouch() && b->getTouch() == t){
+                    b->setTouch(NULL);
+                    if (b->getb2MouseJoint()){
+                        _world->DestroyJoint(b->getb2MouseJoint());
+                        b->setb2MouseJoint(NULL);
+                        break;
+                    }
+                }
+            }
+        }
     };
     
     listener1->onTouchEnded = [this](Touch* touch, Event* event){
@@ -218,7 +312,8 @@ void Airhockey::initTouchHandling(){
     };
     
     // Add listener
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     
 }
 
@@ -261,7 +356,6 @@ void Airhockey::createWall() {
     
     groundBox.Set(b2Vec2(visibleSize.width, visibleSize.height), b2Vec2(visibleSize.width, 0)); //right
     _boxBody->CreateFixture(&groundBoxDef);
-    
     
     groundBox.Set(b2Vec2(0, visibleSize.height/2), b2Vec2(visibleSize.width, visibleSize.height/2)); //center line
     groundBoxDef.filter.maskBits = ~BIT_MASK_PUCK;  //Allow PUCK to pass
