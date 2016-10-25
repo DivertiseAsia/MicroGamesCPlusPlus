@@ -7,12 +7,7 @@
 //
 
 #include "Pinball.h"
-#include "Ball.hpp"
-#include "GameButton.hpp"
 #include "GLES-Render/B2DebugDrawLayer.h"
-#include "ui/CocosGUI.h"
-#include "SoundManager.h"
-#include "Box2D/Box2D.h"
 
 USING_NS_CC;
 
@@ -29,12 +24,11 @@ bool Pinball::init()
 	auto listener = EventListenerAcceleration::create(CC_CALLBACK_2(Pinball::onShake, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	b2Vec2 gravity = b2Vec2(0.0f, -GRAVITY);
+	b2Vec2 gravity = b2Vec2(0.0f, -PB_GRAVITY);
 	world = new b2World(gravity);
 	
 
-	//http://www.cocos2d-x.org/wiki/Multi_resolution_support
-	//auto screenSize = Director::getInstance()->getVisibleSize();
+	//http://www.cocos2d-x.org/wiki/Multi_resolution_support;
 
 	Size screenSize = Director::getInstance()->getVisibleSize();
 	Size fullSize = Director::getInstance()->getWinSize();
@@ -46,36 +40,36 @@ bool Pinball::init()
 	_drawNode->drawLine(Vec2(screenOrigin.x, screenCenter.y), Vec2(screenOrigin.x + screenSize.width, screenCenter.y), Color4F::GRAY);
 	this->addChild(_drawNode);
 
-	_score[TEAM_TOP] = 0;
-	_score[TEAM_BOT] = 0;
+	_score[PB_TEAM_TOP] = 0;
+	_score[PB_TEAM_BOT] = 0;
 
 	scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
 	scoreBottom->setBMFontSize(64);
-	scoreBottom->setPosition(Vec2(screenOrigin.x+SCORE_OFFSET_X, screenCenter.y - SCORE_OFFSET_Y));
+	scoreBottom->setPosition(Vec2(screenOrigin.x+PB_SCORE_OFFSET_X, screenCenter.y - PB_SCORE_OFFSET_Y));
 	scoreBottom->setRotation(90);
 	this->addChild(scoreBottom, 1);
 
 	scoreTop = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
 	scoreTop->setBMFontSize(64);
-	scoreTop->setPosition(Vec2(screenOrigin.x + SCORE_OFFSET_X, screenCenter.y + SCORE_OFFSET_Y));
+	scoreTop->setPosition(Vec2(screenOrigin.x + PB_SCORE_OFFSET_X, screenCenter.y + PB_SCORE_OFFSET_Y));
 	scoreTop->setRotation(90);
 	this->addChild(scoreTop, 1);
 	updateScore();
 
 	//create the walls
 	createWall(screenOrigin,screenSize.height);
-	createWall(Vec2(screenOrigin.x + screenSize.width - WALL_WIDTH, screenOrigin.y), screenSize.height);
+	createWall(Vec2(screenOrigin.x + screenSize.width - PB_WALL_WIDTH, screenOrigin.y), screenSize.height);
 
 	//boxes of fun
-	createBox(Vec2(screenCenter.x, screenCenter.y - BOX_YOFFSET));
-	createBox(Vec2(screenCenter.x, screenCenter.y + BOX_YOFFSET));
+	createBox(Vec2(screenCenter.x, screenCenter.y - PB_BOX_YOFFSET));
+	createBox(Vec2(screenCenter.x, screenCenter.y + PB_BOX_YOFFSET));
 
 	//create the ball
-	float offset = BALL_RESET_OFFSET_Y;
+	float offset = PB_BALL_RESET_OFFSET_Y;
 	if (cocos2d::rand_0_1() > 0.5) {
-		offset = -BALL_RESET_OFFSET_Y;
+		offset = -PB_BALL_RESET_OFFSET_Y;
 	}
-	auto p = Vec2(screenCenter.x+cocos2d::random(-BALL_RESET_OFFSET_X, BALL_RESET_OFFSET_X), screenCenter.y+offset);
+	auto p = Vec2(screenCenter.x+cocos2d::random(-PB_BALL_RESET_OFFSET_X, PB_BALL_RESET_OFFSET_X), screenCenter.y+offset);
 	
 	_ball = DrawNode::create();
 	_ball->setContentSize(cocos2d::Size(DEFAULT_BALL_RADIUS*2, DEFAULT_BALL_RADIUS*2));
@@ -85,9 +79,9 @@ bool Pinball::init()
 	this->addChild(_ball);
 
 	b2FixtureDef ballFixture;
-	ballFixture.density = DEFAULT_DENSITY;
-	ballFixture.friction = DEFAULT_FRICTION;
-	ballFixture.restitution = DEFAULT_RESTITUTION;
+	ballFixture.density = PB_DEFAULT_DENSITY;
+	ballFixture.friction = PB_DEFAULT_FRICTION;
+	ballFixture.restitution = PB_DEFAULT_RESTITUTION;
 	b2CircleShape ballShape;
 	ballShape.m_radius = DEFAULT_BALL_RADIUS / SCALE_RATIO;
 	ballFixture.shape = &ballShape;
@@ -106,16 +100,16 @@ bool Pinball::init()
 		_paddle[i] = addPaddleForPlayer(i,screenSize,screenCenter);
 	}
 
+	
+#ifdef DEBUG_MODE
 	//Debug Layer
-	if (Shared::instance()->isDebugMode()) {
-		b2Draw *debugDraw = new GLESDebugDraw(SCALE_RATIO);
-		debugDraw->SetFlags(GLESDebugDraw::e_shapeBit || GLESDebugDraw::e_jointBit);
-		world->SetDebugDraw(debugDraw);
-		this->addChild(B2DebugDrawLayer::create(world, SCALE_RATIO), 1000);
-	}
+	b2Draw *debugDraw = new GLESDebugDraw(SCALE_RATIO);
+	debugDraw->SetFlags(GLESDebugDraw::e_shapeBit || GLESDebugDraw::e_jointBit);
+	world->SetDebugDraw(debugDraw);
+	this->addChild(B2DebugDrawLayer::create(world, SCALE_RATIO), 1000);
+#endif // DEBUG_MODE
 
 	this->setName("PinballSceneRoot");
-	this->initTouchHandling();
 	this->scheduleUpdate();
 
 	return true;
@@ -123,9 +117,9 @@ bool Pinball::init()
 
 DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCenter) {
 	auto paddle = DrawNode::create();
-	auto paddleLength = screenSize.width* PADDLE_LENGTH_PERCENT;
-	paddle->setContentSize(cocos2d::Size(PADDLE_WIDTH_PX, paddleLength));
-	paddle->drawSolidRect(Vec2(0, 0), Vec2(PADDLE_WIDTH_PX, paddleLength), Color4F::GRAY);
+	auto paddleLength = screenSize.width* PB_PADDLE_LENGTH_PERCENT;
+	paddle->setContentSize(cocos2d::Size(PB_PADDLE_WIDTH_PX, paddleLength));
+	paddle->drawSolidRect(Vec2(0, 0), Vec2(PB_PADDLE_WIDTH_PX, paddleLength), Color4F::GRAY);
 
 	int yfix = 1;
 	int xfix = 1;
@@ -137,17 +131,17 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 		yfix = -1;
 	}
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
+	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (PB_PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
 	paddle->setPosition(_positions[player]);
 	this->addChild(paddle);
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = DEFAULT_DENSITY;
-	boxFixture.friction = DEFAULT_FRICTION;
-	boxFixture.restitution = DEFAULT_RESTITUTION;
+	boxFixture.density = PB_DEFAULT_DENSITY;
+	boxFixture.friction = PB_DEFAULT_FRICTION;
+	boxFixture.restitution = PB_DEFAULT_RESTITUTION;
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(PADDLE_WIDTH_PX / 2 / SCALE_RATIO, paddleLength / 2 / SCALE_RATIO);
+	boxShape.SetAsBox(PB_PADDLE_WIDTH_PX / 2 / SCALE_RATIO, paddleLength / 2 / SCALE_RATIO);
 	boxShape.m_centroid = b2Vec2(0, 0);
 	boxFixture.shape = &boxShape;
 	b2BodyDef boxBodyDef;
@@ -161,17 +155,17 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 	
 
 	auto padControl = DrawNode::create();
-	padControl->setContentSize(cocos2d::Size(PADDLE_CONTROL_RAD * 2, PADDLE_CONTROL_RAD * 2));
-	padControl->drawSolidCircle(Vec2(PADDLE_CONTROL_RAD, PADDLE_CONTROL_RAD), PADDLE_CONTROL_RAD, 360, 100, Shared::instance()->getPlayerColor(player));
+	padControl->setContentSize(cocos2d::Size(PB_PADDLE_CONTROL_RAD * 2, PB_PADDLE_CONTROL_RAD * 2));
+	padControl->drawSolidCircle(Vec2(PB_PADDLE_CONTROL_RAD, PB_PADDLE_CONTROL_RAD), PB_PADDLE_CONTROL_RAD, 360, 100, Shared::instance()->getPlayerColor(player));
 	padControl->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	padControl->setPosition(_positions[player]);
 	this->addChild(padControl);
 	b2FixtureDef circleFixture;
-	circleFixture.density = DEFAULT_DENSITY;
-	circleFixture.friction = DEFAULT_FRICTION;
-	circleFixture.restitution = DEFAULT_RESTITUTION;
+	circleFixture.density = PB_DEFAULT_DENSITY;
+	circleFixture.friction = PB_DEFAULT_FRICTION;
+	circleFixture.restitution = PB_DEFAULT_RESTITUTION;
 	b2CircleShape circleShape;
-	circleShape.m_radius = PADDLE_CONTROL_RAD / SCALE_RATIO;
+	circleShape.m_radius = PB_PADDLE_CONTROL_RAD / SCALE_RATIO;
 	circleFixture.shape = &circleShape;
 	b2BodyDef buttonBodyDef;
 	buttonBodyDef.type = b2BodyType::b2_kinematicBody;
@@ -188,7 +182,7 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 
 	revoluteJointDef.collideConnected = false;
 	revoluteJointDef.localAnchorA.Set(0, 0);//the center
-	revoluteJointDef.localAnchorB.Set(-PADDLE_WIDTH_PX / 2 / SCALE_RATIO, 0);//center of the circle
+	revoluteJointDef.localAnchorB.Set(-PB_PADDLE_WIDTH_PX / 2 / SCALE_RATIO, 0);//center of the circle
 
 	world->CreateJoint(&revoluteJointDef);
 
@@ -214,9 +208,9 @@ GameButton* Pinball::addButtonForPlayer(int player) {
 	this->addChild(button);
 
 	b2FixtureDef circleFixture;
-	circleFixture.density = DEFAULT_DENSITY;
-	circleFixture.friction = DEFAULT_FRICTION;
-	circleFixture.restitution = DEFAULT_RESTITUTION;
+	circleFixture.density = PB_DEFAULT_DENSITY;
+	circleFixture.friction = PB_DEFAULT_FRICTION;
+	circleFixture.restitution = PB_DEFAULT_RESTITUTION;
 	b2CircleShape circleShape;
 	circleShape.m_radius = DEFAULT_BUTTON_RADIUS / SCALE_RATIO;
 	circleFixture.shape = &circleShape;
@@ -239,16 +233,16 @@ void Pinball::onShake(cocos2d::Acceleration *acc, cocos2d::Event *event) {
 
 void Pinball::createWall(Vec2 position, float height) {
 	auto drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(WALL_WIDTH, height));
-	drawNode->drawSolidRect(Vec2::ZERO, Vec2(WALL_WIDTH, height), Color4F::GRAY);
+	drawNode->setContentSize(cocos2d::Size(PB_WALL_WIDTH, height));
+	drawNode->drawSolidRect(Vec2::ZERO, Vec2(PB_WALL_WIDTH, height), Color4F::GRAY);
 	drawNode->setPosition(position);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = DEFAULT_DENSITY;
-	boxFixture.friction = DEFAULT_FRICTION;
-	boxFixture.restitution = DEFAULT_RESTITUTION;
+	boxFixture.density = PB_DEFAULT_DENSITY;
+	boxFixture.friction = PB_DEFAULT_FRICTION;
+	boxFixture.restitution = PB_DEFAULT_RESTITUTION;
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(WALL_WIDTH / 2 / SCALE_RATIO, height / SCALE_RATIO);
+	boxShape.SetAsBox(PB_WALL_WIDTH / 2 / SCALE_RATIO, height / SCALE_RATIO);
 	boxFixture.shape = &boxShape;
 	b2BodyDef boxBodyDef;
 	boxBodyDef.type = b2BodyType::b2_staticBody;
@@ -263,18 +257,18 @@ void Pinball::createWall(Vec2 position, float height) {
 
 void Pinball::createBox(Vec2 position) {
 	auto drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(BOX_SIZE, BOX_SIZE));
-	drawNode->drawSolidRect(Vec2::ZERO, Vec2(BOX_SIZE, BOX_SIZE), Color4F::GRAY);;
+	drawNode->setContentSize(cocos2d::Size(PB_BOX_SIZE, PB_BOX_SIZE));
+	drawNode->drawSolidRect(Vec2::ZERO, Vec2(PB_BOX_SIZE, PB_BOX_SIZE), Color4F::GRAY);;
 	drawNode->setPosition(position);
 	drawNode->setRotation(45);
 	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = DEFAULT_DENSITY;
-	boxFixture.friction = DEFAULT_FRICTION;
-	boxFixture.restitution = DEFAULT_RESTITUTION;
+	boxFixture.density = PB_DEFAULT_DENSITY;
+	boxFixture.friction = PB_DEFAULT_FRICTION;
+	boxFixture.restitution = PB_DEFAULT_RESTITUTION;
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(BOX_SIZE / 2 / SCALE_RATIO, BOX_SIZE / 2 / SCALE_RATIO);
+	boxShape.SetAsBox(PB_BOX_SIZE / 2 / SCALE_RATIO, PB_BOX_SIZE / 2 / SCALE_RATIO);
 	boxFixture.shape = &boxShape;
 	b2BodyDef boxBodyDef;
 	boxBodyDef.type = b2BodyType::b2_staticBody;
@@ -318,22 +312,22 @@ void Pinball::update(float dt) {
 	float gameHeight = Director::getInstance()->getVisibleSize().height;
 	float ballY = _ball->getPositionY();
 	if (ballY < gameHeight/2) {
-		world->SetGravity(b2Vec2(0.0f, -GRAVITY));
+		world->SetGravity(b2Vec2(0.0f, -PB_GRAVITY));
 	}
 	else {
-		world->SetGravity(b2Vec2(0.0f, GRAVITY));
+		world->SetGravity(b2Vec2(0.0f, PB_GRAVITY));
 	}
 
 	if (ballY > gameHeight || ballY < 0) {
 		//give score
 		int offsetYModifier = 1;
 		if (ballY > gameHeight) {
-			_score[TEAM_BOT]++;
+			_score[PB_TEAM_BOT]++;
 			offsetYModifier = -1;
-			if (_score[TEAM_BOT] >= POINTS_TO_WIN) {
+			if (_score[PB_TEAM_BOT] >= PB_POINTS_TO_WIN) {
 				if (numberOfPlayers > 2)
 				{
-					int winners[] = TEAM_BOT_PLAYERS;
+					int winners[] = PB_TEAM_BOT_PLAYERS;
 					endGame(winners, 2);
 				}
 				else {
@@ -342,13 +336,13 @@ void Pinball::update(float dt) {
 			}
 		}
 		else {
-			_score[TEAM_TOP]++;
+			_score[PB_TEAM_TOP]++;
 			offsetYModifier = 1;
 			
-			if (_score[TEAM_TOP] >= POINTS_TO_WIN) {
+			if (_score[PB_TEAM_TOP] >= PB_POINTS_TO_WIN) {
 				if (numberOfPlayers > 3)
 				{
-					int winners[] = TEAM_TOP_PLAYERS;
+					int winners[] = PB_TEAM_TOP_PLAYERS;
 					endGame(winners,2);
 				}
 				else {
@@ -356,12 +350,12 @@ void Pinball::update(float dt) {
 				}
 			}
 		}
-		float offset_x = cocos2d::random(-BALL_RESET_OFFSET_X, BALL_RESET_OFFSET_X);
+		float offset_x = cocos2d::random(-PB_BALL_RESET_OFFSET_X, PB_BALL_RESET_OFFSET_X);
 		if (offset_x == 0) {
 			offset_x = 0.5f;
 		}
 		_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2 + offset_x,
-			gameHeight / 2 + offsetYModifier*BALL_RESET_OFFSET_Y));
+			gameHeight / 2 + offsetYModifier*PB_BALL_RESET_OFFSET_Y));
 		//reset ball transform & velocity
 		ballBody->SetTransform(b2Vec2(_ball->getPosition().x / SCALE_RATIO, _ball->getPosition().y / SCALE_RATIO),0);
 		ballBody->SetLinearVelocity(b2Vec2_zero);
@@ -381,10 +375,6 @@ void Pinball::startGame() {
 	GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
 
-void Pinball::initTouchHandling() {
-
-}
-
 void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	auto button = static_cast<GameButton*>(sender);
 	int player = button->getPlayer();
@@ -395,20 +385,20 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	{
 	case ui::Widget::TouchEventType::BEGAN:
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			paddleControlBody[player]->SetAngularVelocity(-PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(-PB_PADDLE_ANG_VEL);
 		}
 		else {
-			paddleControlBody[player]->SetAngularVelocity(PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(PB_PADDLE_ANG_VEL);
 		}
 		
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			paddleControlBody[player]->SetAngularVelocity(PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(PB_PADDLE_ANG_VEL);
 		}
 		else {
-			paddleControlBody[player]->SetAngularVelocity(-PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(-PB_PADDLE_ANG_VEL);
 		}
 		break;
 	}
@@ -418,12 +408,6 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 }
 
 void Pinball::updateScore() {
-	
-	std::ostringstream st;
-	st << _score[TEAM_TOP];
-	scoreTop->setString(st.str());
-
-	std::ostringstream sb;
-	sb << _score[TEAM_BOT];
-	scoreBottom->setString(sb.str());
+	scoreTop->setString(Shared::intToString(_score[PB_TEAM_TOP]));
+	scoreBottom->setString(Shared::intToString(_score[PB_TEAM_BOT]));
 }
