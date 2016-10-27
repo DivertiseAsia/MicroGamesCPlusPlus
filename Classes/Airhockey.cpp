@@ -447,6 +447,7 @@ void Airhockey::BeginContact(b2Contact* contact) {
         updateScore();
         _needReset = true;
         SoundManager::instance()->playEffect(SOUND_FILE_WIN);
+        return;
     }
     
     if (contact->GetFixtureA() == _bottomGoal && contact->GetFixtureB() == _ballFixture){
@@ -454,9 +455,12 @@ void Airhockey::BeginContact(b2Contact* contact) {
         updateScore();
         _needReset = true;
         SoundManager::instance()->playEffect(SOUND_FILE_WIN);
+        return;
     }
+    
+    SoundManager::instance()->playEffect(SOUND_FILE_HOCKEY_PUCK);
 }
 
 void Airhockey::EndContact(b2Contact* contact) {
-    SoundManager::instance()->playEffect(SOUND_FILE_HOCKEY_PUCK);
+    
 }
