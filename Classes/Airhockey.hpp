@@ -55,6 +55,8 @@ public:
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
     void onDrag();
+    void onGameStart() override;
+    
     using GameScene::GameScene;
     
     void BeginContact(b2Contact* contact) override;

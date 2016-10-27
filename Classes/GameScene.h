@@ -30,6 +30,9 @@ public:
     void updateCounter(float);
     void showText(std::string, float);
     
+    //virtual function to be overridden
+    virtual void onGameStart();
+    
 protected:
 	void showReturnMenu(float);
 	int numberOfPlayers;

@@ -55,6 +55,7 @@ void GameScene::updateCounter(float dt){
         gameStatus = GAME_INPROGRESS;
         log("Game started!");
         showText(GS_GO_TEXT, 1.0f);
+        onGameStart();
     } else{
         showText(Shared::intToString(_counter), 1.0f);
     }
@@ -170,8 +171,9 @@ void GameScene::showText(std::string s, float dt){
     this->addChild(label, 1);
     
     this->scheduleOnce([this, label, dt](float tp){ this->removeChild(label);}, dt, "remove"+s);
-
 }
+
+void GameScene::onGameStart(){}
 
 template Scene* GameScene::createScene<Taprace>(int);
 template Scene* GameScene::createScene<Holdrace>(int);
