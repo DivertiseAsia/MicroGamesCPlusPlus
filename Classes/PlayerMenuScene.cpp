@@ -39,17 +39,16 @@ bool PlayerMenu::init()
 	// 2. add a menu item with "X" image, which is clicked to quit the program
 	//    you may modify it.
 
-	// add a "close" icon to exit the progress. it's an autorelease object
 	Vector<MenuItem*> MenuItems;
-	auto closeItem = MenuItemImage::create(
-		"CloseNormal.png",
-		"CloseSelected.png",
+	auto backButton = MenuItemImage::create(
+		"BackNormal.png",
+		"BackHighlighted.png",
 		CC_CALLBACK_1(PlayerMenu::backButtonCallback, this));
 
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
-		origin.y + closeItem->getContentSize().height / 2));
+	backButton->setPosition(Vec2(origin.x + backButton->getContentSize().width,
+		origin.y + visibleSize.height/2 - backButton->getContentSize().height / 2));
 
-	MenuItems.pushBack(closeItem);
+	MenuItems.pushBack(backButton);
 
 	//Title
 
