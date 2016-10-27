@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.microgames.cocos"
-      android:versionCode="1"
-      android:versionName="1.0"
+      package="th.co.microgames"
+      android:versionCode="2"
+      android:versionName="1.0.0"
       android:installLocation="auto">
 
     <uses-sdk android:minSdkVersion="9"/>
@@ -16,7 +16,7 @@
         <meta-data android:name="android.app.lib_name"
                    android:value="MyGame" />
 
-        <activity android:name="org.cocos2dx.cpp.AppActivity"
+        <activity android:name="th.co.microgames.AppActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
@@ -34,6 +34,4 @@
                       android:normalScreens="true"
                       android:largeScreens="true"
                       android:xlargeScreens="true"/>
-
-    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
