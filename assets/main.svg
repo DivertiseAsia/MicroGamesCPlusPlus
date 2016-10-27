@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 512.00001 512.00001"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="main.svg"
+   inkscape:export-filename="C:\Users\Hunter\dev\microgames\res\android\xxxhdpi.png"
+   inkscape:export-xdpi="33.75"
+   inkscape:export-ydpi="33.75">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4226"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#d94850;stop-opacity:1;"
+         offset="0"
+         id="stop4228" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4220"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#f2e416;stop-opacity:1;"
+         offset="0"
+         id="stop4222" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4214"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#4df2bd;stop-opacity:1;"
+         offset="0"
+         id="stop4216" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4208"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#646464;stop-opacity:1;"
+         offset="0"
+         id="stop4210" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4192"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#5294f2;stop-opacity:1;"
+         offset="0"
+         id="stop4194" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4184">
+      <stop
+         style="stop-color:#782121;stop-opacity:1;"
+         offset="0"
+         id="stop4186" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4178"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#5b4273;stop-opacity:1;"
+         offset="0"
+         id="stop4180" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4178"
+       id="linearGradient4182"
+       x1="257.14285"
+       y1="325.57648"
+       x2="330.71429"
+       y2="325.57648"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.86990289,0,0,0.8699026,54.585515,112.80228)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4192"
+       id="linearGradient4165"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.86872216,0,0,0.8699026,54.889147,112.80228)" />
+    <linearGradient
+       gradientTransform="matrix(0.86872204,0,0,0.86990281,127.67722,112.80222)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient4214"
+       id="linearGradient4165-7"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4178"
+       id="linearGradient4182-3"
+       x1="257.14285"
+       y1="325.57648"
+       x2="330.71429"
+       y2="325.57648"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.86990281,0,0,0.86990281,127.37359,112.80222)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4226"
+       id="linearGradient4165-0"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.86872204,0,0,0.86990281,54.889202,188.08016)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4178"
+       id="linearGradient4182-8"
+       x1="257.14285"
+       y1="325.57648"
+       x2="330.71429"
+       y2="325.57648"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.86990281,0,0,0.86990281,54.585574,188.08016)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4220"
+       id="linearGradient4165-1"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.86872204,0,0,0.86990281,127.67718,188.08016)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4178"
+       id="linearGradient4182-2"
+       x1="257.14285"
+       y1="325.57648"
+       x2="330.71429"
+       y2="325.57648"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.86990281,0,0,0.86990281,127.37356,188.08016)" />
+    <linearGradient
+       gradientTransform="matrix(1.3573782,0,0,1.3592232,-134.3712,340.58622)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient4178"
+       id="linearGradient4165-7-8"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4178"
+       id="linearGradient4182-3-6"
+       x1="257.14285"
+       y1="325.57648"
+       x2="330.71429"
+       y2="325.57648"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3592231,0,0,1.3592232,-134.84561,340.58622)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.5"
+     inkscape:cx="388.58788"
+     inkscape:cy="405.65396"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="698"
+     inkscape:window-height="386"
+     inkscape:window-x="902"
+     inkscape:window-y="11"
+     inkscape:window-maximized="0"
+     units="px" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-540.36214)">
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4136"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Organo (colored version at: logomagazin.com/organo-font)';-inkscape-font-specification:'Organo (colored version at: logomagazin.com/organo-font)';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion4138"><rect
+           id="rect4140"
+           width="514.28571"
+           height="234.28572"
+           x="137.14285"
+           y="383.79077"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Organo (colored version at: logomagazin.com/organo-font)';-inkscape-font-specification:'Organo (colored version at: logomagazin.com/organo-font)'" /></flowRegion><flowPara
+         id="flowPara4142" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4144"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Organo (colored version at: logomagazin.com/organo-font)';-inkscape-font-specification:'Organo (colored version at: logomagazin.com/organo-font)';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion4146"><rect
+           id="rect4148"
+           width="228.57143"
+           height="211.42857"
+           x="105.71429"
+           y="218.07649"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Organo (colored version at: logomagazin.com/organo-font)';-inkscape-font-specification:'Organo (colored version at: logomagazin.com/organo-font)'" /></flowRegion><flowPara
+         id="flowPara4150" /></flowRoot>    <g
+       id="g4295"
+       transform="matrix(3.5703995,0,0,3.5703995,-688.97344,-1980.1986)">
+      <circle
+         r="49.999992"
+         cy="783.11731"
+         cx="264.66882"
+         id="path4176-4-0"
+         style="opacity:1;fill:url(#linearGradient4165-7-8);fill-opacity:1;stroke:url(#linearGradient4182-3-6);stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <g
+         transform="translate(-82.000014,344)"
+         id="g4287">
+        <ellipse
+           style="opacity:1;fill:url(#linearGradient4165);fill-opacity:1;stroke:url(#linearGradient4182);stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="path4176"
+           cx="310.27484"
+           cy="396.02209"
+           rx="31.999998"
+           ry="31.999989" />
+        <circle
+           style="opacity:1;fill:url(#linearGradient4165-7);fill-opacity:1;stroke:url(#linearGradient4182-3);stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="path4176-4"
+           cx="383.06284"
+           cy="396.02209"
+           r="31.999996" />
+      </g>
+      <g
+         transform="translate(-82.000015,344)"
+         id="g4291">
+        <circle
+           style="opacity:1;fill:url(#linearGradient4165-0);fill-opacity:1;stroke:url(#linearGradient4182-8);stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="path4176-0"
+           cx="310.27484"
+           cy="471.30005"
+           r="31.999996" />
+        <circle
+           style="opacity:1;fill:url(#linearGradient4165-1);fill-opacity:1;stroke:url(#linearGradient4182-2);stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="path4176-1"
+           cx="383.06284"
+           cy="471.30005"
+           r="31.999996" />
+      </g>
+    </g>
+  </g>
+</svg>
