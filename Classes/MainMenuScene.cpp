@@ -40,15 +40,20 @@ bool MainMenu::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
 	Vector<MenuItem*> MenuItems;
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
+    auto soundName = "SoundOn.png";
+    if (SoundManager::instance()->isMuted())
+        soundName = "SoundOff.png";
+        
+    _soundMuteItem = MenuItemImage::create(
+                                           soundName,
+                                           soundName,
                                            CC_CALLBACK_1(MainMenu::muteButtonCallback, this));
-    
-    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
 
-	MenuItems.pushBack(closeItem);
+    
+    _soundMuteItem->setPosition(Vec2(origin.x + visibleSize.width - _soundMuteItem->getContentSize().width/2 ,
+                                origin.y + _soundMuteItem->getContentSize().height/2));
+
+	MenuItems.pushBack(_soundMuteItem);
 
 	auto label = Label::createWithBMFont(SHARED_FONT_FILE_TITLE, SHARED_GAME_NAME);
 	// position the label on the center of the screen
@@ -95,8 +100,10 @@ void MainMenu::muteButtonCallback(Ref* pSender)
     //Mute or unmute the sound effects of the game
 	if (SoundManager::instance()->isMuted()) {
 		SoundManager::instance()->unmuteAll();
+        _soundMuteItem->setNormalImage(Sprite::create("SoundOn.png"));
 	}
 	else {
 		SoundManager::instance()->muteAll();
+        _soundMuteItem->setNormalImage(Sprite::create("SoundOff.png"));
 	}
 }
