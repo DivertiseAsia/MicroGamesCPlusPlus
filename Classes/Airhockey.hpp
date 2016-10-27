@@ -15,6 +15,7 @@
 #include "GameButton.hpp"
 #include "GameScene.h"
 #include <Box2D/Box2D.h>
+#include "SoundManager.h"
 
 USING_NS_CC;
 
@@ -56,33 +57,8 @@ public:
     void onDrag();
     using GameScene::GameScene;
     
-    
-    void BeginContact(b2Contact* contact) {
-        
-        //check if fixture A was a ball
-        auto bodyUserData = contact->GetFixtureA()->GetUserData();
-        if ( bodyUserData ){
-            log("fixtureA:%i", (long)bodyUserData);
-        }
-        
-        if (contact->GetFixtureA() == _topGoal && contact->GetFixtureB() == _ballFixture){
-            _scoreBottom->setUserData((void*)((long)_scoreBottom->getUserData()+1));
-            updateScore();
-            _needReset = true;
-        }
-        
-        if (contact->GetFixtureA() == _bottomGoal && contact->GetFixtureB() == _ballFixture){
-            _scoreTop->setUserData((void*)((long)_scoreTop->getUserData()+1));
-            updateScore();
-            _needReset = true;
-        }
-        
-        
-    }
-    
-    void EndContact(b2Contact* contact) {
-        
-    }
+    void BeginContact(b2Contact* contact) override;
+    void EndContact(b2Contact* contact) override;
     
 private:
     void updateScore();

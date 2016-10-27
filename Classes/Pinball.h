@@ -51,9 +51,14 @@ public:
     
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
-	using GameScene::GameScene;
+    void BeginContact(b2Contact* contact) override;
+    void EndContact(b2Contact* contact) override;
+    
+    using GameScene::GameScene;
 	b2World *world;
 	float deltaTime;
+    
+    
 private:
 	void createBox(Vec2);
 	void createWall(Vec2, float);

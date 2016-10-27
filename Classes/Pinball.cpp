@@ -109,6 +109,7 @@ bool Pinball::init()
 	this->addChild(B2DebugDrawLayer::create(world, SCALE_RATIO), 1000);
 #endif // DEBUG_MODE
 
+    this->world->SetContactListener(this);
 	this->setName("PinballSceneRoot");
 	this->scheduleUpdate();
 
@@ -322,6 +323,7 @@ void Pinball::update(float dt) {
 		//give score
 		int offsetYModifier = 1;
 		if (ballY > gameHeight) {
+            SoundManager::instance()->playEffect(SOUND_FILE_WIN);
 			_score[PB_TEAM_BOT]++;
 			offsetYModifier = -1;
 			if (_score[PB_TEAM_BOT] >= PB_POINTS_TO_WIN) {
@@ -336,6 +338,7 @@ void Pinball::update(float dt) {
 			}
 		}
 		else {
+            SoundManager::instance()->playEffect(SOUND_FILE_WIN);
 			_score[PB_TEAM_TOP]++;
 			offsetYModifier = 1;
 			
@@ -410,4 +413,12 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 void Pinball::updateScore() {
 	scoreTop->setString(Shared::intToString(_score[PB_TEAM_TOP]));
 	scoreBottom->setString(Shared::intToString(_score[PB_TEAM_BOT]));
+}
+
+void Pinball::BeginContact(b2Contact* contact) {
+    SoundManager::instance()->playEffect(SOUND_FILE_HOCKEY_PUCK);
+}
+
+void Pinball::EndContact(b2Contact* contact) {
+    
 }
