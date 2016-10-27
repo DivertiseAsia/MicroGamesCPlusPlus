@@ -23,6 +23,9 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(MainMenu);
+    
+private:
+    cocos2d::MenuItemImage* _soundMuteItem;
 };
 
 #endif // __MAINMENU_SCENE_H__

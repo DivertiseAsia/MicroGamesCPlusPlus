@@ -42,8 +42,8 @@ bool PlayerMenu::init()
 	// add a "close" icon to exit the progress. it's an autorelease object
 	Vector<MenuItem*> MenuItems;
 	auto closeItem = MenuItemImage::create(
-		"CloseNormal.png",
-		"CloseSelected.png",
+		"BackNormal.png",
+		"BackHighlighted.png",
 		CC_CALLBACK_1(PlayerMenu::backButtonCallback, this));
 
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
