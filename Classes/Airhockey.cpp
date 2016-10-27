@@ -300,7 +300,7 @@ void Airhockey::createWall() {
     auto left = (1-goal_size)/2*visibleSize.width;
     auto right = (1-(1-goal_size)/2)*visibleSize.width;
     groundBoxDef.userData = (void*)123;
-    groundBox.Set(b2Vec2(left, 0.1), b2Vec2(right, 0.1)); //bottom goal
+    groundBox.Set(b2Vec2(left, 0.1f), b2Vec2(right, 0.1f)); //bottom goal
     _bottomGoal = _boxBody->CreateFixture(&groundBoxDef);
     
     groundBoxDef.userData = (void*)321;
