@@ -8,8 +8,8 @@
 #include "GameScene.h"
 #include "SoundManager.h"
 
-#define HR_BALL_ACCELERATION 0.01
-#define HR_BALL_FRICTION 1.01
+#define HR_BALL_ACCELERATION	0.01f
+#define HR_BALL_FRICTION		1.01f
 
 USING_NS_CC;
 

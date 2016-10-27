@@ -3,37 +3,34 @@
 
 #include "Shared.h"
 #include "cocos2d.h"
-#include "Ball.hpp"
 #include "GameButton.hpp"
+#include "SoundManager.h"
 #include "GameScene.h"
 #include <Box2D/Box2D.h>
 
-#define GRAVITY 10.0f
-#define POINTS_TO_WIN 4
-#define TEAM_TOP 0
-#define TEAM_BOT 1
-#define TEAM_TOP_PLAYERS {SHARED_PLAYER1, SHARED_PLAYER4}
-#define TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
-#define PADDLE_LENGTH_PERCENT	0.33
-#define PADDLE_WIDTH_PX	20
-#define PADDLE_ANG_VEL	14
-#define PADDLE_CONTROL_RAD 30.0f
-#define PADDLE_OFFSET_X_PERCENT .325f
-#define BOX_SIZE		50.0f
-#define BOX_YOFFSET		200
-#define WALL_WIDTH		5.0f
-#define CAT_MASK_PADDLE	0x01
-#define CAT_MASK_STAT	0x02
-#define CAT_MASK_BALL	0x05
-#define BALL_RESET_OFFSET_Y	3
-#define BALL_RESET_OFFSET_X	20
+#define PB_GRAVITY 10.0f
+#define PB_POINTS_TO_WIN 4
+#define PB_TEAM_TOP 0
+#define PB_TEAM_BOT 1
+#define PB_TEAM_TOP_PLAYERS {SHARED_PLAYER1, SHARED_PLAYER4}
+#define PB_TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
+#define PB_PADDLE_LENGTH_PERCENT	0.33f
+#define PB_PADDLE_WIDTH_PX	20
+#define PB_PADDLE_ANG_VEL	14
+#define PB_PADDLE_CONTROL_RAD 30.0f
+#define PB_PADDLE_OFFSET_X_PERCENT .325f
+#define PB_BOX_SIZE		50.0f
+#define PB_BOX_YOFFSET		200
+#define PB_WALL_WIDTH		5.0f
+#define PB_BALL_RESET_OFFSET_Y	3
+#define PB_BALL_RESET_OFFSET_X	20
 
-#define SCORE_OFFSET_X 50
-#define SCORE_OFFSET_Y 50
+#define PB_SCORE_OFFSET_X 50
+#define PB_SCORE_OFFSET_Y 50
 
-#define DEFAULT_DENSITY		10.0f
-#define DEFAULT_FRICTION	0.8f
-#define DEFAULT_RESTITUTION 0.6f
+#define PB_DEFAULT_DENSITY		10.0f
+#define PB_DEFAULT_FRICTION	0.8f
+#define PB_DEFAULT_RESTITUTION 0.6f
 
 #define SCALE_RATIO 32.0
 
@@ -51,7 +48,6 @@ public:
     
     // Our game custom functions
     void startGame();
-    void initTouchHandling();
     
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);

@@ -30,8 +30,6 @@ public:
 	static std::string intToString(int);
 	cocos2d::Color4F getPlayerColor(int);
 	cocos2d::Vec2 getPlayerPosition(int);
-	bool isDebugMode();
-	void setDebugMode(bool);
 private:
 	Shared() {};
 	static Shared* minstance;

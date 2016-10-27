@@ -38,14 +38,6 @@ Color4F Shared::getPlayerColor(int player) {
 	return Color4F::WHITE;
 }
 
-bool Shared::isDebugMode() {
-	return debug;
-}
-
-void Shared::setDebugMode(bool val) {
-	debug = val;
-}
-
 std::string Shared::intToString(int number) {
 	std::stringstream out;
 	out << number;
