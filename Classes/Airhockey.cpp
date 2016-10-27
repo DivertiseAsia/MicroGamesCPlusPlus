@@ -48,20 +48,19 @@ bool Airhockey::init()
         Vec2(_screenOrigin.x + _screenSize.width - buttonOffset.x, _screenOrigin.y+ buttonOffset.y),  //1
         _screenOrigin+buttonOffset, //2
         _screenOrigin + _screenSize - buttonOffset}; //3
-    auto colors = SHARED_COLOR_PLAYERS;
     
     
     //create the controls and paddles
     for (int i = 0; i < numberOfPlayers; i++) {
         Color4F c;
         if (numberOfPlayers < 3 && i == SHARED_PLAYER3) {
-            c = colors.begin()[SHARED_PLAYER2];
+			c = Shared::instance()->getPlayerColor(SHARED_PLAYER2);
         }
         else if (numberOfPlayers < 4 && i == SHARED_PLAYER4) {
-            c = colors.begin()[SHARED_PLAYER1];
+            c = Shared::instance()->getPlayerColor(SHARED_PLAYER1);
         }
         else {
-            c = colors.begin()[i];
+			c = Shared::instance()->getPlayerColor(i);
         }
         
         addMallet(i, buttonPos.begin()[i], c);
@@ -70,10 +69,10 @@ bool Airhockey::init()
     //Debug Layer
 #ifdef DEBUG_MODE
     log("DEBUG MODE!!!");
-    b2Draw *debugDraw = new GLESDebugDraw(PTM_RATIO);
+    b2Draw *debugDraw = new GLESDebugDraw(AR_PTM_RATIO);
     debugDraw->SetFlags(GLESDebugDraw::e_shapeBit || GLESDebugDraw::e_jointBit);
     _world->SetDebugDraw(debugDraw);
-    auto debugLayer = B2DebugDrawLayer::create(_world, PTM_RATIO);
+    auto debugLayer = B2DebugDrawLayer::create(_world, AR_PTM_RATIO);
     debugLayer->setTag(12345);
     this->addChild(debugLayer, 1000);
 #endif
@@ -81,25 +80,25 @@ bool Airhockey::init()
     this->setName("AirhockeySceneRoot");
     this->initTouchHandling();
     this->scheduleUpdate();
-    this->startGame(3);
+    this->startGame(SHARED_COUNTDOWN_LENGTH);
     
     return true;
 }
 
 void Airhockey::updateScore(){
-    if ((long)_scoreBottom->getUserData() >= MAX_SCORE) {
+    if ((long)_scoreBottom->getUserData() >= AR_MAX_SCORE) {
         if (numberOfPlayers > 2)
         {
-            int winners[] = PB_TEAM_BOT_PLAYERS;
+            int winners[] = AH_TEAM_BOT_PLAYERS;
             endGame(winners, 2);
         }
         else {
             endGame(SHARED_PLAYER2);
         }
-    } else if ((long)_scoreTop->getUserData() >= MAX_SCORE) {
+    } else if ((long)_scoreTop->getUserData() >= AR_MAX_SCORE) {
         if (numberOfPlayers > 3)
         {
-            int winners[] = PB_TEAM_TOP_PLAYERS;
+            int winners[] = AH_TEAM_TOP_PLAYERS;
             endGame(winners,2);
         }
         else {
@@ -122,7 +121,7 @@ void Airhockey::update(float dt){
         if (body->GetUserData())
         {
             auto sprite = (DrawNode*)body->GetUserData();
-            sprite->setPosition(Vec2(body->GetPosition().x * PTM_RATIO, body->GetPosition().y * PTM_RATIO));
+            sprite->setPosition(Vec2(body->GetPosition().x * AR_PTM_RATIO, body->GetPosition().y * AR_PTM_RATIO));
             sprite->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
             
         }
@@ -139,16 +138,12 @@ void Airhockey::onPress(cocos2d::Ref* sender, GameButton::Widget::TouchEventType
     switch (type)
     {
         case ui::Widget::TouchEventType::BEGAN:{
-            //button->getBall()->setAcceleration(Vec2(0,-BALL_ACCELERATION));
-            button->setActionTag(PADDLE_DRAG);
+            button->setActionTag(AR_PADDLE_DRAG);
             break;
         }
         case ui::Widget::TouchEventType::ENDED:{
             if (button->getActionTag() != 5) { break; }//was never primed properly eg pressed before game start
-            button->setActionTag(PADDLE_DROP);
-            
-            //SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
-            
+            button->setActionTag(AR_PADDLE_DROP);            
             break;
         }
         default:
@@ -192,7 +187,6 @@ void Airhockey::initTouchHandling(){
                         
                         md.frequencyHz = 1000;
                         
-                        //_mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
                         btn->setb2MouseJoint((b2MouseJoint *)_world->CreateJoint(&md));
                         body->SetAwake(true);
                     }
@@ -208,7 +202,6 @@ void Airhockey::initTouchHandling(){
         //Loop through each touch
         for(auto iter=touches.rbegin(); iter != touches.rend(); ++iter){
             Touch* t = static_cast<Touch*>(*iter);
-            //Point touchPoint = touchSurface->convertTouchToNodeSpace(t); //re calculate position to the
             
             //For each button test it agianst the touch.
             for (int i=0;i<this->numberOfPlayers;i++){
@@ -218,7 +211,7 @@ void Airhockey::initTouchHandling(){
                 if (b->getTouch() && b->getTouch() == t){
                     auto tap = t->getLocation();
                     
-                    b2Vec2 pos = b2Vec2(tap.x/PTM_RATIO,tap.y/PTM_RATIO);
+                    b2Vec2 pos = b2Vec2(tap.x/AR_PTM_RATIO,tap.y/AR_PTM_RATIO);
                     b->getb2MouseJoint()->SetTarget(pos);
                     break;
                 }
@@ -231,8 +224,7 @@ void Airhockey::initTouchHandling(){
         //Loop through each touch
         for(auto iter=touches.rbegin(); iter != touches.rend(); ++iter){
             Touch* t = static_cast<Touch*>(*iter);
-            //Point touchPoint = touchSurface->convertTouchToNodeSpace(t); //re calculate position to the
-            
+
             for (int i=0;i<this->numberOfPlayers;i++){
                 auto b = this->_button[i];
                 
@@ -256,7 +248,6 @@ void Airhockey::initTouchHandling(){
 
 void Airhockey::onEnter(){
     Node::onEnter();  //If you forgot this touch won't work.
-    //startGame();
 }
 
 void Airhockey::startGame(float s){
@@ -264,9 +255,8 @@ void Airhockey::startGame(float s){
 }
 
 void Airhockey::createWall() {
-    //auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin() * 1.0/PTM_RATIO;
-    Size visibleSize = Director::getInstance()->getVisibleSize() * 1.0/PTM_RATIO;
+    Vec2 origin = Director::getInstance()->getVisibleOrigin() * 1.0/AR_PTM_RATIO;
+    Size visibleSize = Director::getInstance()->getVisibleSize() * 1.0/AR_PTM_RATIO;
     
     auto margin = 0.1;
     
@@ -296,7 +286,7 @@ void Airhockey::createWall() {
     
     
     //Create goal lines
-    auto goal_size = GOAL_SIZE;// respect to visibleWidth
+    auto goal_size = AR_GOAL_SIZE;// respect to visibleWidth
     auto left = (1-goal_size)/2*visibleSize.width;
     auto right = (1-(1-goal_size)/2)*visibleSize.width;
     groundBoxDef.userData = (void*)123;
@@ -310,7 +300,7 @@ void Airhockey::createWall() {
     
     //Draw center line
     groundBox.Set(b2Vec2(0, visibleSize.height/2), b2Vec2(visibleSize.width, visibleSize.height/2)); //center line
-    groundBoxDef.filter.maskBits = ~BIT_MASK_PUCK;  //Allow PUCK to pass
+    groundBoxDef.filter.maskBits = ~AR_BIT_MASK_PUCK;  //Allow PUCK to pass
     
     _boxBody->CreateFixture(&groundBoxDef);
 }
@@ -321,7 +311,7 @@ void Airhockey::drawBoard(){
 
     _drawNode->drawLine(Vec2(_screenOrigin.x, _screenCenter.y), Vec2(_screenSize.width+_screenOrigin.x, _screenCenter.y), Color4F::GRAY);   //Add center line
     
-    auto goal_size = GOAL_SIZE;// respect to visibleWidth
+    auto goal_size = AR_GOAL_SIZE;// respect to visibleWidth
     auto left = (1-goal_size)/2*_screenSize.width;
     auto right = (1-(1-goal_size)/2)*_screenSize.width;
     
@@ -351,19 +341,14 @@ void Airhockey::addScores(){
 
 void Airhockey::placePuck(){
     //create the ball
-    float offset = BALL_RESET_OFFSET_Y;
-    if (cocos2d::rand_0_1() > 0.5) {
-        offset = -BALL_RESET_OFFSET_Y;
-    }
-    auto colors = SHARED_COLOR_PLAYERS;
-    _ball = Ball::create(colors.begin()[0]);
-    _ball->setPosition(Vec2(_screenCenter.x, _screenCenter.y+offset));
+    _ball = Ball::create(Color4F::MAGENTA);
+    _ball->setPosition(Vec2(_screenCenter.x, _screenCenter.y));
     this->addChild(_ball);
     
     // Create _ballBody
     b2BodyDef ballBodyDef;
     ballBodyDef.type = b2_dynamicBody;
-    auto ballPosInWorld = _ball->getPosition()/PTM_RATIO;
+    auto ballPosInWorld = _ball->getPosition()/AR_PTM_RATIO;
     ballBodyDef.position.Set(ballPosInWorld.x, ballPosInWorld.y);
     ballBodyDef.userData = _ball;
     ballBodyDef.bullet = true; //Enable CCD
@@ -371,7 +356,7 @@ void Airhockey::placePuck(){
     
     // Define a shape for the _ballBody(tangible)
     b2CircleShape circle;
-    circle.m_radius = _ball->getContentSize().width/2/PTM_RATIO;
+    circle.m_radius = _ball->getContentSize().width/2/AR_PTM_RATIO;
     
     // Create shape definition and add to body
     b2FixtureDef ballShapeDef;
@@ -379,7 +364,7 @@ void Airhockey::placePuck(){
     ballShapeDef.density = 1.0f;
     ballShapeDef.friction = 0.9f;
     ballShapeDef.restitution = 0.5f;
-    ballShapeDef.filter.categoryBits = BIT_MASK_PUCK;   //Set the shape to belong to PUCK cat
+    ballShapeDef.filter.categoryBits = AR_BIT_MASK_PUCK;   //Set the shape to belong to PUCK cat
     
     _ballFixture = _ballBody->CreateFixture(&ballShapeDef);
     _ballBody->SetLinearDamping(0.3f);  //How fast the ball losing its velocity
@@ -395,7 +380,7 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     m->setPlayer(playerNo);
     m->setPosition(pos);
     m->setTag(playerNo);  //Set the number to indicate button order.
-    m->setActionTag(PADDLE_DROP);
+    m->setActionTag(AR_PADDLE_DROP);
     m->setPressedActionEnabled(false); // Disable zoom action on pressed
     m->setZoomScale(0.0f);
     m->addTouchEventListener(CC_CALLBACK_2(Airhockey::onPress, this));
@@ -406,7 +391,7 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     // Create _buttonBody
     b2BodyDef btnBodyDef;
     btnBodyDef.type = b2_dynamicBody;
-    auto btnPosInWorld = m->getPosition()/PTM_RATIO;
+    auto btnPosInWorld = m->getPosition()/AR_PTM_RATIO;
     btnBodyDef.position.Set(btnPosInWorld.x, btnPosInWorld.y);
     btnBodyDef.userData = m;
     btnBodyDef.bullet = true; //Enable CCD
@@ -414,7 +399,7 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     
     // Define a shape for the _ballBody(tangible)
     b2CircleShape circle;
-    circle.m_radius = m->getContentSize().width/2/PTM_RATIO;
+    circle.m_radius = m->getContentSize().width/2/AR_PTM_RATIO;
     
     // Create shape definition and add to body
     b2FixtureDef btnShapeDef;
@@ -434,12 +419,8 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
 void Airhockey::resetGame(float dt){
     _needReset = false;
     _world->ClearForces();
-    float offset = BALL_RESET_OFFSET_Y;
-    if (cocos2d::rand_0_1() > 0.5) {
-        offset = -BALL_RESET_OFFSET_Y;
-    }
-    _ball->setPosition(Vec2(_screenCenter.x, _screenCenter.y+offset));
-    auto ballPosInWorld = _ball->getPosition()/PTM_RATIO;
+    _ball->setPosition(Vec2(_screenCenter.x, _screenCenter.y));
+    auto ballPosInWorld = _ball->getPosition()/AR_PTM_RATIO;
     _ballBody->SetLinearVelocity(b2Vec2(0,0));
     _ballBody->SetAngularVelocity(0.f);
     _ballBody->SetTransform(b2Vec2(ballPosInWorld.x, ballPosInWorld.y),0);
