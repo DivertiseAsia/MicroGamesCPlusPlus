@@ -28,8 +28,10 @@ USING_NS_CC;
 
 #define BIT_MASK_PUCK 0x0002
 
+#define GOAL_SIZE 0.3f
 
-class Airhockey : public GameScene
+
+class Airhockey : public GameScene, public b2ContactListener
 {
 public:
     
@@ -53,8 +55,43 @@ public:
     void onDrag();
     using GameScene::GameScene;
     
+    
+    void BeginContact(b2Contact* contact) {
+        
+        //check if fixture A was a ball
+        auto bodyUserData = contact->GetFixtureA()->GetUserData();
+        if ( bodyUserData ){
+            log("fixtureA:%i", (long)bodyUserData);
+        }
+        
+        if (contact->GetFixtureA() == _topGoal && contact->GetFixtureB() == _ballFixture){
+            _scoreBottom->setUserData((void*)((long)_scoreBottom->getUserData()+1));
+            updateScore();
+            _needReset = true;
+        }
+        
+        if (contact->GetFixtureA() == _bottomGoal && contact->GetFixtureB() == _ballFixture){
+            _scoreTop->setUserData((void*)((long)_scoreTop->getUserData()+1));
+            updateScore();
+            _needReset = true;
+        }
+        
+        
+    }
+    
+    void EndContact(b2Contact* contact) {
+        
+    }
+    
 private:
     void updateScore();
+    void resetGame(float);
+    void checkForGoal();
+//    void pause();
+//    void resume();
+    
+    bool _gamePause = false;
+    bool _needReset = false;
     
     Ball* _ball;
     GameButton* _button[4];
@@ -65,8 +102,11 @@ private:
     
     b2Body* _boxBody;
     b2Body* _ballBody;
+    b2Fixture* _ballFixture;
     b2World* _world;
     b2MouseJoint* _mouseJoint;
+    b2Fixture* _bottomGoal;
+    b2Fixture* _topGoal;
     
     Vec2 _screenOrigin;
     Size _screenSize;

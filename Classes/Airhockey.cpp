@@ -31,6 +31,7 @@ bool Airhockey::init()
     _screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
     
     _world = new b2World(b2Vec2(0.0f, 0.0f));  //Create a physic world.
+    _world->SetContactListener(this);
     
     //Create drawNode and draw the center line
     _drawNode = DrawNode::create(10);    //Default line width
@@ -86,14 +87,14 @@ bool Airhockey::init()
 }
 
 void Airhockey::updateScore(){
-    log("Update score--");
+    _scoreTop->setString(Shared::intToString((int)((long)_scoreTop->getUserData())));
+    _scoreBottom->setString(Shared::intToString((int)((long)_scoreBottom->getUserData())));
 }
 
 
 void Airhockey::update(float dt){
     int positionIterations = 10;
     int velocityIterations = 10;
-    
     
     _world->Step(dt, velocityIterations, positionIterations);
     
@@ -107,6 +108,8 @@ void Airhockey::update(float dt){
         }
     }
     _world->DrawDebugData();
+    
+    checkForGoal();
 }
 
 void Airhockey::onPress(cocos2d::Ref* sender, GameButton::Widget::TouchEventType type){
@@ -133,9 +136,8 @@ void Airhockey::onPress(cocos2d::Ref* sender, GameButton::Widget::TouchEventType
     }
 }
 void Airhockey::initTouchHandling(){
-    auto listener1 = EventListenerTouchOneByOne::create();
     auto touchListener = EventListenerTouchAllAtOnce::create();
-    
+
     touchListener->onTouchesBegan = [this](const std::vector<Touch *> & 	touches,
                                            Event * 	event){
         auto touchSurface = static_cast<Airhockey*>(event->getCurrentTarget());
@@ -183,48 +185,6 @@ void Airhockey::initTouchHandling(){
         
     };
     
-    // trigger when you push down
-    listener1->onTouchBegan = [this](Touch* touch, Event* event){
-        
-        auto parentNode = static_cast<Sprite*>(event->getCurrentTarget());
-        
-        log("ParentNode that takes touch is %s", parentNode->getName().c_str());
-        
-        Vector<Node *> children = parentNode->getChildren();    //all objects in the SceneRoot
-        Point touchPosition = parentNode->convertTouchToNodeSpace(touch); //re calculate position to the parentNode's origin.
-        
-        
-        for (auto iter = children.rbegin(); iter != children.rend(); ++iter) {
-            GameButton* childNode = dynamic_cast<GameButton*>(*iter);
-            log("Locked! touch:%i", touch->getID());
-            if (childNode && childNode->getBoundingBox().containsPoint(touchPosition)) {
-                //childNode is the touched Node
-                log(">>%s>>%i",childNode->getName().c_str(),childNode->getTag());
-                childNode->setTouch(touch);
-                
-                if (childNode->getUserData()){
-                    
-                    log(">>CreateJoint!!!<<");
-                    auto body = (b2Body*)childNode->getUserData();
-                    //auto locationWorld = b2Vec2(touchPosition.x/PTM_RATIO, touchPosition.y/PTM_RATIO);
-                    
-                    b2MouseJointDef md;
-                    md.bodyA = this->_boxBody;
-                    md.bodyB = body;
-                    md.target = body->GetWorldCenter();
-                    md.collideConnected = true;
-                    md.maxForce = 10000.0f * body->GetMass(); //more force, less bouncing effect.
-                    
-                    md.frequencyHz = 1000;
-                    
-                    _mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
-                    body->SetAwake(true);
-                }
-            }
-        }
-        
-        return true;  //Return 'true' to enable onTouchMoved event
-    };
     
     touchListener->onTouchesMoved = [this](const std::vector<Touch *> & touches,
                                            Event * 	event){
@@ -248,30 +208,6 @@ void Airhockey::initTouchHandling(){
             }
         }
     };
-
-    
-    
-    // trigger when moving touch
-    listener1->onTouchMoved = [this](Touch* touch, Event* event){
-        
-        for(int i=0;i<this->numberOfPlayers;i++){
-            auto b = this->_button[i];
-            if (b->getTouch() != NULL && b->getTouch() == touch){
-                //log("moved! touch:%i", touch->getID());
-                auto tap = touch->getLocation();
-                
-                if (b->getUserData()){
-                    b2Vec2 pos = b2Vec2(tap.x/PTM_RATIO,tap.y/PTM_RATIO);
-                    
-                    _mouseJoint->SetTarget(pos);
-                }else{
-                    b->setPosition(tap);
-                }
-            }
-        }
-        
-    };
-    
     
     touchListener->onTouchesEnded = [this](const std::vector<Touch *> & touches,
                                            Event * 	event){
@@ -296,23 +232,7 @@ void Airhockey::initTouchHandling(){
         }
     };
     
-    listener1->onTouchEnded = [this](Touch* touch, Event* event){
-        for(int i=0;i<this->numberOfPlayers;i++){
-            auto b = this->_button[i];
-            if (b->getTouch() != NULL && b->getTouch() == touch){
-                b->setTouch(NULL);
-                log("UnLocked!touch:%i", touch->getID());
-                if (_mouseJoint) {
-                    _world->DestroyJoint(_mouseJoint);
-                    _mouseJoint = NULL;
-                }
-            }
-        }
-        
-    };
-    
     // Add listener
-    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     
 }
@@ -357,6 +277,21 @@ void Airhockey::createWall() {
     groundBox.Set(b2Vec2(visibleSize.width, visibleSize.height), b2Vec2(visibleSize.width, 0)); //right
     _boxBody->CreateFixture(&groundBoxDef);
     
+    
+    //Create goal lines
+    auto goal_size = GOAL_SIZE;// respect to visibleWidth
+    auto left = (1-goal_size)/2*visibleSize.width;
+    auto right = (1-(1-goal_size)/2)*visibleSize.width;
+    groundBoxDef.userData = (void*)123;
+    groundBox.Set(b2Vec2(left, 0.1), b2Vec2(right, 0.1)); //bottom goal
+    _bottomGoal = _boxBody->CreateFixture(&groundBoxDef);
+    
+    groundBoxDef.userData = (void*)321;
+    groundBox.Set(b2Vec2(left, visibleSize.height-0.1f), b2Vec2(right, visibleSize.height-0.1f)); //top goal
+    _topGoal = _boxBody->CreateFixture(&groundBoxDef);
+    
+    
+    //Draw center line
     groundBox.Set(b2Vec2(0, visibleSize.height/2), b2Vec2(visibleSize.width, visibleSize.height/2)); //center line
     groundBoxDef.filter.maskBits = ~BIT_MASK_PUCK;  //Allow PUCK to pass
     
@@ -369,20 +304,28 @@ void Airhockey::drawBoard(){
 
     _drawNode->drawLine(Vec2(_screenOrigin.x, _screenCenter.y), Vec2(_screenSize.width+_screenOrigin.x, _screenCenter.y), Color4F::GRAY);   //Add center line
     
+    auto goal_size = GOAL_SIZE;// respect to visibleWidth
+    auto left = (1-goal_size)/2*_screenSize.width;
+    auto right = (1-(1-goal_size)/2)*_screenSize.width;
+    
+    _drawNode->drawLine(_screenOrigin+Vec2(left,2), _screenOrigin+Vec2(right,2), Color4F::BLACK);
+    _drawNode->drawLine(_screenOrigin+Vec2(left,_screenSize.height-4), _screenOrigin+Vec2(right,_screenSize.height-4), Color4F::BLACK);
+    
+    
     addScores();
 }
 
 void Airhockey::addScores(){
     _scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
     _scoreBottom->setBMFontSize(64);
-    _scoreBottom->setPosition(Vec2(50, _screenCenter.y - 50));
+    _scoreBottom->setPosition(Vec2(_screenOrigin.x+32, _screenCenter.y - 50));
     _scoreBottom->setRotation(90);
     _scoreBottom->setUserData(0); //Use UserData to store score
     this->addChild(_scoreBottom, 1);
     
     _scoreTop = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
     _scoreTop->setBMFontSize(64);
-    _scoreTop->setPosition(Vec2(50, _screenCenter.y + 50));
+    _scoreTop->setPosition(Vec2(_screenOrigin.x+32, _screenCenter.y + 50));
     _scoreTop->setRotation(90);
     _scoreTop->setUserData(0); //Use UserData to store score
     this->addChild(_scoreTop, 1);
@@ -421,7 +364,7 @@ void Airhockey::placePuck(){
     ballShapeDef.restitution = 0.5f;
     ballShapeDef.filter.categoryBits = BIT_MASK_PUCK;   //Set the shape to belong to PUCK cat
     
-    _ballBody->CreateFixture(&ballShapeDef);
+    _ballFixture = _ballBody->CreateFixture(&ballShapeDef);
     _ballBody->SetLinearDamping(0.3f);  //How fast the ball losing its velocity
     _ballBody->SetAngularDamping(0.2f); //How fast it loses angular speed
 }
@@ -470,3 +413,28 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     
     this->addChild(m);
 }
+
+void Airhockey::resetGame(float dt){
+    _world->ClearForces();
+    float offset = BALL_RESET_OFFSET_Y;
+    if (cocos2d::rand_0_1() > 0.5) {
+        offset = -BALL_RESET_OFFSET_Y;
+    }
+    _ball->setPosition(Vec2(_screenCenter.x, _screenCenter.y+offset));
+    auto ballPosInWorld = _ball->getPosition()/PTM_RATIO;
+    _ballBody->SetLinearVelocity(b2Vec2(0,0));
+    _ballBody->SetAngularVelocity(0.f);
+    _ballBody->SetTransform(b2Vec2(ballPosInWorld.x, ballPosInWorld.y),0);
+    _ball->setVisible(true);
+    this->scheduleUpdate();
+}
+
+void Airhockey::checkForGoal(){
+    if(_needReset){
+        _ball->setVisible(false);
+        this->scheduleOnce(schedule_selector(Airhockey::resetGame), 1.0f);
+        this->unscheduleUpdate();
+    }
+    _needReset = false;
+}
+
