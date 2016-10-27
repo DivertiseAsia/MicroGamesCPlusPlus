@@ -20,7 +20,7 @@ public:
 		{ FLAPFLAP, "Flapflap" }
 	};
 
-	const GameType AVAILABLE_GAMES[5] = {TAPTAP,OVERSHOOT,PINBALL,AIRHOCKEY,FLAPFLAP};
+	const GameType AVAILABLE_GAMES[4] = {TAPTAP,OVERSHOOT,PINBALL,AIRHOCKEY};
 private:
 	GameList() {};
 	static GameList* minstance;
