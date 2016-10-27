@@ -50,8 +50,8 @@ bool MainMenu::init()
                                            CC_CALLBACK_1(MainMenu::muteButtonCallback, this));
 
     
-    _soundMuteItem->setPosition(Vec2(origin.x + visibleSize.width - _soundMuteItem->getContentSize().width/2 ,
-                                origin.y + _soundMuteItem->getContentSize().height/2));
+    _soundMuteItem->setPosition(Vec2(origin.x + visibleSize.width - _soundMuteItem->getContentSize().width/2 -20,
+                                origin.y + _soundMuteItem->getContentSize().height/2+20));
 
 	MenuItems.pushBack(_soundMuteItem);
 
