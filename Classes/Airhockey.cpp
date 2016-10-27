@@ -155,6 +155,9 @@ void Airhockey::initTouchHandling(){
 
     touchListener->onTouchesBegan = [this](const std::vector<Touch *> & 	touches,
                                            Event * 	event){
+		if (gameStatus != GAME_INPROGRESS) {
+			return;
+		}
         auto touchSurface = static_cast<Airhockey*>(event->getCurrentTarget());
         auto objects = touchSurface->getChildren();    //all objects in the SceneRoot
         
