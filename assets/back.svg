@@ -32,7 +32,7 @@
      inkscape:cx="36.661558"
      inkscape:cy="48.690245"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      units="px"
      inkscape:window-width="1536"
@@ -81,10 +81,10 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="second"
-     style="display:none">
+     style="display:inline">
     <path
        sodipodi:type="star"
-       style="opacity:1;fill:#404040;fill-opacity:1;stroke:#404040;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#646464;fill-opacity:1;stroke:#64645a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4225"
        sodipodi:sides="3"
        sodipodi:cx="-31.062189"
