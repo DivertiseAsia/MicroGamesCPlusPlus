@@ -87,6 +87,26 @@ bool Airhockey::init()
 }
 
 void Airhockey::updateScore(){
+    if ((long)_scoreBottom->getUserData() >= MAX_SCORE) {
+        if (numberOfPlayers > 2)
+        {
+            int winners[] = PB_TEAM_BOT_PLAYERS;
+            endGame(winners, 2);
+        }
+        else {
+            endGame(SHARED_PLAYER2);
+        }
+    } else if ((long)_scoreTop->getUserData() >= MAX_SCORE) {
+        if (numberOfPlayers > 3)
+        {
+            int winners[] = PB_TEAM_TOP_PLAYERS;
+            endGame(winners,2);
+        }
+        else {
+            endGame(SHARED_PLAYER1);
+        }
+    }
+    
     _scoreTop->setString(Shared::intToString((int)((long)_scoreTop->getUserData())));
     _scoreBottom->setString(Shared::intToString((int)((long)_scoreBottom->getUserData())));
 }
@@ -148,8 +168,6 @@ void Airhockey::initTouchHandling(){
             Touch* t = static_cast<Touch*>(*iter);
             Point touchPoint = touchSurface->convertTouchToNodeSpace(t); //re calculate position to the
             
-            log("Touch %i", t->getID());
-            
             //Loop through each object on the scene
             for(auto obj = objects.rbegin(); obj != objects.rend(); obj++){
                 GameButton* btn = dynamic_cast<GameButton*>(*obj);
@@ -163,7 +181,6 @@ void Airhockey::initTouchHandling(){
                     
                     if (btn->getUserData()){
                         
-                        log(">>CreateJoint!!!<<");
                         auto body = (b2Body*)btn->getUserData();
                         
                         b2MouseJointDef md;
@@ -415,6 +432,7 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
 }
 
 void Airhockey::resetGame(float dt){
+    _needReset = false;
     _world->ClearForces();
     float offset = BALL_RESET_OFFSET_Y;
     if (cocos2d::rand_0_1() > 0.5) {
@@ -426,13 +444,14 @@ void Airhockey::resetGame(float dt){
     _ballBody->SetAngularVelocity(0.f);
     _ballBody->SetTransform(b2Vec2(ballPosInWorld.x, ballPosInWorld.y),0);
     _ball->setVisible(true);
+    _ball->runAction(Blink::create(0.5f, 2));
     this->scheduleUpdate();
 }
 
 void Airhockey::checkForGoal(){
     if(_needReset){
         _ball->setVisible(false);
-        this->scheduleOnce(schedule_selector(Airhockey::resetGame), 1.0f);
+        this->scheduleOnce(schedule_selector(Airhockey::resetGame), 0.3f);
         this->unscheduleUpdate();
     }
     _needReset = false;

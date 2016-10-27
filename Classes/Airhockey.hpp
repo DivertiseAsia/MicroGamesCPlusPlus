@@ -29,6 +29,10 @@ USING_NS_CC;
 #define BIT_MASK_PUCK 0x0002
 
 #define GOAL_SIZE 0.3f
+#define MAX_SCORE 3
+
+#define PB_TEAM_TOP_PLAYERS {SHARED_PLAYER1, SHARED_PLAYER4}
+#define PB_TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
 
 
 class Airhockey : public GameScene, public b2ContactListener
@@ -87,8 +91,6 @@ private:
     void updateScore();
     void resetGame(float);
     void checkForGoal();
-//    void pause();
-//    void resume();
     
     bool _gamePause = false;
     bool _needReset = false;
