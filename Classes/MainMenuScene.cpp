@@ -53,7 +53,7 @@ bool MainMenu::init()
 	auto label = Label::createWithBMFont(SHARED_FONT_FILE_TITLE, SHARED_GAME_NAME);
 	// position the label on the center of the screen
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height - label->getContentSize().height));
+		origin.y + visibleSize.height - label->getContentSize().height - MMS_TITLE_Y_OFFSET));
 	float currentScale = label->getContentSize().width / visibleSize.width;
 	label->setScale(MMS_TITLE_WIDTH_PERCENT / currentScale);
 	// add the label as a child to this layer
