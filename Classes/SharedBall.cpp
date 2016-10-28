@@ -20,16 +20,16 @@ void SharedBall::createBall(Vec2 p, float radius, Color4F color) {
 	this->addChild(_ball);
 
 	b2FixtureDef ballFixture;
-	ballFixture.density = PB_DEFAULT_DENSITY;
-	ballFixture.friction = PB_DEFAULT_FRICTION;
-	ballFixture.restitution = PB_DEFAULT_RESTITUTION;
+	ballFixture.density = SB_DEFAULT_DENSITY;
+	ballFixture.friction = SB_DEFAULT_FRICTION;
+	ballFixture.restitution = SB_DEFAULT_RESTITUTION;
 	b2CircleShape ballShape;
-	ballShape.m_radius = radius / SCALE_RATIO;
+	ballShape.m_radius = radius / SB_SCALE_RATIO;
 	ballFixture.shape = &ballShape;
 	b2BodyDef ballBodyDef;
 	ballBodyDef.type = b2BodyType::b2_dynamicBody;
 	ballBodyDef.userData = _ball;
-	ballBodyDef.position.Set(_ball->getPosition().x / SCALE_RATIO, _ball->getPosition().y / SCALE_RATIO);
+	ballBodyDef.position.Set(_ball->getPosition().x / SB_SCALE_RATIO, _ball->getPosition().y / SB_SCALE_RATIO);
 
 	ballBody = world->CreateBody(&ballBodyDef);
 	ballBody->CreateFixture(&ballFixture);
@@ -37,8 +37,8 @@ void SharedBall::createBall(Vec2 p, float radius, Color4F color) {
 }
 
 void SharedBall::setupScore(int startScore, Vec2 position1, Vec2 position2) {
-	_score[PB_TEAM_TOP] = startScore;
-	_score[PB_TEAM_BOT] = startScore;
+	_score[SB_TEAM_TOP] = startScore;
+	_score[SB_TEAM_BOT] = startScore;
 
 	scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
 	scoreBottom->setBMFontSize(64);
@@ -77,16 +77,16 @@ GameButton* SharedBall::addButtonForPlayer(int player) {
 	this->addChild(button);
 
 	b2FixtureDef circleFixture;
-	circleFixture.density = PB_DEFAULT_DENSITY;
-	circleFixture.friction = PB_DEFAULT_FRICTION;
-	circleFixture.restitution = PB_DEFAULT_RESTITUTION;
+	circleFixture.density = SB_DEFAULT_DENSITY;
+	circleFixture.friction = SB_DEFAULT_FRICTION;
+	circleFixture.restitution = SB_DEFAULT_RESTITUTION;
 	b2CircleShape circleShape;
-	circleShape.m_radius = DEFAULT_BUTTON_RADIUS / SCALE_RATIO;
+	circleShape.m_radius = DEFAULT_BUTTON_RADIUS / SB_SCALE_RATIO;
 	circleFixture.shape = &circleShape;
 	b2BodyDef buttonBodyDef;
 	buttonBodyDef.type = b2BodyType::b2_staticBody;
 	buttonBodyDef.userData = NULL;
-	buttonBodyDef.position.Set(button->getPosition().x / SCALE_RATIO, button->getPosition().y / SCALE_RATIO);
+	buttonBodyDef.position.Set(button->getPosition().x / SB_SCALE_RATIO, button->getPosition().y / SB_SCALE_RATIO);
 
 	auto bb = world->CreateBody(&buttonBodyDef);
 	bb->CreateFixture(&circleFixture);
@@ -102,21 +102,21 @@ void SharedBall::onShake(cocos2d::Acceleration *acc, cocos2d::Event *event) {
 
 void SharedBall::createWall(Vec2 position, float height) {
 	auto drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(PB_WALL_WIDTH, height));
-	drawNode->drawSolidRect(Vec2::ZERO, Vec2(PB_WALL_WIDTH, height), Color4F::GRAY);
+	drawNode->setContentSize(cocos2d::Size(SB_WALL_WIDTH, height));
+	drawNode->drawSolidRect(Vec2::ZERO, Vec2(SB_WALL_WIDTH, height), Color4F::GRAY);
 	drawNode->setPosition(position);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = PB_DEFAULT_DENSITY;
-	boxFixture.friction = PB_DEFAULT_FRICTION;
-	boxFixture.restitution = PB_DEFAULT_RESTITUTION;
+	boxFixture.density = SB_DEFAULT_DENSITY;
+	boxFixture.friction = SB_DEFAULT_FRICTION;
+	boxFixture.restitution = SB_DEFAULT_RESTITUTION;
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(PB_WALL_WIDTH / 2 / SCALE_RATIO, height / SCALE_RATIO);
+	boxShape.SetAsBox(SB_WALL_WIDTH / 2 / SB_SCALE_RATIO, height / SB_SCALE_RATIO);
 	boxFixture.shape = &boxShape;
 	b2BodyDef boxBodyDef;
 	boxBodyDef.type = b2BodyType::b2_staticBody;
 	boxBodyDef.userData = drawNode;
-	boxBodyDef.position.Set(drawNode->getPosition().x / SCALE_RATIO, drawNode->getPosition().y / SCALE_RATIO);
+	boxBodyDef.position.Set(drawNode->getPosition().x / SB_SCALE_RATIO, drawNode->getPosition().y / SB_SCALE_RATIO);
 
 	auto boxBody1 = world->CreateBody(&boxBodyDef);
 	boxBody1->CreateFixture(&boxFixture);
@@ -126,24 +126,24 @@ void SharedBall::createWall(Vec2 position, float height) {
 
 void SharedBall::createBox(Vec2 position) {
 	auto drawNode = DrawNode::create();
-	drawNode->setContentSize(cocos2d::Size(PB_BOX_SIZE, PB_BOX_SIZE));
-	drawNode->drawSolidRect(Vec2::ZERO, Vec2(PB_BOX_SIZE, PB_BOX_SIZE), Color4F::GRAY);;
+	drawNode->setContentSize(cocos2d::Size(SB_BOX_SIZE, SB_BOX_SIZE));
+	drawNode->drawSolidRect(Vec2::ZERO, Vec2(SB_BOX_SIZE, SB_BOX_SIZE), Color4F::GRAY);;
 	drawNode->setPosition(position);
 	drawNode->setRotation(45);
 	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
 	b2FixtureDef boxFixture;
-	boxFixture.density = PB_DEFAULT_DENSITY;
-	boxFixture.friction = PB_DEFAULT_FRICTION;
-	boxFixture.restitution = PB_DEFAULT_RESTITUTION;
+	boxFixture.density = SB_DEFAULT_DENSITY;
+	boxFixture.friction = SB_DEFAULT_FRICTION;
+	boxFixture.restitution = SB_DEFAULT_RESTITUTION;
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(PB_BOX_SIZE / 2 / SCALE_RATIO, PB_BOX_SIZE / 2 / SCALE_RATIO);
+	boxShape.SetAsBox(SB_BOX_SIZE / 2 / SB_SCALE_RATIO, SB_BOX_SIZE / 2 / SB_SCALE_RATIO);
 	boxFixture.shape = &boxShape;
 	b2BodyDef boxBodyDef;
 	boxBodyDef.type = b2BodyType::b2_staticBody;
 	boxBodyDef.userData = drawNode;
 	boxBodyDef.angle = CC_DEGREES_TO_RADIANS(drawNode->getRotation());
-	boxBodyDef.position.Set(drawNode->getPosition().x / SCALE_RATIO, drawNode->getPosition().y / SCALE_RATIO);
+	boxBodyDef.position.Set(drawNode->getPosition().x / SB_SCALE_RATIO, drawNode->getPosition().y / SB_SCALE_RATIO);
 
 	auto boxBody1 = world->CreateBody(&boxBodyDef);
 	boxBody1->CreateFixture(&boxFixture);
@@ -173,7 +173,7 @@ void SharedBall::update(float dt) {
 		if (body->GetUserData())
 		{
 			DrawNode *sprite = (DrawNode *)body->GetUserData();
-			sprite->setPosition(Vec2(body->GetPosition().x * SCALE_RATIO, body->GetPosition().y * SCALE_RATIO));
+			sprite->setPosition(Vec2(body->GetPosition().x * SB_SCALE_RATIO, body->GetPosition().y * SB_SCALE_RATIO));
 			sprite->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
 		}
 	}
@@ -183,10 +183,10 @@ void SharedBall::update(float dt) {
 	float gameHeight = Director::getInstance()->getVisibleSize().height;
 	float ballY = _ball->getPositionY();
 	if (ballY < gameHeight/2) {
-		world->SetGravity(b2Vec2(0.0f, -PB_GRAVITY));
+		world->SetGravity(b2Vec2(0.0f, -SB_GRAVITY));
 	}
 	else {
-		world->SetGravity(b2Vec2(0.0f, PB_GRAVITY));
+		world->SetGravity(b2Vec2(0.0f, SB_GRAVITY));
 	}
 
 	if (ballY > gameHeight || ballY < 0) {
@@ -194,12 +194,12 @@ void SharedBall::update(float dt) {
 		int offsetYModifier = 1;
 		if (ballY > gameHeight) {
             SoundManager::instance()->playEffect(SOUND_FILE_WIN);
-			_score[PB_TEAM_BOT]++;
+			_score[SB_TEAM_BOT]++;
 			offsetYModifier = -1;
-			if (_score[PB_TEAM_BOT] >= PB_POINTS_TO_WIN) {
+			if (_score[SB_TEAM_BOT] >= SB_POINTS_TO_WIN) {
 				if (numberOfPlayers > 2)
 				{
-					int winners[] = PB_TEAM_BOT_PLAYERS;
+					int winners[] = SB_TEAM_BOT_PLAYERS;
 					endGame(winners, 2);
 				}
 				else {
@@ -209,13 +209,13 @@ void SharedBall::update(float dt) {
 		}
 		else {
             SoundManager::instance()->playEffect(SOUND_FILE_WIN);
-			_score[PB_TEAM_TOP]++;
+			_score[SB_TEAM_TOP]++;
 			offsetYModifier = 1;
 			
-			if (_score[PB_TEAM_TOP] >= PB_POINTS_TO_WIN) {
+			if (_score[SB_TEAM_TOP] >= SB_POINTS_TO_WIN) {
 				if (numberOfPlayers > 3)
 				{
-					int winners[] = PB_TEAM_TOP_PLAYERS;
+					int winners[] = SB_TEAM_TOP_PLAYERS;
 					endGame(winners,2);
 				}
 				else {
@@ -223,14 +223,14 @@ void SharedBall::update(float dt) {
 				}
 			}
 		}
-		float offset_x = cocos2d::random(-PB_BALL_RESET_OFFSET_X, PB_BALL_RESET_OFFSET_X);
+		float offset_x = cocos2d::random(-SB_BALL_RESET_OFFSET_X, SB_BALL_RESET_OFFSET_X);
 		if (offset_x == 0) {
 			offset_x = 0.5f;
 		}
 		_ball->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2 + offset_x,
-			gameHeight / 2 + offsetYModifier*PB_BALL_RESET_OFFSET_Y));
+			gameHeight / 2 + offsetYModifier*SB_BALL_RESET_OFFSET_Y));
 		//reset ball transform & velocity
-		ballBody->SetTransform(b2Vec2(_ball->getPosition().x / SCALE_RATIO, _ball->getPosition().y / SCALE_RATIO),0);
+		ballBody->SetTransform(b2Vec2(_ball->getPosition().x / SB_SCALE_RATIO, _ball->getPosition().y / SB_SCALE_RATIO),0);
 		ballBody->SetLinearVelocity(b2Vec2_zero);
 		ballBody->SetAngularVelocity(0);
 		updateScore();
@@ -249,8 +249,8 @@ void SharedBall::startGame() {
 }
 
 void SharedBall::updateScore() {
-	scoreTop->setString(Shared::intToString(_score[PB_TEAM_TOP]));
-	scoreBottom->setString(Shared::intToString(_score[PB_TEAM_BOT]));
+	scoreTop->setString(Shared::intToString(_score[SB_TEAM_TOP]));
+	scoreBottom->setString(Shared::intToString(_score[SB_TEAM_BOT]));
 }
 
 //to be overridden
