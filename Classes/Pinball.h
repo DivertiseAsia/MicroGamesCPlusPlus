@@ -1,6 +1,13 @@
 #ifndef __PINBALL_SCENE_H__
 #define __PINBALL_SCENE_H__
 
+
+#define PB_PADDLE_OFFSET_X_PERCENT .14f
+#define PB_PADDLE_LENGTH_PERCENT .33f
+#define PB_MIN_ANGLE {-15, 165, 80, 260}
+#define PB_MAX_ANGLE_DIFF 115
+#define PB_PADDLE_ANG_VEL	7
+
 #include "Shared.h"
 #include "cocos2d.h"
 #include "GameButton.hpp"
@@ -23,6 +30,9 @@ public:
 
 	using SharedBall::SharedBall;
 private:
+	void lockPaddleAngle(int);
+	float getMaxPaddleAngle(float);
+	float getMinPaddleAngle(int);
 	DrawNode* addPaddleForPlayer(int, cocos2d::Size, cocos2d::Vec2);
 };
 

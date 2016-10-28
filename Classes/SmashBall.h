@@ -1,6 +1,10 @@
 #ifndef __SMASHBALL_SCENE_H__
 #define __SMASHBALL_SCENE_H__
 
+#define SMB_PADDLE_LENGTH_PERCENT	0.33f
+#define SMB_PADDLE_OFFSET_X_PERCENT .325f
+#define SMB_PADDLE_ANG_VEL	14
+
 #include "Shared.h"
 #include "cocos2d.h"
 #include "GameButton.hpp"

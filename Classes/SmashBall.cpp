@@ -73,7 +73,7 @@ bool SmashBall::init()
 
 DrawNode* SmashBall::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCenter) {
 	auto paddle = DrawNode::create();
-	auto paddleLength = screenSize.width* SB_PADDLE_LENGTH_PERCENT;
+	auto paddleLength = screenSize.width* SMB_PADDLE_LENGTH_PERCENT;
 	paddle->setContentSize(cocos2d::Size(SB_PADDLE_WIDTH_PX, paddleLength));
 	paddle->drawSolidRect(Vec2(0, 0), Vec2(SB_PADDLE_WIDTH_PX, paddleLength), Color4F::GRAY);
 
@@ -87,7 +87,7 @@ DrawNode* SmashBall::addPaddleForPlayer(int player, Size screenSize, Vec2 screen
 		yfix = -1;
 	}
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (SB_PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
+	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (SMB_PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
 	paddle->setPosition(_positions[player]);
 	this->addChild(paddle);
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -197,20 +197,20 @@ void SmashBall::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	{
 	case ui::Widget::TouchEventType::BEGAN:
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			paddleControlBody[player]->SetAngularVelocity(-SB_PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(-SMB_PADDLE_ANG_VEL);
 		}
 		else {
-			paddleControlBody[player]->SetAngularVelocity(SB_PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(SMB_PADDLE_ANG_VEL);
 		}
 		
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			paddleControlBody[player]->SetAngularVelocity(SB_PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(SMB_PADDLE_ANG_VEL);
 		}
 		else {
-			paddleControlBody[player]->SetAngularVelocity(-SB_PADDLE_ANG_VEL);
+			paddleControlBody[player]->SetAngularVelocity(-SMB_PADDLE_ANG_VEL);
 		}
 		break;
 	}
