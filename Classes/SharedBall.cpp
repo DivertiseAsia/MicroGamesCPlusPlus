@@ -263,3 +263,47 @@ void SharedBall::BeginContact(b2Contact* contact) {
 void SharedBall::EndContact(b2Contact* contact) {
     
 }
+
+void SharedBall::addScore(int team, int amount) {
+	_score[team]+=amount;
+	if (_score[SB_TEAM_BOT] >= SB_POINTS_TO_WIN) {
+		if (numberOfPlayers > 2)
+		{
+			int winners[] = SB_TEAM_BOT_PLAYERS;
+			endGame(winners, 2);
+		}
+		else {
+			endGame(SHARED_PLAYER2);
+		}
+	}else if (_score[SB_TEAM_TOP] >= SB_POINTS_TO_WIN) {
+		if (numberOfPlayers > 3)
+		{
+			int winners[] = SB_TEAM_TOP_PLAYERS;
+			endGame(winners, 2);
+		}
+		else {
+			endGame(SHARED_PLAYER1);
+		}
+	}
+}
+
+void SharedBall::updatePhysics(float dt) {
+	int positionIterations = 10;
+	int velocityIterations = 10;
+
+	deltaTime = dt;
+	world->Step(dt, velocityIterations, positionIterations);
+
+	for (b2Body *body = world->GetBodyList(); body != NULL; body = body->GetNext()) {
+		if (body->GetUserData())
+		{
+			DrawNode *sprite = (DrawNode *)body->GetUserData();
+			sprite->setPosition(Vec2(body->GetPosition().x * SB_SCALE_RATIO, body->GetPosition().y * SB_SCALE_RATIO));
+			sprite->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
+		}
+	}
+	world->ClearForces();
+#ifdef DEBUG_MODE
+	world->DrawDebugData();
+#endif //DEBUG_MODE
+}

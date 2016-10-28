@@ -156,22 +156,7 @@ void Pinball::update(float dt) {
 		return;
 	}
 
-	int positionIterations = 10;
-	int velocityIterations = 10;
-
-	deltaTime = dt;
-	world->Step(dt, velocityIterations, positionIterations);
-
-	for (b2Body *body = world->GetBodyList(); body != NULL; body = body->GetNext()) {
-		if (body->GetUserData())
-		{
-			DrawNode *sprite = (DrawNode *)body->GetUserData();
-			sprite->setPosition(Vec2(body->GetPosition().x * SB_SCALE_RATIO, body->GetPosition().y * SB_SCALE_RATIO));
-			sprite->setRotation(-1 * CC_RADIANS_TO_DEGREES(body->GetAngle()));
-		}
-	}
-	world->ClearForces();
-	world->DrawDebugData();
+	updatePhysics(dt);
 
 	float gameHeight = Director::getInstance()->getVisibleSize().height;
 	float ballY = _ball->getPositionY();
@@ -187,34 +172,13 @@ void Pinball::update(float dt) {
 		int offsetYModifier = 1;
 		if (ballY > gameHeight) {
             SoundManager::instance()->playEffect(SOUND_FILE_WIN);
-			_score[SB_TEAM_BOT]++;
+			addScore(SB_TEAM_TOP, 1);
 			offsetYModifier = -1;
-			if (_score[SB_TEAM_BOT] >= SB_POINTS_TO_WIN) {
-				if (numberOfPlayers > 2)
-				{
-					int winners[] = SB_TEAM_BOT_PLAYERS;
-					endGame(winners, 2);
-				}
-				else {
-					endGame(SHARED_PLAYER2);
-				}
-			}
 		}
 		else {
             SoundManager::instance()->playEffect(SOUND_FILE_WIN);
-			_score[SB_TEAM_TOP]++;
+			addScore(SB_TEAM_BOT, 1);
 			offsetYModifier = 1;
-			
-			if (_score[SB_TEAM_TOP] >= SB_POINTS_TO_WIN) {
-				if (numberOfPlayers > 3)
-				{
-					int winners[] = SB_TEAM_TOP_PLAYERS;
-					endGame(winners,2);
-				}
-				else {
-					endGame(SHARED_PLAYER1);
-				}
-			}
 		}
 		float offset_x = cocos2d::random(-SB_BALL_RESET_OFFSET_X, SB_BALL_RESET_OFFSET_X);
 		if (offset_x == 0) {
