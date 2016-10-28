@@ -111,9 +111,12 @@ bool Pinball::init()
 
     this->world->SetContactListener(this);
 	this->setName("PinballSceneRoot");
-	this->scheduleUpdate();
 
 	return true;
+}
+
+void Pinball::onGameStart() {
+	this->scheduleUpdate();
 }
 
 DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCenter) {
