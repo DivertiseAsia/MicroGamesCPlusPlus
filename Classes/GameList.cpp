@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "Holdrace.h"
 #include "Pinball.h"
+#include "SmashBall.h"
 #include "Taprace.h"
 #include "Airhockey.hpp"
 
@@ -20,6 +21,8 @@ Scene* GameList::getScene(GameType listing, int numberOfPlayers) {
 		return GameScene::createScene<Taprace>(numberOfPlayers);
     case AIRHOCKEY:
         return GameScene::createScene<Airhockey>(numberOfPlayers);
+	case SMASHBALL:
+		return GameScene::createScene<SmashBall>(numberOfPlayers);
 	default:
 		return GameScene::createScene<Taprace>(numberOfPlayers);
 	}

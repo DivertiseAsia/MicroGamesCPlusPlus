@@ -6,7 +6,7 @@
 class GameList
 {
 public:
-	enum GameType { TAPTAP, OVERSHOOT, PINBALL, AIRHOCKEY, FLAPFLAP};
+	enum GameType { TAPTAP, OVERSHOOT, PINBALL, AIRHOCKEY, FLAPFLAP, SMASHBALL};
 
     static cocos2d::Scene* getScene(GameType listing, int numberOfPlayers);
 	static std::string getGameName(GameType listing);
@@ -16,11 +16,12 @@ public:
 		{ TAPTAP, "TapTap" },
 		{ OVERSHOOT, "Overshoot"},
 		{ PINBALL, "Pinball" },
+		{ SMASHBALL, "SmashBall" },
 		{ AIRHOCKEY, "Airhockey" },
 		{ FLAPFLAP, "Flapflap" }
 	};
 
-	const GameType AVAILABLE_GAMES[4] = {TAPTAP,OVERSHOOT,PINBALL,AIRHOCKEY};
+	const GameType AVAILABLE_GAMES[5] = {TAPTAP,OVERSHOOT,PINBALL,AIRHOCKEY,SMASHBALL};
 private:
 	GameList() {};
 	static GameList* minstance;

@@ -2,6 +2,7 @@
 #include "Taprace.h"
 #include "Holdrace.h"
 #include "Pinball.h"
+#include "SmashBall.h"
 #include "MainMenuScene.h"
 #include "Shared.h"
 #include "Airhockey.hpp"
@@ -179,3 +180,4 @@ template Scene* GameScene::createScene<Taprace>(int);
 template Scene* GameScene::createScene<Holdrace>(int);
 template Scene* GameScene::createScene<Airhockey>(int);
 template Scene* GameScene::createScene<Pinball>(int);
+template Scene* GameScene::createScene<SmashBall>(int);

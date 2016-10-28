@@ -160,6 +160,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\PlayerMenuScene.cpp" />
     <ClCompile Include="..\Classes\Shared.cpp" />
     <ClCompile Include="..\Classes\SharedBall.cpp" />
+    <ClCompile Include="..\Classes\SmashBall.cpp" />
     <ClCompile Include="..\Classes\SoundManager.cpp" />
     <ClCompile Include="..\Classes\SplashScene.cpp" />
     <ClCompile Include="..\Classes\Taprace.cpp" />
@@ -182,6 +183,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\PlayerMenuScene.h" />
     <ClInclude Include="..\Classes\Shared.h" />
     <ClInclude Include="..\Classes\SharedBall.h" />
+    <ClInclude Include="..\Classes\SmashBall.h" />
     <ClInclude Include="..\Classes\SoundManager.h" />
     <ClInclude Include="..\Classes\SplashScene.h" />
     <ClInclude Include="..\Classes\Taprace.h" />

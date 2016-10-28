@@ -29,6 +29,7 @@
       <Filter>GLES-Render</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\SharedBall.cpp" />
+    <ClCompile Include="..\Classes\SmashBall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\Airhockey.hpp" />
@@ -59,6 +60,7 @@
       <Filter>GLES-Render</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SharedBall.h" />
+    <ClInclude Include="..\Classes\SmashBall.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
