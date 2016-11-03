@@ -96,7 +96,15 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 	}
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (PB_PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS*.75f)*yfix);
-	paddle->setPosition(_positions[player]);
+	auto xpos = _positions[player].x - cos(15)*xfix*paddleLength / 2;
+	auto ypos = _positions[player].y - SB_PADDLE_CONTROL_RAD*yfix;
+	paddle->setPosition(Vec2(xpos,ypos));
+	if (player == SHARED_PLAYER3 || player == SHARED_PLAYER4) {
+		paddle->setRotation(-1*getMinPaddleAngle(player));
+	} else {
+		paddle->setRotation(-1*getMaxPaddleAngle(getMinPaddleAngle(player)));
+	}
+	
 	this->addChild(paddle);
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
@@ -114,7 +122,9 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 	boxBodyDef.position.Set(paddle->getPosition().x / SB_SCALE_RATIO, paddle->getPosition().y / SB_SCALE_RATIO);
 
 	auto pB = world->CreateBody(&boxBodyDef);
+	pB->SetTransform(b2Vec2(paddle->getPosition().x / SB_SCALE_RATIO, paddle->getPosition().y / SB_SCALE_RATIO), CC_DEGREES_TO_RADIANS(-1*paddle->getRotation()));
 	pB->CreateFixture(&boxFixture);	
+	//pB->SetBullet(true);
 
 	auto padControl = DrawNode::create();
 	padControl->setContentSize(cocos2d::Size(SB_PADDLE_CONTROL_RAD * 2, SB_PADDLE_CONTROL_RAD * 2));
@@ -137,7 +147,15 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 	bb->CreateFixture(&circleFixture);
 
 	paddleControlBody[player] = bb;
-
+	float angle = 0;
+	if (player == SHARED_PLAYER3 || player == SHARED_PLAYER4) {
+		angle = getMinPaddleAngle(player);
+	}
+	else {
+		angle = getMaxPaddleAngle(getMinPaddleAngle(player));
+	}
+	bb->SetTransform(bb->GetPosition(), CC_DEGREES_TO_RADIANS(angle));
+	
 	b2WeldJointDef revoluteJointDef;
 	revoluteJointDef.bodyA = bb;
 	revoluteJointDef.bodyB = pB;

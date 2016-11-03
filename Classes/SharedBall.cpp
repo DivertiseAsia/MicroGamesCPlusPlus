@@ -33,6 +33,7 @@ void SharedBall::createBall(Vec2 p, float radius, Color4F color) {
 
 	ballBody = world->CreateBody(&ballBodyDef);
 	ballBody->CreateFixture(&ballFixture);
+	ballBody->SetBullet(true);
 	ballBody->SetGravityScale(1);
 }
 
