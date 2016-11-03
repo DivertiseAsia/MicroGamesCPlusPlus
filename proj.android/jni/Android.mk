@@ -24,6 +24,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/GameScene.cpp \
 									 ../../Classes/Holdrace.cpp \
 									 ../../Classes/MainMenuScene.cpp \
+					../../Classes/SharedBall.cpp \
+					../../Classes/SmashBall.cpp \
                    ../../Classes/Pinball.cpp \
 									 ../../Classes/PlayerMenuScene.cpp \
                    ../../Classes/Shared.cpp \
