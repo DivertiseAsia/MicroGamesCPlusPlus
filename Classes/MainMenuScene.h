@@ -10,6 +10,8 @@
 
 #define MMS_MENU_HEIGHT_PERCENT .8f
 
+USING_NS_CC;
+
 class MainMenu : public cocos2d::LayerColor
 {
 public:
@@ -20,6 +22,9 @@ public:
     // a selector callback
     void muteButtonCallback(cocos2d::Ref* pSender);
 	void pickPlayers(cocos2d::Ref* pSender, GameList::GameType game);
+    
+    //Override the keyevent
+    virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
     
     // implement the "static create()" method manually
     CREATE_FUNC(MainMenu);

@@ -82,6 +82,7 @@ bool MainMenu::init()
 		MenuItems.pushBack(gameListing);
 	}
 
+    this->setKeyboardEnabled(true);
     // create menu, it's an autorelease object
 	auto menu = Menu::createWithArray(MenuItems);
     menu->setPosition(Vec2::ZERO);
@@ -105,5 +106,17 @@ void MainMenu::muteButtonCallback(Ref* pSender)
 	else {
 		SoundManager::instance()->muteAll();
         _soundMuteItem->setNormalImage(Sprite::create("SoundOff.png"));
+	}
+}
+
+void MainMenu::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
+{
+    if (keyCode == EventKeyboard::KeyCode::KEY_HOME)
+    {
+         log("You pressed home button");
+    } else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE){
+        log("You pressed back button");
+        Director::getInstance()->end();
+        exit(0);
 	}
 }

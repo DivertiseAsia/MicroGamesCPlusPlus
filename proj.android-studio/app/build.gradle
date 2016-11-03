@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 apply plugin: 'com.android.application'
 
 android {
@@ -18,6 +20,7 @@ android {
         jniLibs.srcDir "libs"
         manifest.srcFile "AndroidManifest.xml"
         assets.srcDir "assets"
+        jni.srcDirs = []   //disable automatic ndk-build call
     }
 
     signingConfigs {
@@ -41,6 +44,25 @@ android {
             }
         }
     }
+
+    productFlavors {
+        x86 {
+            ndk {
+                abiFilter "x86"
+            }
+        }
+        armv7 {
+            ndk {
+                abiFilter "armeabi-v7a"
+            }
+        }
+        arm {
+            ndk {
+                abiFilter "armeabi"
+            }
+        }
+        fat
+    }
 }
 
 dependencies {
@@ -51,9 +73,24 @@ dependencies {
 task cleanAssets(type: Delete) {
     delete 'assets'
 }
+
 task copyAssets(type: Copy) {
     from '../../Resources'
     into 'assets'
+}
+
+// call regular ndk-build(.cmd) script from app directory
+task ndkBuild(type: Exec) {
+    def ndkDir = android.ndkDirectory.getAbsolutePath()
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine ndkDir+'/ndk-build.cmd', '-C', file('src').absolutePath
+    } else {
+        commandLine ndkDir+'/ndk-build', '-C', file('src').absolutePath
+    }
+}
+
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn ndkBuild
 }
 
 clean.dependsOn cleanAssets

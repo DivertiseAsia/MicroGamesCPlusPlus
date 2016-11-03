@@ -8,6 +8,8 @@
 #include "cocos2d.h"
 #include "GameList.h"
 
+USING_NS_CC;
+
 class PlayerMenu : public cocos2d::LayerColor
 {
 public:
@@ -16,9 +18,12 @@ public:
 	virtual bool init();
 
 	// a selector callback
-	void backButtonCallback(cocos2d::Ref* pSender);
+	void backButtonCallback(cocos2d::Ref* pSender) ;
 	void startGame(cocos2d::Ref* pSender, int players);
 	void setGameToLoad(GameList::GameType game);
+
+	//Override the keyevent
+	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 
 	// implement the "static create()" method manually
 	CREATE_FUNC(PlayerMenu);

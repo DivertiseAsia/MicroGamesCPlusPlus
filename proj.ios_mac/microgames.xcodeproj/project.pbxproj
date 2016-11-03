@@ -68,6 +68,8 @@
 		96E16D2C1D8A7CFF00D732A8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D2A1D8A7CFF00D732A8 /* Ball.cpp */; };
 		96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E16D321D8C4A2600D732A8 /* GameList.cpp */; };
 		96E16D361D8D114E00D732A8 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E16D351D8D114E00D732A8 /* splash.png */; };
+		96E224151DCB966F00C3CD61 /* SharedBall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E224111DCB966F00C3CD61 /* SharedBall.cpp */; };
+		96E224161DCB966F00C3CD61 /* SmashBall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96E224131DCB966F00C3CD61 /* SmashBall.cpp */; };
 		96F2C8B01D8842A100EED92B /* Holdrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8AE1D8842A100EED92B /* Holdrace.cpp */; };
 		96F2C8BA1D88432700EED92B /* MainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8B41D88432700EED92B /* MainMenuScene.cpp */; };
 		96F2C8BB1D88432700EED92B /* PlayerMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96F2C8B61D88432700EED92B /* PlayerMenuScene.cpp */; };
@@ -197,6 +199,10 @@
 		96E16D321D8C4A2600D732A8 /* GameList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameList.cpp; sourceTree = "<group>"; };
 		96E16D331D8C4A2600D732A8 /* GameList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameList.h; sourceTree = "<group>"; };
 		96E16D351D8D114E00D732A8 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
+		96E224111DCB966F00C3CD61 /* SharedBall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SharedBall.cpp; sourceTree = "<group>"; };
+		96E224121DCB966F00C3CD61 /* SharedBall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedBall.h; sourceTree = "<group>"; };
+		96E224131DCB966F00C3CD61 /* SmashBall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SmashBall.cpp; sourceTree = "<group>"; };
+		96E224141DCB966F00C3CD61 /* SmashBall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmashBall.h; sourceTree = "<group>"; };
 		96F2C8AE1D8842A100EED92B /* Holdrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Holdrace.cpp; sourceTree = "<group>"; };
 		96F2C8AF1D8842A100EED92B /* Holdrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Holdrace.h; sourceTree = "<group>"; };
 		96F2C8B41D88432700EED92B /* MainMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuScene.cpp; sourceTree = "<group>"; };
@@ -362,6 +368,10 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				96E224111DCB966F00C3CD61 /* SharedBall.cpp */,
+				96E224121DCB966F00C3CD61 /* SharedBall.h */,
+				96E224131DCB966F00C3CD61 /* SmashBall.cpp */,
+				96E224141DCB966F00C3CD61 /* SmashBall.h */,
 				96FD62791DB8A2EB00FFC430 /* GLES-Render */,
 				96A455871DB75F9C00A377C7 /* Shared.cpp */,
 				9606DBCE1DB73FCF007BC8D2 /* Pinball.cpp */,
@@ -617,6 +627,7 @@
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				96F2C8BB1D88432700EED92B /* PlayerMenuScene.cpp in Sources */,
 				96F2C8B01D8842A100EED92B /* Holdrace.cpp in Sources */,
+				96E224161DCB966F00C3CD61 /* SmashBall.cpp in Sources */,
 				96FD62841DB8A30A00FFC430 /* GLESRender.cpp in Sources */,
 				96FD62821DB8A30A00FFC430 /* B2DebugDrawLayer.cpp in Sources */,
 				96E16D341D8C4A2600D732A8 /* GameList.cpp in Sources */,
@@ -627,6 +638,7 @@
 				96A455841DB749CB00A377C7 /* Airhockey.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				9606DBD01DB73FCF007BC8D2 /* Pinball.cpp in Sources */,
+				96E224151DCB966F00C3CD61 /* SharedBall.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

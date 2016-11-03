@@ -446,23 +446,38 @@ void Airhockey::checkForGoal(){
 }
 
 void Airhockey::BeginContact(b2Contact* contact) {
-    if (contact->GetFixtureA() == _topGoal && contact->GetFixtureB() == _ballFixture){
-        _scoreBottom->setUserData((void*)((long)_scoreBottom->getUserData()+1));
-        updateScore();
-        _needReset = true;
-        SoundManager::instance()->playEffect(SOUND_FILE_WIN);
-        return;
+    if (contact->GetFixtureA() == _ballFixture || contact->GetFixtureB() == _ballFixture){
+        
+        if (contact->GetFixtureA() == _topGoal || contact->GetFixtureA() == _bottomGoal){
+            auto score = (contact->GetFixtureA() == _topGoal) ? _scoreBottom : _scoreTop;
+            score->setUserData((void*)((long)score->getUserData()+1));
+            updateScore();
+            _needReset = true;
+            SoundManager::instance()->playEffect(SOUND_FILE_WIN);
+
+            b2WorldManifold worldManifold;
+            contact->GetWorldManifold(&worldManifold);
+            b2Vec2 vel1 = contact->GetFixtureA()->GetBody()->GetLinearVelocityFromWorldPoint( worldManifold.points[0] );
+            b2Vec2 vel2 = contact->GetFixtureB()->GetBody()->GetLinearVelocityFromWorldPoint( worldManifold.points[0] );
+            b2Vec2 impactVelocity = vel1 - vel2;
+            if (impactVelocity.LengthSquared() > 5000){
+                auto fireParticle = ParticleFlower::create();
+                fireParticle->setPosition(_ball->getPosition());
+                fireParticle->setLife(0.5f);
+                fireParticle->setDuration(0.5f);
+                this->addChild(fireParticle);
+                fireParticle->setAutoRemoveOnFinish(true);
+            }
+#ifdef DEBUG_MODE
+                log("Impact strength %.3f", impactVelocity.LengthSquared());
+#endif
+        } else {
+            SoundManager::instance()->playEffect(SOUND_FILE_HOCKEY_PUCK);
+            
+        }
+        
+        
     }
-    
-    if (contact->GetFixtureA() == _bottomGoal && contact->GetFixtureB() == _ballFixture){
-        _scoreTop->setUserData((void*)((long)_scoreTop->getUserData()+1));
-        updateScore();
-        _needReset = true;
-        SoundManager::instance()->playEffect(SOUND_FILE_WIN);
-        return;
-    }
-    
-    SoundManager::instance()->playEffect(SOUND_FILE_HOCKEY_PUCK);
 }
 
 void Airhockey::EndContact(b2Contact* contact) {

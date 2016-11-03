@@ -77,7 +77,7 @@ bool PlayerMenu::init()
 		MenuItems.pushBack(game1);
 	}
 	
-
+    this->setKeyboardEnabled(true);
 	// create menu, it's an autorelease object
 	auto menu = Menu::createWithArray(MenuItems);
 	menu->setPosition(Vec2::ZERO);
@@ -100,4 +100,21 @@ void PlayerMenu::startGame(Ref* pSender, int players) {
 void PlayerMenu::backButtonCallback(Ref* pSender)
 {
 	Director::getInstance()->replaceScene(TransitionSlideInL::create(1, MainMenu::createScene()));
+}
+
+void PlayerMenu::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
+{
+    if (keyCode == EventKeyboard::KeyCode::KEY_BACKSPACE /*KeyboardEvent::KeyCode::Menu(KEY_BACKSPACE)*/)
+    {
+         log("You pressed back button");
+         Director::getInstance()->end();
+         exit(0);
+    } 
+    else if (keyCode == EventKeyboard::KeyCode::KEY_HOME)
+    {
+         log("You pressed home button");
+         // pause the game
+    } else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE){
+        backButtonCallback(this);
+	}
 }
