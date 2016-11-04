@@ -164,12 +164,12 @@ void SmashBall::update(float dt) {
 		int offsetYModifier = 1;
 		if (ballY > gameHeight) {
             SoundManager::instance()->playEffect(SOUND_FILE_WIN);
-			addScore(SB_TEAM_TOP, 1);
+			addScore(SB_TEAM_BOT, 1);
 			offsetYModifier = -1;
 		}
 		else {
             SoundManager::instance()->playEffect(SOUND_FILE_WIN);
-			addScore(SB_TEAM_BOT, 1);
+			addScore(SB_TEAM_TOP, 1);
 			offsetYModifier = 1;
 		}
 		float offset_x = cocos2d::random(-SB_BALL_RESET_OFFSET_X, SB_BALL_RESET_OFFSET_X);
