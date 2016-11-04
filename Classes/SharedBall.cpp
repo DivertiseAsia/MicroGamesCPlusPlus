@@ -81,13 +81,15 @@ GameButton* SharedBall::addButtonForPlayer(int player) {
 	circleFixture.density = SB_DEFAULT_DENSITY;
 	circleFixture.friction = SB_DEFAULT_FRICTION;
 	circleFixture.restitution = SB_DEFAULT_RESTITUTION;
-	b2CircleShape circleShape;
+    circleFixture.filter.categoryBits = SB_BITMASK_BUTTON;  //Assign the fixture to button category.
+    b2CircleShape circleShape;
 	circleShape.m_radius = DEFAULT_BUTTON_RADIUS / SB_SCALE_RATIO;
 	circleFixture.shape = &circleShape;
 	b2BodyDef buttonBodyDef;
 	buttonBodyDef.type = b2BodyType::b2_staticBody;
 	buttonBodyDef.userData = NULL;
 	buttonBodyDef.position.Set(button->getPosition().x / SB_SCALE_RATIO, button->getPosition().y / SB_SCALE_RATIO);
+    
 
 	auto bb = world->CreateBody(&buttonBodyDef);
 	bb->CreateFixture(&circleFixture);

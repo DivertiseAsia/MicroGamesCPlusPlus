@@ -95,11 +95,23 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 		yfix = -1;
 	}
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    
+    auto transalation = Vec2(20*xfix,-30*yfix);
+    
 	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (PB_PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS*.75f)*yfix);
-	auto xpos = _positions[player].x - cos(15)*xfix*paddleLength / 2;
-	auto ypos = _positions[player].y - SB_PADDLE_CONTROL_RAD*yfix;
+    
+    auto xpos = _positions[player].x+xfix*paddleLength/2;// - cos(15)*xfix*paddleLength / 2;
+    
+    // Pullback y equal to radius and move up paddle's w. +3 is a fucking magic number. Too lazy to figure out where it comes from.
+    auto ypos = _positions[player].y+yfix*(SB_PADDLE_WIDTH_PX/2.0f - SB_PADDLE_CONTROL_RAD + 3);
+    
+    //Shift paddle inward to vertical center and pull back to board's sides
+    xpos += transalation.x;
+    ypos += transalation.y;
+    
 	paddle->setPosition(Vec2(xpos,ypos));
-	if (player == SHARED_PLAYER3 || player == SHARED_PLAYER4) {
+    
+	if (player == SHARED_PLAYER3 || player == SHARED_PLAYER4) {  //To flip rotation according to each side.
 		paddle->setRotation(-1*getMinPaddleAngle(player));
 	} else {
 		paddle->setRotation(-1*getMaxPaddleAngle(getMinPaddleAngle(player)));
@@ -112,6 +124,8 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 	boxFixture.density = SB_DEFAULT_DENSITY;
 	boxFixture.friction = SB_DEFAULT_FRICTION;
 	boxFixture.restitution = SB_DEFAULT_RESTITUTION;
+    boxFixture.filter.maskBits = ~(SB_BITMASK_BUTTON | SB_BITMASK_PADDLE);;  //Flip ""PADDLE" or BUTTON" bit so that it won't collide.
+    boxFixture.filter.categoryBits = SB_BITMASK_PADDLE;
 	b2PolygonShape boxShape;
 	boxShape.SetAsBox(SB_PADDLE_WIDTH_PX / 2 / SB_SCALE_RATIO, paddleLength / 2 / SB_SCALE_RATIO);
 	boxShape.m_centroid = b2Vec2(0, 0);
@@ -124,25 +138,32 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 	auto pB = world->CreateBody(&boxBodyDef);
 	pB->SetTransform(b2Vec2(paddle->getPosition().x / SB_SCALE_RATIO, paddle->getPosition().y / SB_SCALE_RATIO), CC_DEGREES_TO_RADIANS(-1*paddle->getRotation()));
 	pB->CreateFixture(&boxFixture);	
-	//pB->SetBullet(true);
+	pB->SetBullet(true);
 
 	auto padControl = DrawNode::create();
 	padControl->setContentSize(cocos2d::Size(SB_PADDLE_CONTROL_RAD * 2, SB_PADDLE_CONTROL_RAD * 2));
 	padControl->drawSolidCircle(Vec2(SB_PADDLE_CONTROL_RAD, SB_PADDLE_CONTROL_RAD), SB_PADDLE_CONTROL_RAD, 360, 100, Shared::instance()->getPlayerColor(player));
 	padControl->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	padControl->setPosition(_positions[player]);
+	padControl->setPosition(_positions[player]+transalation);
+#ifdef DEBUG_MODE
+    padControl->drawRect(Vec2(0,0),Vec2(padControl->getContentSize().width,padControl->getContentSize().height), Color4F::RED);
+#endif
 	this->addChild(padControl);
+    
 	b2FixtureDef circleFixture;
 	circleFixture.density = SB_DEFAULT_DENSITY;
 	circleFixture.friction = SB_DEFAULT_FRICTION;
 	circleFixture.restitution = SB_DEFAULT_RESTITUTION;
+    circleFixture.filter.maskBits = ~(SB_BITMASK_BUTTON | SB_BITMASK_PADDLE);  //Flip "PADDLE" or "BUTTON" bit so that it won't collide.
+    circleFixture.filter.categoryBits = SB_BITMASK_PADDLE;
 	b2CircleShape circleShape;
 	circleShape.m_radius = SB_PADDLE_CONTROL_RAD / SB_SCALE_RATIO;
 	circleFixture.shape = &circleShape;
 	b2BodyDef buttonBodyDef;
 	buttonBodyDef.type = b2BodyType::b2_kinematicBody;
 	buttonBodyDef.userData = NULL;
-	buttonBodyDef.position.Set(_positions[player].x / SB_SCALE_RATIO, _positions[player].y / SB_SCALE_RATIO);
+    auto btnPos = padControl->getPosition() / SB_SCALE_RATIO;;
+    buttonBodyDef.position.Set(btnPos.x, btnPos.y);
 	auto bb = world->CreateBody(&buttonBodyDef);
 	bb->CreateFixture(&circleFixture);
 
@@ -256,7 +277,7 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 		else {
 			paddleControlBody[player]->SetAngularVelocity(PB_PADDLE_ANG_VEL);
 		}
-		
+        log("touch began");
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
@@ -266,6 +287,7 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 		else {
 			paddleControlBody[player]->SetAngularVelocity(-PB_PADDLE_ANG_VEL);
 		}
+        log("touch ended");
 		break;
 	}
 	default:

@@ -31,6 +31,9 @@
 
 #define SB_SCALE_RATIO 32.0
 
+#define SB_BITMASK_BUTTON 0x0002
+#define SB_BITMASK_PADDLE 0x0004
+
 USING_NS_CC;
 
 class SharedBall : public GameScene, public b2ContactListener
