@@ -253,11 +253,11 @@ void Pinball::lockPaddleAngle(int paddle) {
 	float minAngle = getMinPaddleAngle(paddle);
 	float maxAngle = getMaxPaddleAngle(minAngle);
 	if (CC_RADIANS_TO_DEGREES(paddleControlBody[paddle]->GetAngle()) > maxAngle) {
-		paddleControlBody[paddle]->SetAngularVelocity(0);
+		paddleControlBody[paddle]->SetAngularVelocity(-PB_PADDLE_ANG_VEL*(paddle>1));
 		paddleControlBody[paddle]->SetTransform(paddleControlBody[paddle]->GetPosition(),CC_DEGREES_TO_RADIANS(maxAngle));
 	}
 	else if (CC_RADIANS_TO_DEGREES(paddleControlBody[paddle]->GetAngle()) < minAngle) {
-		paddleControlBody[paddle]->SetAngularVelocity(0);
+		paddleControlBody[paddle]->SetAngularVelocity(PB_PADDLE_ANG_VEL*(paddle<=1));
 		paddleControlBody[paddle]->SetTransform(paddleControlBody[paddle]->GetPosition(), CC_DEGREES_TO_RADIANS(minAngle));
 	}
 }
@@ -271,23 +271,25 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	switch (type)
 	{
 	case ui::Widget::TouchEventType::BEGAN:
+            
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
 			paddleControlBody[player]->SetAngularVelocity(-PB_PADDLE_ANG_VEL);
 		}
 		else {
 			paddleControlBody[player]->SetAngularVelocity(PB_PADDLE_ANG_VEL);
 		}
-        log("touch began");
+        
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+        
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
-			paddleControlBody[player]->SetAngularVelocity(PB_PADDLE_ANG_VEL);
+            paddleControlBody[player]->SetAngularVelocity(PB_PADDLE_ANG_VEL);
 		}
 		else {
 			paddleControlBody[player]->SetAngularVelocity(-PB_PADDLE_ANG_VEL);
 		}
-        log("touch ended");
+        
 		break;
 	}
 	default:
