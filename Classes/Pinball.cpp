@@ -26,7 +26,7 @@ bool Pinball::init()
 
 	b2Vec2 gravity = b2Vec2(0.0f, -SB_GRAVITY);
 	world = new b2World(gravity);
-	
+
 
 	//http://www.cocos2d-x.org/wiki/Multi_resolution_support;
 
@@ -64,7 +64,7 @@ bool Pinball::init()
 		_paddle[i] = addPaddleForPlayer(i,screenSize,screenCenter);
 	}
 
-	
+
 #ifdef DEBUG_MODE
 	//Debug Layer
 	b2Draw *debugDraw = new GLESDebugDraw(SB_SCALE_RATIO);
@@ -95,28 +95,28 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 		yfix = -1;
 	}
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-    
+
     auto transalation = Vec2(20*xfix,-30*yfix);
-    
+
 	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (PB_PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS*.75f)*yfix);
-    
+
     auto xpos = _positions[player].x+xfix*paddleLength/2;// - cos(15)*xfix*paddleLength / 2;
-    
+
     // Pullback y equal to radius and move up paddle's w. +3 is a fucking magic number. Too lazy to figure out where it comes from.
     auto ypos = _positions[player].y+yfix*(SB_PADDLE_WIDTH_PX/2.0f - SB_PADDLE_CONTROL_RAD + 3);
-    
+
     //Shift paddle inward to vertical center and pull back to board's sides
     xpos += transalation.x;
     ypos += transalation.y;
-    
+
 	paddle->setPosition(Vec2(xpos,ypos));
-    
+
 	if (player == SHARED_PLAYER3 || player == SHARED_PLAYER4) {  //To flip rotation according to each side.
 		paddle->setRotation(-1*getMinPaddleAngle(player));
 	} else {
 		paddle->setRotation(-1*getMaxPaddleAngle(getMinPaddleAngle(player)));
 	}
-	
+
 	this->addChild(paddle);
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
@@ -137,7 +137,7 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 
 	auto pB = world->CreateBody(&boxBodyDef);
 	pB->SetTransform(b2Vec2(paddle->getPosition().x / SB_SCALE_RATIO, paddle->getPosition().y / SB_SCALE_RATIO), CC_DEGREES_TO_RADIANS(-1*paddle->getRotation()));
-	pB->CreateFixture(&boxFixture);	
+	pB->CreateFixture(&boxFixture);
 	pB->SetBullet(true);
 
 	auto padControl = DrawNode::create();
@@ -149,7 +149,7 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
     padControl->drawRect(Vec2(0,0),Vec2(padControl->getContentSize().width,padControl->getContentSize().height), Color4F::RED);
 #endif
 	this->addChild(padControl);
-    
+
 	b2FixtureDef circleFixture;
 	circleFixture.density = SB_DEFAULT_DENSITY;
 	circleFixture.friction = SB_DEFAULT_FRICTION;
@@ -176,7 +176,7 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 		angle = getMaxPaddleAngle(getMinPaddleAngle(player));
 	}
 	bb->SetTransform(bb->GetPosition(), CC_DEGREES_TO_RADIANS(angle));
-	
+
 	b2WeldJointDef revoluteJointDef;
 	revoluteJointDef.bodyA = bb;
 	revoluteJointDef.bodyB = pB;
@@ -237,7 +237,7 @@ void Pinball::update(float dt) {
 		ballBody->SetAngularVelocity(0);
 		updateScore();
 	}
-	
+
 }
 
 float Pinball::getMinPaddleAngle(int paddle) {
@@ -253,11 +253,11 @@ void Pinball::lockPaddleAngle(int paddle) {
 	float minAngle = getMinPaddleAngle(paddle);
 	float maxAngle = getMaxPaddleAngle(minAngle);
 	if (CC_RADIANS_TO_DEGREES(paddleControlBody[paddle]->GetAngle()) > maxAngle) {
-		paddleControlBody[paddle]->SetAngularVelocity(-PB_PADDLE_ANG_VEL*(paddle>1));
+		paddleControlBody[paddle]->SetAngularVelocity(0);
 		paddleControlBody[paddle]->SetTransform(paddleControlBody[paddle]->GetPosition(),CC_DEGREES_TO_RADIANS(maxAngle));
 	}
 	else if (CC_RADIANS_TO_DEGREES(paddleControlBody[paddle]->GetAngle()) < minAngle) {
-		paddleControlBody[paddle]->SetAngularVelocity(PB_PADDLE_ANG_VEL*(paddle<=1));
+		paddleControlBody[paddle]->SetAngularVelocity(0);
 		paddleControlBody[paddle]->SetTransform(paddleControlBody[paddle]->GetPosition(), CC_DEGREES_TO_RADIANS(minAngle));
 	}
 }
@@ -271,25 +271,25 @@ void Pinball::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	switch (type)
 	{
 	case ui::Widget::TouchEventType::BEGAN:
-            
+
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
 			paddleControlBody[player]->SetAngularVelocity(-PB_PADDLE_ANG_VEL);
 		}
 		else {
 			paddleControlBody[player]->SetAngularVelocity(PB_PADDLE_ANG_VEL);
 		}
-        
+
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
 		SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
-        
+
 		if (player == SHARED_PLAYER1 || player == SHARED_PLAYER2) {
             paddleControlBody[player]->SetAngularVelocity(PB_PADDLE_ANG_VEL);
 		}
 		else {
 			paddleControlBody[player]->SetAngularVelocity(-PB_PADDLE_ANG_VEL);
 		}
-        
+
 		break;
 	}
 	default:
