@@ -7,6 +7,7 @@
 
 #include "cocos2d.h"
 #include "GameList.h"
+#include "Shared.h"
 
 USING_NS_CC;
 

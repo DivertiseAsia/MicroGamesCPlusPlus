@@ -43,6 +43,7 @@ bool MainMenu::init()
     auto soundName = "SoundOn.png";
     if (SoundManager::instance()->isMuted())
         soundName = "SoundOff.png";
+
         
     _soundMuteItem = MenuItemImage::create(
                                            soundName,
@@ -54,6 +55,8 @@ bool MainMenu::init()
                                 origin.y + _soundMuteItem->getContentSize().height/2+20));
 
 	MenuItems.pushBack(_soundMuteItem);
+
+	Shared::instance()->setBackground("bg/BG_Home.png", this);
 
 	auto label = Label::createWithBMFont(SHARED_FONT_FILE_TITLE, SHARED_GAME_NAME);
 	// position the label on the center of the screen

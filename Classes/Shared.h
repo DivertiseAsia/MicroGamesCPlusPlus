@@ -21,6 +21,8 @@
 
 #define SHARED_GAME_NAME "MicroGames"
 
+USING_NS_CC;
+
 //#define DEBUG_MODE
 
 class Shared
@@ -30,6 +32,8 @@ public:
 	static std::string intToString(int);
 	cocos2d::Color4F getPlayerColor(int);
 	cocos2d::Vec2 getPlayerPosition(int);
+	void setBackground(std::string, Layer*);
+
 private:
 	Shared() {};
 	static Shared* minstance;

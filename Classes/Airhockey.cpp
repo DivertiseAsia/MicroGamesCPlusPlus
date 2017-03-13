@@ -29,6 +29,9 @@ bool Airhockey::init()
     
     Size winSize = Director::getInstance()->getWinSize();
     _screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
+
+	// Add object to the scene here.
+	Shared::instance()->setBackground("bg/BG_CatHokey.png", this);
     
     _world = new b2World(b2Vec2(0.0f, 0.0f));  //Create a physic world.
     _world->SetContactListener(this);

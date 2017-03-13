@@ -30,6 +30,7 @@ bool Holdrace::init()
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
     
     // Add object to the scene here.
+	Shared::instance()->setBackground("bg/BG_JumpyMouse.png",this);
     
     //Create drawNode and draw the race line
     _drawNode = DrawNode::create(10);    //Default line width

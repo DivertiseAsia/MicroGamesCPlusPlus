@@ -35,6 +35,9 @@ bool Pinball::init()
 	auto screenOrigin = Director::getInstance()->getVisibleOrigin();
 	auto screenCenter = Vec2(fullSize.width / 2, fullSize.height / 2);
 
+	// Add object to the scene here.
+	Shared::instance()->setBackground("bg/BG_Pawball.png", this);
+
 	//Create drawNode and draw the center line
 	_drawNode = DrawNode::create(10);    //Default line width
 	_drawNode->drawLine(Vec2(screenOrigin.x, screenCenter.y), Vec2(screenOrigin.x + screenSize.width, screenCenter.y), Color4F::GRAY);

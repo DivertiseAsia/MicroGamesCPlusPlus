@@ -31,7 +31,8 @@ bool Taprace::init()
     Size winSize = Director::getInstance()->getWinSize();
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
     
-    // Add object to the scene here.
+	// Add object to the scene here.
+	Shared::instance()->setBackground("bg/BG_TapRace.png", this);
     
     //Create drawNode and draw the race line
     _drawNode = DrawNode::create(10);    //Default line width

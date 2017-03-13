@@ -43,3 +43,16 @@ std::string Shared::intToString(int number) {
 	out << number;
 	return out.str();
 }
+
+void Shared::setBackground(std::string fname, Layer* layer)
+{
+	auto winSize = layer->getContentSize();
+	Sprite* bg = Sprite::create(fname);
+	auto scaleX = winSize.width / bg->getContentSize().width;
+	auto scaleY = winSize.height / bg->getContentSize().height;
+	bg->setScaleX(scaleX);
+	bg->setScaleY(scaleY);
+	bg->setAnchorPoint(Vec2(0, 0));
+	bg->setPosition(Vec2(0, 0));
+	layer->addChild(bg, 0);
+}
