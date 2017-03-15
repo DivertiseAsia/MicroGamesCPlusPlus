@@ -42,21 +42,12 @@ bool PlayerMenu::init()
 	//    you may modify it.
 
 	Vector<MenuItem*> MenuItems;
-	auto backButton = MenuItemImage::create(
-		"BackNormal.png",
-		"BackHighlighted.png",
-		CC_CALLBACK_1(PlayerMenu::backButtonCallback, this));
-
-	backButton->setPosition(Vec2(origin.x + backButton->getContentSize().width,
-		origin.y + visibleSize.height/2 - backButton->getContentSize().height / 2));
-
-	MenuItems.pushBack(backButton);
 
 	//Title
 
-	auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "Choose the number of players");
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE_MENU, "Choose the number of players");
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height - label->getContentSize().height));
+		origin.y + visibleSize.height - label->getContentSize().height * 2));
 	float currentScale = label->getContentSize().width / visibleSize.width;
 	label->setScale(PMS_TITLE_WIDTH_PERCENT / currentScale);
 	this->addChild(label, 1);
@@ -66,17 +57,28 @@ bool PlayerMenu::init()
 	float startY = origin.y + visibleSize.height * PMS_MENU_HEIGHT_PERCENT - label->getContentSize().height * 2;
 	float availableArea = visibleSize.height * PMS_MENU_HEIGHT_PERCENT - label->getContentSize().height * 2;
 
-	for (int i = 2; i <= 4; i++) {
-		auto s = Shared::intToString(i);
-		auto item1 = Label::createWithBMFont(SHARED_FONT_FILE_MENU, s);
-		auto game1 = MenuItemLabel::create(item1, CC_CALLBACK_1(PlayerMenu::startGame, this, i));
-		game1->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			startY - availableArea / 3 * (i-2)));
-		if (currentScale == 0) {
-			currentScale = game1->getContentSize().width / visibleSize.width;
+	for (int i = 2; i <= 5; i++) {
+		auto button = MenuItemImage::create();
+		if (i < 5) {
+			auto s = Shared::intToString(i);
+			button = MenuItemImage::create(
+				"button/Button_Choose_" + s + ".png", 
+				"button/Button_Choose_Pressed_" + s + ".png", 
+				CC_CALLBACK_1(PlayerMenu::startGame, this, i));
 		}
-		game1->setScale(PMS_MENU_WIDTH_PERCENT / currentScale);
-		MenuItems.pushBack(game1);
+		else {
+			button = MenuItemImage::create(
+				"button/Button_Choose_Back.png",
+				"button/Button_Choose_Back.png",
+				CC_CALLBACK_1(PlayerMenu::backButtonCallback, this));
+		}
+		button->setPosition(Vec2(origin.x + visibleSize.width / 2,
+			startY - availableArea / 3.5 * (i - 2)));
+		if (currentScale == 0) {
+			currentScale = button->getContentSize().width / visibleSize.width;
+		}
+		button->setScale(currentScale / 1.5);
+		MenuItems.pushBack(button);
 	}
 	
     this->setKeyboardEnabled(true);
