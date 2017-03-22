@@ -8,6 +8,7 @@
 #define GS_RETURN_TEXT_WIDTH_PERCENT .95f
 #define GS_WINNER_TEXT	"Winner"
 #define GS_RETURN_TEXT	"Press anywhere to go home"
+#define GS_RESUME_TEXT	"TAP TO RESUME"
 #define GS_GO_TEXT		"Go!"
 
 #include "cocos2d.h"
@@ -30,7 +31,7 @@ public:
 	void updateCounter(float);
 	void showText(std::string, float);
 	void createBtnPanel();
-	void createTabListenerOverlay();
+	void createListenerTabOverlay();
 	void pauseGame();
 	void resumeGame();
 

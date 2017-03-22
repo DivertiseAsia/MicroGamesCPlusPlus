@@ -178,7 +178,7 @@ void GameScene::showText(std::string s, float dt){
     this->scheduleOnce([this, label, dt](float tp){ this->removeChild(label);}, dt, "remove"+s);
 }
 
-void GameScene::createTabListenerOverlay()
+void GameScene::createListenerTabOverlay()
 {
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -192,7 +192,17 @@ void GameScene::createTabListenerOverlay()
 
 	Color4F halfblack(0, 0, 0, 0.7f);
 	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
-	
+
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE_MENU, GS_RESUME_TEXT);
+	// position the label on the center of the screen
+	label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+
+	auto currentScale = label->getContentSize().width / visibleSize.width;
+
+	label->setScale(GS_RETURN_TEXT_WIDTH_PERCENT / (2 * currentScale));
+
+	// add the label as a child to overlay layer
+	rectOverlay->addChild(label);
 	this->addChild(rectOverlay);
 
 	auto tabScreenLtn = EventListenerTouchOneByOne::create();
@@ -213,7 +223,7 @@ void GameScene::pauseGame()
 	if (gameStatus == GAME_INPROGRESS) {
 		gameStatus = GAME_PAUSE;
 		menu->setVisible(FALSE);
-		createTabListenerOverlay();
+		createListenerTabOverlay();
 	}
 }
 
@@ -223,6 +233,7 @@ void GameScene::resumeGame()
 		_counter = SHARED_COUNTDOWN_LENGTH;
 		this->schedule(schedule_selector(GameScene::updateCounter), 1.0f);
 		menu->setVisible(TRUE);
+		rectOverlay->removeAllChildren();
 		rectOverlay->clear();
 	}
 }
