@@ -55,7 +55,6 @@ void GameScene::updateCounter(float dt){
     _counter -= dt;
     if (_counter<=0){
         this->unschedule(schedule_selector(GameScene::updateCounter));
-		showBtnPanel();
         _counter = 0;
         gameStatus = GAME_INPROGRESS;
         log("Game started!");
@@ -71,6 +70,7 @@ void GameScene::startGame(float dt){
     if (gameStatus == GAME_START){
         _counter = dt;
         this->schedule(schedule_selector(GameScene::updateCounter),1.0f);
+		createBtnPanel();
     }
 }
 void GameScene::endGame(int winner) {
@@ -178,26 +178,65 @@ void GameScene::showText(std::string s, float dt){
     this->scheduleOnce([this, label, dt](float tp){ this->removeChild(label);}, dt, "remove"+s);
 }
 
+void GameScene::createTabListenerOverlay()
+{
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	this->rectOverlay = DrawNode::create();
+	Vec2 rectangle[4];
+	rectangle[0] = origin;
+	rectangle[1] = Vec2(origin.x, visibleSize.height);
+	rectangle[2] = visibleSize;
+	rectangle[3] = Vec2(visibleSize.width, origin.y);
+
+	Color4F halfblack(0, 0, 0, 0.7);
+	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
+	
+	this->addChild(rectOverlay);
+
+	auto tabScreenLtn = EventListenerTouchOneByOne::create();
+
+	tabScreenLtn->onTouchBegan = [](Touch* touch, Event* event) {
+		return true;
+	};
+
+	tabScreenLtn->onTouchEnded = [=](Touch* touch, Event* event) {
+		resumeGame();
+	};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(tabScreenLtn, this);
+}
+
 void GameScene::pauseGame()
 {
 	if (gameStatus == GAME_INPROGRESS) {
 		gameStatus = GAME_PAUSE;
-	}else if(gameStatus == GAME_PAUSE) {
+		menu->setVisible(FALSE);
+		createTabListenerOverlay();
+	}
+}
+
+void GameScene::resumeGame()
+{
+	if (gameStatus == GAME_PAUSE) {
 		_counter = SHARED_COUNTDOWN_LENGTH;
 		this->schedule(schedule_selector(GameScene::updateCounter), 1.0f);
+		menu->setVisible(TRUE);
+		rectOverlay->clear();
 	}
 }
 
 void GameScene::onGameStart(){}
 
-void GameScene::showBtnPanel() {
+void GameScene::createBtnPanel() {
 	auto screenSize = Director::getInstance()->getVisibleSize();
 	auto winSize = Director::getInstance()->getWinSize();
 	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
 
 	Vector<MenuItem*> MenuItems;
 	// Create pause and back buttons
-	this->backBtn = MenuItemImage::create(
+	auto backBtn = MenuItemImage::create(
 		"button/Button_Back.png",
 		"button/Button_Back.png",
 		CC_CALLBACK_1(GameScene::backButtonCallback, this));
@@ -206,7 +245,7 @@ void GameScene::showBtnPanel() {
 	backBtn->setScale(backBtn->getContentSize().width / screenSize.width * 3);
 	MenuItems.pushBack(backBtn);
 
-	this->pauseBtn = MenuItemImage::create(
+	auto pauseBtn = MenuItemImage::create(
 		"button/Button_Pause.png",
 		"button/Button_Pause.png",
 		CC_CALLBACK_1(GameScene::pauseButtonCallback, this));
@@ -218,7 +257,7 @@ void GameScene::showBtnPanel() {
 	MenuItems.pushBack(pauseBtn);
 
 	// create menu, it's an autorelease object
-	auto menu = Menu::createWithArray(MenuItems);
+	this->menu = Menu::createWithArray(MenuItems);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
 }

@@ -29,17 +29,20 @@ public:
 	void endGame(int[], int);
 	void updateCounter(float);
 	void showText(std::string, float);
-	void showBtnPanel();
+	void createBtnPanel();
+	void createTabListenerOverlay();
 	void pauseGame();
+	void resumeGame();
 
 	//virtual function to be overridden
 	virtual void onGameStart();
 
 	// Button objects and listener
-	MenuItemImage* backBtn;
-	MenuItemImage* pauseBtn;
+	Menu* menu;
 	void backButtonCallback(cocos2d::Ref* pSender);
 	void pauseButtonCallback(cocos2d::Ref* pSender);
+	DrawNode* rectOverlay;
+
 
 	int gameType;
 
