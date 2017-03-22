@@ -6,6 +6,7 @@
 #include "MainMenuScene.h"
 #include "Shared.h"
 #include "Airhockey.hpp"
+#include "PlayerMenuScene.h"
 
 USING_NS_CC;
 
@@ -52,6 +53,7 @@ void GameScene::updateCounter(float dt){
     _counter -= dt;
     if (_counter<=0){
         this->unschedule(schedule_selector(GameScene::updateCounter));
+		showBtnPanel();
         _counter = 0;
         gameStatus = GAME_INPROGRESS;
         log("Game started!");
@@ -174,7 +176,49 @@ void GameScene::showText(std::string s, float dt){
     this->scheduleOnce([this, label, dt](float tp){ this->removeChild(label);}, dt, "remove"+s);
 }
 
+void GameScene::pauseGame(bool)
+{
+
+}
+
 void GameScene::onGameStart(){}
+
+void GameScene::showBtnPanel() {
+	auto screenSize = Director::getInstance()->getVisibleSize();
+	auto winSize = Director::getInstance()->getWinSize();
+	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
+
+	Vector<MenuItem*> MenuItems;
+	// Create pause and back buttons
+	this->backBtn = MenuItemImage::create(
+		"button/Button_Back.png",
+		"button/Button_Back.png",
+		CC_CALLBACK_1(Taprace::backButtonCallback, this));
+	backBtn->setPosition(screenSize.width - backBtn->getContentSize().width / 2,
+		screenCenter.y + backBtn->getContentSize().height);
+	backBtn->setScale(backBtn->getContentSize().width / screenSize.width * 3);
+	MenuItems.pushBack(backBtn);
+
+	this->pauseBtn = MenuItemImage::create(
+		"button/Button_Pause.png",
+		"button/Button_Pause.png");
+	auto diffSize = backBtn->getContentSize().width - pauseBtn->getContentSize().width;
+	pauseBtn->setPosition((screenSize.width - pauseBtn->getContentSize().width / 2) - abs(diffSize) / 2,
+		screenCenter.y - pauseBtn->getContentSize().height);
+	float scaleFromBackBtn = pauseBtn->getContentSize().width / backBtn->getContentSize().width;
+	pauseBtn->setScale(scaleFromBackBtn);
+	MenuItems.pushBack(pauseBtn);
+
+	// create menu, it's an autorelease object
+	auto menu = Menu::createWithArray(MenuItems);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu);
+}
+
+void GameScene::backButtonCallback(cocos2d::Ref * pSender)
+{
+	Director::getInstance()->replaceScene(TransitionSlideInL::create(1, PlayerMenu::createScene(GameList::GameType(GameList::instance()->AVAILABLE_GAMES[0]))));
+}
 
 template Scene* GameScene::createScene<Taprace>(int);
 template Scene* GameScene::createScene<Holdrace>(int);

@@ -17,27 +17,34 @@ USING_NS_CC;
 class GameScene : public cocos2d::LayerColor
 {
 public:
-	enum GameStatus { GAME_START, GAME_INPROGRESS, GAME_OVER };
+	enum GameStatus { GAME_START, GAME_INPROGRESS, GAME_OVER, GAME_PAUSE };
 	GameScene(int numberOfPlayers);
 	template <class T> static Scene* createScene(int numberOfPlayers); //Create the scene which holds the root node.
-    
-    // implement the "static create()" method manually
+
+																	   // implement the "static create()" method manually
 	template <class T> static GameScene* create(int numberOfPlayers);
-    // Our game custom functions
-    void startGame(float);
+	// Our game custom functions
+	void startGame(float);
 	void endGame(int);
-	void endGame(int[],int);
-    void updateCounter(float);
-    void showText(std::string, float);
-    
-    //virtual function to be overridden
-    virtual void onGameStart();
-    
+	void endGame(int[], int);
+	void updateCounter(float);
+	void showText(std::string, float);
+	void showBtnPanel();
+	void pauseGame(bool);
+
+	//virtual function to be overridden
+	virtual void onGameStart();
+
+	// Button objects and listener
+	MenuItemImage* backBtn;
+	MenuItemImage* pauseBtn;
+	void backButtonCallback(cocos2d::Ref* pSender);
+
 protected:
 	void showReturnMenu(float);
 	int numberOfPlayers;
 	GameStatus gameStatus;
-    int _counter = 0;
+	int _counter = 0;
 };
 
 #endif // __GameScene_SCENE_H__
