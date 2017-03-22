@@ -178,7 +178,11 @@ void GameScene::showText(std::string s, float dt){
 
 void GameScene::pauseGame(bool)
 {
-
+	if (gameStatus == GAME_INPROGRESS) {
+		gameStatus = GAME_PAUSE;
+	}else if(gameStatus == GAME_PAUSE) {
+		gameStatus = GAME_INPROGRESS;
+	}
 }
 
 void GameScene::onGameStart(){}
@@ -193,7 +197,7 @@ void GameScene::showBtnPanel() {
 	this->backBtn = MenuItemImage::create(
 		"button/Button_Back.png",
 		"button/Button_Back.png",
-		CC_CALLBACK_1(Taprace::backButtonCallback, this));
+		CC_CALLBACK_1(GameScene::backButtonCallback, this));
 	backBtn->setPosition(screenSize.width - backBtn->getContentSize().width / 2,
 		screenCenter.y + backBtn->getContentSize().height);
 	backBtn->setScale(backBtn->getContentSize().width / screenSize.width * 3);
@@ -218,6 +222,11 @@ void GameScene::showBtnPanel() {
 void GameScene::backButtonCallback(cocos2d::Ref * pSender)
 {
 	Director::getInstance()->replaceScene(TransitionSlideInL::create(1, PlayerMenu::createScene(GameList::GameType(GameList::instance()->AVAILABLE_GAMES[0]))));
+}
+
+void GameScene::pauseButtonCallback(cocos2d::Ref * pSender)
+{
+
 }
 
 template Scene* GameScene::createScene<Taprace>(int);

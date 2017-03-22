@@ -39,6 +39,7 @@ public:
 	MenuItemImage* backBtn;
 	MenuItemImage* pauseBtn;
 	void backButtonCallback(cocos2d::Ref* pSender);
+	void pauseButtonCallback(cocos2d::Ref* pSender);
 
 protected:
 	void showReturnMenu(float);
