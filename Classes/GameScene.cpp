@@ -190,7 +190,7 @@ void GameScene::createTabListenerOverlay()
 	rectangle[2] = visibleSize;
 	rectangle[3] = Vec2(visibleSize.width, origin.y);
 
-	Color4F halfblack(0, 0, 0, 0.7);
+	Color4F halfblack(0, 0, 0, 0.7f);
 	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
 	
 	this->addChild(rectOverlay);

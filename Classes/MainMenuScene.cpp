@@ -40,37 +40,38 @@ bool MainMenu::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
 	Vector<MenuItem*> MenuItems;
-    auto soundName = "SoundOn.png";
+    auto soundName = "button/Buttom_Home_SoundOn.png";
     if (SoundManager::instance()->isMuted())
-        soundName = "SoundOff.png";
+        soundName = "button/Buttom_Home_SoundOff.png";
 
-        
     _soundMuteItem = MenuItemImage::create(
                                            soundName,
                                            soundName,
                                            CC_CALLBACK_1(MainMenu::muteButtonCallback, this));
 
-    
     _soundMuteItem->setPosition(Vec2(origin.x + visibleSize.width - _soundMuteItem->getContentSize().width/2 -20,
                                 origin.y + _soundMuteItem->getContentSize().height/2+20));
+
+	_soundMuteItem->setScale(0.5);
 
 	MenuItems.pushBack(_soundMuteItem);
 
 	Shared::instance()->setBackground("bg/BG_Home.png", this);
 
-	auto label = Label::createWithBMFont(SHARED_FONT_FILE_TITLE, SHARED_GAME_NAME);
-	// position the label on the center of the screen
-	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height - label->getContentSize().height - MMS_TITLE_Y_OFFSET));
-	float currentScale = label->getContentSize().width / visibleSize.width;
-	label->setScale(MMS_TITLE_WIDTH_PERCENT / currentScale);
-	// add the label as a child to this layer
-	this->addChild(label, 1);
+	auto title = Sprite::create("item/Item_Home_Logo.png");
+	// position the title on the center of the screen
+	title->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height - title->getContentSize().height / 2 - MMS_TITLE_Y_OFFSET));
+
+	float currentScale = title->getContentSize().width / visibleSize.width;
+	title->setScale(MMS_TITLE_WIDTH_PERCENT / (currentScale * 1.5));
+	// add the title as a child to this layer
+	this->addChild(title, 1);
 
 	currentScale = 0;
 
-	float startY = origin.y + visibleSize.height * MMS_MENU_HEIGHT_PERCENT - label->getContentSize().height*2;
-	float availableArea = visibleSize.height * MMS_MENU_HEIGHT_PERCENT - label->getContentSize().height * 2;
+	float startY = origin.y + visibleSize.height * MMS_MENU_HEIGHT_PERCENT - title->getContentSize().height / 2;
+	float availableArea = visibleSize.height * MMS_MENU_HEIGHT_PERCENT - title->getContentSize().height / 2;
 
 	for (int i = 0; i < GameList::instance()->numberOfAvailableGames(); i++) {
 		auto gameListingLabel = Label::createWithBMFont(SHARED_FONT_FILE_MENU, GameList::getGameName(GameList::instance ()->AVAILABLE_GAMES[i]));
@@ -104,11 +105,11 @@ void MainMenu::muteButtonCallback(Ref* pSender)
     //Mute or unmute the sound effects of the game
 	if (SoundManager::instance()->isMuted()) {
 		SoundManager::instance()->unmuteAll();
-        _soundMuteItem->setNormalImage(Sprite::create("SoundOn.png"));
+        _soundMuteItem->setNormalImage(Sprite::create("button/Buttom_Home_SoundOn.png"));
 	}
 	else {
 		SoundManager::instance()->muteAll();
-        _soundMuteItem->setNormalImage(Sprite::create("SoundOff.png"));
+        _soundMuteItem->setNormalImage(Sprite::create("button/Buttom_Home_SoundOff.png"));
 	}
 }
 
