@@ -7,6 +7,7 @@
 //
 
 #include "Taprace.h"
+#include "GameList.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
 
 USING_NS_CC;
@@ -20,6 +21,7 @@ bool Taprace::init()
     {
         return false;
     }
+	GameScene::gameType = GameType::TAPTAP;
     
     //http://www.cocos2d-x.org/wiki/Multi_resolution_support
     

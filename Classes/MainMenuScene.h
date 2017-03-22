@@ -21,7 +21,7 @@ public:
     
     // a selector callback
     void muteButtonCallback(cocos2d::Ref* pSender);
-	void pickPlayers(cocos2d::Ref* pSender, GameList::GameType game);
+	void pickPlayers(cocos2d::Ref* pSender, GameType game);
     
     //Override the keyevent
     virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);

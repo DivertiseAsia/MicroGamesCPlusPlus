@@ -3,11 +3,12 @@
 
 #include "cocos2d.h"
 
+
+enum GameType { TAPTAP, OVERSHOOT, PINBALL, AIRHOCKEY, FLAPFLAP, SMASHBALL };
+
 class GameList
 {
 public:
-	enum GameType { TAPTAP, OVERSHOOT, PINBALL, AIRHOCKEY, FLAPFLAP, SMASHBALL};
-
     static cocos2d::Scene* getScene(GameType listing, int numberOfPlayers);
 	static std::string getGameName(GameType listing);
 	static GameList* instance();

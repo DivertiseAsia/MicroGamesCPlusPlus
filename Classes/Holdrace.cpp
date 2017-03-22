@@ -7,6 +7,7 @@
 //
 
 #include "Holdrace.h"
+#include "GameList.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
 
 USING_NS_CC;
@@ -21,6 +22,7 @@ bool Holdrace::init()
     {
         return false;
     }
+	GameScene::gameType = GameType::OVERSHOOT;
 
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     auto screenSize = Director::getInstance()->getVisibleSize();

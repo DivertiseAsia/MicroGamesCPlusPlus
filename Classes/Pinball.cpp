@@ -7,6 +7,7 @@
 //
 
 #include "Pinball.h"
+#include "GameList.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
 
 USING_NS_CC;
@@ -20,6 +21,8 @@ bool Pinball::init()
 	{
 		return false;
 	}
+	GameScene::gameType = GameType::PINBALL;
+
 	Device::setAccelerometerEnabled(true);
 	auto listener = EventListenerAcceleration::create(CC_CALLBACK_2(Pinball::onShake, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);

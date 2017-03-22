@@ -6,7 +6,7 @@
 
 USING_NS_CC;
 
-Scene* PlayerMenu::createScene(GameList::GameType game)
+Scene* PlayerMenu::createScene(GameType game)
 {
 	// 'scene' is an autorelease object
 	auto scene = Scene::create();
@@ -90,7 +90,7 @@ bool PlayerMenu::init()
 	return true;
 }
 
-void PlayerMenu::setGameToLoad(GameList::GameType game) {
+void PlayerMenu::setGameToLoad(GameType game) {
 	gameToLoad = game;
 }
 

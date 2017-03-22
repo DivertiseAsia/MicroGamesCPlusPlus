@@ -94,7 +94,7 @@ bool MainMenu::init()
     return true;
 }
 
-void MainMenu::pickPlayers(Ref* pSender, GameList::GameType game) {
+void MainMenu::pickPlayers(Ref* pSender, GameType game) {
 	SoundManager::instance()->playEffect(SOUND_FILE_MENU_TRANS);
 	Director::getInstance()->replaceScene(TransitionSlideInR::create(0.5f,PlayerMenu::createScene(game)));
 }

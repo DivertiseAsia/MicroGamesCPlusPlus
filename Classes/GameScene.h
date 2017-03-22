@@ -30,7 +30,7 @@ public:
 	void updateCounter(float);
 	void showText(std::string, float);
 	void showBtnPanel();
-	void pauseGame(bool);
+	void pauseGame();
 
 	//virtual function to be overridden
 	virtual void onGameStart();
@@ -40,6 +40,8 @@ public:
 	MenuItemImage* pauseBtn;
 	void backButtonCallback(cocos2d::Ref* pSender);
 	void pauseButtonCallback(cocos2d::Ref* pSender);
+
+	int gameType;
 
 protected:
 	void showReturnMenu(float);

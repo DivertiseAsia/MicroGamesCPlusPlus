@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "GameList.h"
 #include "Taprace.h"
 #include "Holdrace.h"
 #include "Pinball.h"
@@ -30,6 +31,7 @@ GameScene::GameScene(int numberOfPlayers)
 {
 	this->numberOfPlayers = numberOfPlayers;
 	this->gameStatus = GAME_START;
+	this->gameType = 0;
 }
 
 template <class T>
@@ -176,12 +178,13 @@ void GameScene::showText(std::string s, float dt){
     this->scheduleOnce([this, label, dt](float tp){ this->removeChild(label);}, dt, "remove"+s);
 }
 
-void GameScene::pauseGame(bool)
+void GameScene::pauseGame()
 {
 	if (gameStatus == GAME_INPROGRESS) {
 		gameStatus = GAME_PAUSE;
 	}else if(gameStatus == GAME_PAUSE) {
-		gameStatus = GAME_INPROGRESS;
+		_counter = SHARED_COUNTDOWN_LENGTH;
+		this->schedule(schedule_selector(GameScene::updateCounter), 1.0f);
 	}
 }
 
@@ -205,7 +208,8 @@ void GameScene::showBtnPanel() {
 
 	this->pauseBtn = MenuItemImage::create(
 		"button/Button_Pause.png",
-		"button/Button_Pause.png");
+		"button/Button_Pause.png",
+		CC_CALLBACK_1(GameScene::pauseButtonCallback, this));
 	auto diffSize = backBtn->getContentSize().width - pauseBtn->getContentSize().width;
 	pauseBtn->setPosition((screenSize.width - pauseBtn->getContentSize().width / 2) - abs(diffSize) / 2,
 		screenCenter.y - pauseBtn->getContentSize().height);
@@ -221,12 +225,12 @@ void GameScene::showBtnPanel() {
 
 void GameScene::backButtonCallback(cocos2d::Ref * pSender)
 {
-	Director::getInstance()->replaceScene(TransitionSlideInL::create(1, PlayerMenu::createScene(GameList::GameType(GameList::instance()->AVAILABLE_GAMES[0]))));
+	Director::getInstance()->replaceScene(TransitionSlideInL::create(1, PlayerMenu::createScene(GameType(GameList::instance()->AVAILABLE_GAMES[gameType]))));
 }
 
 void GameScene::pauseButtonCallback(cocos2d::Ref * pSender)
 {
-
+	pauseGame();
 }
 
 template Scene* GameScene::createScene<Taprace>(int);

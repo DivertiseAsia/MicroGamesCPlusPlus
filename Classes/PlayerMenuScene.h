@@ -14,14 +14,14 @@ USING_NS_CC;
 class PlayerMenu : public cocos2d::LayerColor
 {
 public:
-	static cocos2d::Scene* createScene(GameList::GameType game);
+	static cocos2d::Scene* createScene(GameType game);
 
 	virtual bool init();
 
 	// a selector callback
 	void backButtonCallback(cocos2d::Ref* pSender) ;
 	void startGame(cocos2d::Ref* pSender, int players);
-	void setGameToLoad(GameList::GameType game);
+	void setGameToLoad(GameType game);
 
 	//Override the keyevent
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
@@ -29,7 +29,7 @@ public:
 	// implement the "static create()" method manually
 	CREATE_FUNC(PlayerMenu);
 private:
-	GameList::GameType gameToLoad;
+	GameType gameToLoad;
 };
 
 #endif // __PLAYERMENU_SCENE_H__

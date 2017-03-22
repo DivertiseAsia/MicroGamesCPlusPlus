@@ -1,4 +1,5 @@
 #include "SmashBall.h"
+#include "GameList.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
 
 USING_NS_CC;
@@ -12,6 +13,8 @@ bool SmashBall::init()
 	{
 		return false;
 	}
+	GameScene::gameType = GameType::SMASHBALL;
+
 	Device::setAccelerometerEnabled(true);
 	auto listener = EventListenerAcceleration::create(CC_CALLBACK_2(SmashBall::onShake, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);

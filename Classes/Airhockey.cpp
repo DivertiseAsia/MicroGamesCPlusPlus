@@ -8,6 +8,7 @@
 
 #include "Shared.h"
 #include "Airhockey.hpp"
+#include "GameList.h"
 #include "Box2D/Box2D.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
 
@@ -20,6 +21,7 @@ bool Airhockey::init()
     {
         return false;
     }
+	GameScene::gameType = GameType::AIRHOCKEY;
     
     //http://www.cocos2d-x.org/wiki/Multi_resolution_support
     
