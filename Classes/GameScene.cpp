@@ -61,7 +61,7 @@ void GameScene::updateCounter(float dt){
         showText(GS_GO_TEXT, 1.0f);
         onGameStart();
     } else{
-        showText(Shared::intToString(_counter), 1.0f);
+        showText(Shared::intToString(_counter), 1.0f, 10.0f);
     }
 }
 
@@ -85,7 +85,7 @@ void GameScene::endGame(int winners[], int totalWinners)
 		Vec2 origin = Director::getInstance()->getVisibleOrigin();
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 
-		auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, GS_WINNER_TEXT);
+		auto label = Label::createWithBMFont(SHARED_FONT_FILE, GS_WINNER_TEXT);
 
 		// position the label on the center of the screen
 		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
@@ -125,7 +125,7 @@ void GameScene::showReturnMenu(float dt) {
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, GS_RETURN_TEXT);
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE, GS_RETURN_TEXT);
 
 	// position the label on the center of the screen
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
@@ -153,9 +153,9 @@ void GameScene::showReturnMenu(float dt) {
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
 }
 
-void GameScene::showText(std::string s, float dt){
+void GameScene::showText(std::string s, float dt, float scale){
     log("showText %s", s.c_str());
-    auto label = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, s);
+    auto label = Label::createWithBMFont(SHARED_FONT_FILE, s);
     label->setBMFontSize(128);
     
     // position the label on the center of the screen
@@ -163,11 +163,14 @@ void GameScene::showText(std::string s, float dt){
 	Size visibleSize = Director::getInstance()->getVisibleSize();
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
     label->setPosition(screenCenter);
-
-	auto currentScale = label->getContentSize().width / visibleSize.width;
-
+	auto currentScale = 1/scale;
+	if (scale == 0) {
+		currentScale = label->getContentSize().width / visibleSize.width;
+	}
+	log("scale %", currentScale);
 	if (s.length() == 1) {
 		label->setScale(GS_COUNTDOWN_TEXT_WIDTH_PERCENT / currentScale);
+		log("showText length %d", s.length());
 	}
 	else {
 		label->setScale(GS_GO_TEXT_WIDTH_PERCENT / currentScale);
@@ -193,7 +196,7 @@ void GameScene::createListenerTabOverlay()
 	Color4F halfblack(0, 0, 0, 0.7f);
 	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
 
-	auto label = Label::createWithBMFont(SHARED_FONT_FILE_MENU, GS_RESUME_TEXT);
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE, GS_RESUME_TEXT);
 	// position the label on the center of the screen
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
 

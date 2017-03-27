@@ -41,13 +41,13 @@ void SharedBall::setupScore(int startScore, Vec2 position1, Vec2 position2) {
 	_score[SB_TEAM_TOP] = startScore;
 	_score[SB_TEAM_BOT] = startScore;
 
-	scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
+	scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE, "");
 	scoreBottom->setBMFontSize(64);
 	scoreBottom->setPosition(position1);
 	scoreBottom->setRotation(90);
 	this->addChild(scoreBottom, 1);
 
-	scoreTop = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
+	scoreTop = Label::createWithBMFont(SHARED_FONT_FILE, "");
 	scoreTop->setBMFontSize(64);
 	scoreTop->setPosition(position2);
 	scoreTop->setRotation(90);

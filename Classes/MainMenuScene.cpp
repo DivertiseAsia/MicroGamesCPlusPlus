@@ -74,7 +74,7 @@ bool MainMenu::init()
 	float availableArea = visibleSize.height * MMS_MENU_HEIGHT_PERCENT - title->getContentSize().height / 2;
 
 	for (int i = 0; i < GameList::instance()->numberOfAvailableGames(); i++) {
-		auto gameListingLabel = Label::createWithBMFont(SHARED_FONT_FILE_MENU, GameList::getGameName(GameList::instance ()->AVAILABLE_GAMES[i]));
+		auto gameListingLabel = Label::createWithBMFont(SHARED_FONT_FILE, GameList::getGameName(GameList::instance ()->AVAILABLE_GAMES[i]));
 		auto gameListing = MenuItemLabel::create(gameListingLabel, CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
 		gameListing->setPosition(Vec2(origin.x + visibleSize.width / 2,
 			startY - availableArea/GameList::instance()->numberOfAvailableGames() * i));

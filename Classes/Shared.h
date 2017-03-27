@@ -3,9 +3,7 @@
 
 #include "cocos2d.h"
 
-#define SHARED_FONT_FILE_TITLE	"fonts/font-title.fnt"
-#define SHARED_FONT_FILE_MENU	"fonts/font-menu.fnt"
-#define SHARED_FONT_FILE_INGAME	"fonts/font-ingame.fnt"
+#define SHARED_FONT_FILE "fonts/font.fnt"
 
 #define SHARED_COLOR_BACKGROUND Color4F(.357f,.259f,.451f,1)
 

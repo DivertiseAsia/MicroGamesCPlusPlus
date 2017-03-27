@@ -45,7 +45,7 @@ bool PlayerMenu::init()
 
 	//Title
 
-	auto label = Label::createWithBMFont(SHARED_FONT_FILE_MENU, "Choose the number of players");
+	auto label = Label::createWithBMFont(SHARED_FONT_FILE, "Choose the number of players");
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
 		origin.y + visibleSize.height - label->getContentSize().height * 2));
 	float currentScale = label->getContentSize().width / visibleSize.width;

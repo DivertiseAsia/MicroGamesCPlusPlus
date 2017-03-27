@@ -335,14 +335,14 @@ void Airhockey::drawBoard(){
 }
 
 void Airhockey::addScores(){
-    _scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
+    _scoreBottom = Label::createWithBMFont(SHARED_FONT_FILE, "");
     _scoreBottom->setBMFontSize(64);
     _scoreBottom->setPosition(Vec2(_screenOrigin.x+32, _screenCenter.y - 50));
     _scoreBottom->setRotation(90);
     _scoreBottom->setUserData(0); //Use UserData to store score
     this->addChild(_scoreBottom, 1);
     
-    _scoreTop = Label::createWithBMFont(SHARED_FONT_FILE_INGAME, "");
+    _scoreTop = Label::createWithBMFont(SHARED_FONT_FILE, "");
     _scoreTop->setBMFontSize(64);
     _scoreTop->setPosition(Vec2(_screenOrigin.x+32, _screenCenter.y + 50));
     _scoreTop->setRotation(90);

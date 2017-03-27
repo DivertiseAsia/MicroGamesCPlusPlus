@@ -2,7 +2,7 @@
 #define __GameScene_SCENE_H__
 
 #define GS_WINNER_TEXT_OFFSET_Y 20
-#define GS_GO_TEXT_WIDTH_PERCENT .5f
+#define GS_GO_TEXT_WIDTH_PERCENT .3f
 #define GS_COUNTDOWN_TEXT_WIDTH_PERCENT .08f
 #define GS_WINNER_TEXT_WIDTH_PERCENT .85f
 #define GS_RETURN_TEXT_WIDTH_PERCENT .95f
@@ -29,7 +29,7 @@ public:
 	void endGame(int);
 	void endGame(int[], int);
 	void updateCounter(float);
-	void showText(std::string, float);
+	void showText(std::string, float, float=0);
 	void createBtnPanel();
 	void createListenerTabOverlay();
 	void pauseGame();
