@@ -70,20 +70,25 @@ bool MainMenu::init()
 
 	currentScale = 0;
 
-	float startY = origin.y + visibleSize.height * MMS_MENU_HEIGHT_PERCENT - title->getContentSize().height / 2;
+	float startY = origin.y + visibleSize.height * MMS_MENU_HEIGHT_PERCENT - title->getContentSize().height * 1.5;
 	float availableArea = visibleSize.height * MMS_MENU_HEIGHT_PERCENT - title->getContentSize().height / 2;
 
+	float rad = 3.141 / 2;
 	for (int i = 0; i < GameList::instance()->numberOfAvailableGames(); i++) {
-		auto gameListingLabel = Label::createWithBMFont(SHARED_FONT_FILE, GameList::getGameName(GameList::instance ()->AVAILABLE_GAMES[i]));
-		auto gameListing = MenuItemLabel::create(gameListingLabel, CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
-		gameListing->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			startY - availableArea/GameList::instance()->numberOfAvailableGames() * i));
-
+		auto fname = "button/Button_Home_" + GameList::getGameName(GameList::instance()->AVAILABLE_GAMES[i]) + ".png";
+		log("Create button %s", fname.c_str());
+		auto button = MenuItemImage::create(fname.c_str(), fname.c_str(), CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
+		auto xPosition = cos(rad) * visibleSize.width * 0.3;
+		auto yPosition = sin(rad) * visibleSize.width * 0.3;
+		log("x = %.4f : y = %.4f", xPosition, yPosition);
+		button->setPosition(Vec2(origin.x + visibleSize.width / 2 + xPosition,
+			startY + yPosition));
+		rad += (3.141 * 2) / 5;
 		if (currentScale == 0) {
-			currentScale = gameListing->getContentSize().width / visibleSize.width;
+			currentScale = button->getContentSize().width / visibleSize.width;
 		}
-		gameListing->setScale(MMS_MENU_WIDTH_PERCENT / currentScale);
-		MenuItems.pushBack(gameListing);
+		button->setScale(MMS_MENU_WIDTH_PERCENT / currentScale);
+		MenuItems.pushBack(button);
 	}
 
     this->setKeyboardEnabled(true);
