@@ -196,15 +196,20 @@ void GameScene::createListenerTabOverlay()
 	Color4F halfblack(0, 0, 0, 0.7f);
 	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
 
+	auto pauseIcon = Sprite::create("item/Item_Pause_Icon.png");
+	pauseIcon->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + (visibleSize.height / 2) + (pauseIcon->getContentSize().height / 2)));
+	pauseIcon->setScale(3 * pauseIcon->getContentSize().width / visibleSize.width);
+
 	auto label = Label::createWithBMFont(SHARED_FONT_FILE, GS_RESUME_TEXT);
 	// position the label on the center of the screen
-	label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+	label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + (visibleSize.height / 2) - (label->getContentSize().height / 2)));
 
 	auto currentScale = label->getContentSize().width / visibleSize.width;
 
 	label->setScale(GS_RETURN_TEXT_WIDTH_PERCENT / (2 * currentScale));
 
 	// add the label as a child to overlay layer
+	rectOverlay->addChild(pauseIcon);
 	rectOverlay->addChild(label);
 	this->addChild(rectOverlay);
 
