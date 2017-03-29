@@ -76,8 +76,9 @@ bool MainMenu::init()
 	float rad = 3.141 / 2;
 	for (int i = 0; i < GameList::instance()->numberOfAvailableGames(); i++) {
 		auto fname = "button/Button_Home_" + GameList::getGameName(GameList::instance()->AVAILABLE_GAMES[i]) + ".png";
+		auto fname2 = "button/Button_Home_" + GameList::getGameName(GameList::instance()->AVAILABLE_GAMES[i]) + "_Pressed.png";
 		log("Create button %s", fname.c_str());
-		auto button = MenuItemImage::create(fname.c_str(), fname.c_str(), CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
+		auto button = MenuItemImage::create(fname.c_str(), fname2.c_str(), CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
 		auto xPosition = cos(rad) * visibleSize.width * 0.3;
 		auto yPosition = sin(rad) * visibleSize.width * 0.3;
 		log("x = %.4f : y = %.4f", xPosition, yPosition);
