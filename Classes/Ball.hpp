@@ -18,7 +18,7 @@ USING_NS_CC; //Alias to declare using cocos namespace
 #define DEFAULT_BALL_COLOR Color4F::BLUE
 #define DEFAULT_BALL_INITIAL_VELOCITY Vec2(0,0)
 
-class Ball : public Node
+class Ball : public DrawNode
 {
 public:
     Ball(float radius=DEFAULT_BALL_RADIUS, Vec2 initialVelocity=DEFAULT_BALL_INITIAL_VELOCITY);
@@ -35,6 +35,7 @@ public:
 
 	// for customize ball style
 	void setBallImage(std::string);
+	void setBallImage(std::string, Rect);
     
     CC_SYNTHESIZE(Vec2, _velocity, Velocity); //create getter and setter
     CC_SYNTHESIZE(Vec2, _friction, Fricition);

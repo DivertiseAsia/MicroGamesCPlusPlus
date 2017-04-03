@@ -37,7 +37,7 @@ Ball* Ball::create(float radius){
 
 bool Ball::init(){
     
-    if (!Node::init())
+    if (!DrawNode::init())
     {
         return false;
     }
@@ -46,9 +46,11 @@ bool Ball::init(){
     
     
     auto rect = this->getBoundingBox();
+//#define DEBUG_MODE true
 #ifdef DEBUG_MODE
-    this->drawRect( rect.origin, rect.origin+rect.size, Color4F::RED); //For debugging propose
+    this->drawRect(rect.origin, rect.origin + rect.size, Color4F::RED); //For debugging propose
 #endif
+
     this->setName("Ball");
     this->setAnchorPoint(Vec2(0, 0));
     
@@ -91,6 +93,13 @@ void Ball::moveNext(){
 void Ball::setBallImage(std::string fname)
 {
 	auto ballImg = Sprite::create(fname);
+	ballImg->setScale(0.5);
+	this->addChild(ballImg);
+}
+
+void Ball::setBallImage(std::string fname, Rect area)
+{
+	auto ballImg = Sprite::create(fname, area);
 	ballImg->setScale(0.5);
 	this->addChild(ballImg);
 }

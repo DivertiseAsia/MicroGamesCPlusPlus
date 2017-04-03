@@ -12,6 +12,8 @@
 
 USING_NS_CC;
 
+#define START_POINT_Y 45
+#define MOUSE_OFFSET_X 20
 
 // on "init" you need to initialize your instance
 bool Holdrace::init()
@@ -33,16 +35,23 @@ bool Holdrace::init()
     
     // Add object to the scene here.
 	Shared::instance()->setBackground("bg/BG_JumpyMouse.png",this);
-    
-    //Create drawNode and draw the race line
-    _drawNode = DrawNode::create(10);    //Default line width
-    _drawNode->drawLine(Vec2(screenCenter.x,0), Vec2(screenCenter.x,winSize.height), Color4F::GRAY);
-    this->addChild(_drawNode);
 
     // Create balls and buttons
+	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
+	auto sheetSize = mouseSprite->getContentSize();
+	auto mouseWidth = sheetSize.width / 3;
+	auto mouseHeight = sheetSize.height / 4;
+	auto firstPositionX = screenCenter.x - ((numberOfPlayers * mouseWidth/2) / 2);
     for(int i=0;i<numberOfPlayers;i++){
-        auto p = Vec2(screenCenter.x,screenSize.height);
+		//Vector<SpriteFrame*> animFrames;
+		//animFrames.reserve(3);
+		//animFrames.pushBack(SpriteFrame::create("Animate_Mouse_120x180.png", Rect(0, 120 * i, 120, 180)));
+		//animFrames.pushBack(SpriteFrame::create("Animate_Mouse_120x180.png", Rect(120, 120 * i, 120, 180)));
+		//animFrames.pushBack(SpriteFrame::create("Animate_Mouse_120x180.png", Rect(240, 120 * i, 120, 180)));
+        auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - START_POINT_Y);
         _ball[i] = Ball::create();
+		_ball[i]->setBallImage("item/Animate_Mouse_120x180.png", Rect(0, mouseHeight * i, mouseWidth, mouseHeight));
+		_ball[i]->setRotation(180);
         _ball[i]->setPosition(p);
         _ball[i]->setFricition(Vec2(0,HR_BALL_FRICTION));
         _ball[i]->setTag(i);
