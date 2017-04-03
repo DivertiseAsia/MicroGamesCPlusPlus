@@ -47,7 +47,7 @@ bool Taprace::init()
     // Create balls
     for(int i=0;i<numberOfPlayers;i++){
         auto p = Vec2(screenCenter.x,screenSize.height);
-        _ball[i] = Ball::create(Shared::instance()->getPlayerColor(i));
+        _ball[i] = Ball::create();
         _ball[i]->setPosition(p);
         _ball[i]->setVelocity(Vec2(0,-1*ballspeed));
         this->addChild(_ball[i]);

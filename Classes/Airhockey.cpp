@@ -353,7 +353,8 @@ void Airhockey::addScores(){
 
 void Airhockey::placePuck(){
     //create the ball
-    _ball = Ball::create(Color4F::MAGENTA);
+    _ball = Ball::create();
+	_ball->setBallImage("item/Item_Cat Hockey_Hockey.png");
     _ball->setPosition(Vec2(_screenCenter.x, _screenCenter.y));
     this->addChild(_ball);
     

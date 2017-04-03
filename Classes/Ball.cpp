@@ -9,10 +9,9 @@
 #include "Ball.hpp"
 
 
-Ball::Ball(float radius, Color4F color, Vec2 initialVelocity)
+Ball::Ball(float radius, Vec2 initialVelocity)
 {
     _radius = radius;
-    _color = color;
     _velocity = initialVelocity;
 }
 
@@ -21,8 +20,8 @@ Ball::~Ball()
     //Release the memoery here if any.
 }
 
-Ball* Ball::create(float radius, Color4F color){
-    Ball *pRet = new(std::nothrow)Ball(radius, color, Vec2(0,0));
+Ball* Ball::create(float radius){
+    Ball *pRet = new(std::nothrow)Ball(radius, Vec2(0,0));
     if (pRet && pRet->init())
     {
         pRet->autorelease();
@@ -36,19 +35,14 @@ Ball* Ball::create(float radius, Color4F color){
     }
 }
 
-Ball* Ball::create(Color4F color){
-    return Ball::create(DEFAULT_BALL_RADIUS, color);
-}
-
 bool Ball::init(){
     
-    if (!DrawNode::init())
+    if (!Node::init())
     {
         return false;
     }
     
     this->setContentSize(Size(_radius*2, _radius*2));
-    this->drawSolidCircle(Vec2(_radius,_radius), _radius, 3.1415968f, 360, _color);    //Draw circle at 0,0
     
     
     auto rect = this->getBoundingBox();
@@ -56,7 +50,7 @@ bool Ball::init(){
     this->drawRect( rect.origin, rect.origin+rect.size, Color4F::RED); //For debugging propose
 #endif
     this->setName("Ball");
-    this->setAnchorPoint(Vec2(0.5,0.5));
+    this->setAnchorPoint(Vec2(0, 0));
     
     return true;
 }
@@ -92,4 +86,11 @@ void Ball::moveNext(){
     
     if (_velocity.getLength() != 0)
         _moved = true;
+}
+
+void Ball::setBallImage(std::string fname)
+{
+	auto ballImg = Sprite::create(fname);
+	ballImg->setScale(0.5);
+	this->addChild(ballImg);
 }
