@@ -66,7 +66,7 @@ protected:
 	void onShake(cocos2d::Acceleration *, cocos2d::Event *);
 	void updatePhysics(float dt);
 	GameButton* addButtonForPlayer(int);
-	void createBall(Vec2, float, cocos2d::Color4F);
+	void createBall(Vec2, float, std::string);
 	void setupScore(int,Vec2,Vec2);
 	void updateScore();
     DrawNode* _ball;

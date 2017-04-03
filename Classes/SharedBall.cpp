@@ -11,12 +11,14 @@
 
 USING_NS_CC;
 
-void SharedBall::createBall(Vec2 p, float radius, Color4F color) {
+void SharedBall::createBall(Vec2 p, float radius, std::string fname) {
 	_ball = DrawNode::create();
 	_ball->setContentSize(cocos2d::Size(radius * 2, radius * 2));
-	_ball->drawSolidCircle(Vec2(radius, radius), radius, 360, 100, color);
-	_ball->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	//_ball->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	_ball->setPosition(p);
+	auto ballImg = Sprite::create(fname);
+	ballImg->setScale(0.4);
+	_ball->addChild(ballImg);
 	this->addChild(_ball);
 
 	b2FixtureDef ballFixture;

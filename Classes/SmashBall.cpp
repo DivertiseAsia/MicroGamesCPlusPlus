@@ -54,7 +54,7 @@ bool SmashBall::init()
 		offset = -SB_BALL_RESET_OFFSET_Y;
 	}
 	auto p = Vec2(screenCenter.x+cocos2d::random(-SB_BALL_RESET_OFFSET_X, SB_BALL_RESET_OFFSET_X), screenCenter.y+offset);
-	createBall(p, DEFAULT_BALL_RADIUS, Color4F::MAGENTA);
+	createBall(p, DEFAULT_BALL_RADIUS, "item/Item_Ball.png");
 
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
