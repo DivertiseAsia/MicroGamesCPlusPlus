@@ -57,3 +57,5 @@ proj.win32/game.aps
 # proj.win8.1-universal
 
 # others
+*.suo
+*.db
