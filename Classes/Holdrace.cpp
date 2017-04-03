@@ -14,6 +14,7 @@ USING_NS_CC;
 
 #define START_POINT_Y 45
 #define MOUSE_OFFSET_X 20
+#define MAX_NUMBER_PLAYER 4
 
 // on "init" you need to initialize your instance
 bool Holdrace::init()
@@ -41,7 +42,7 @@ bool Holdrace::init()
 	auto sheetSize = mouseSprite->getContentSize();
 	auto mouseWidth = sheetSize.width / 3;
 	auto mouseHeight = sheetSize.height / 4;
-	auto firstPositionX = screenCenter.x - ((numberOfPlayers * mouseWidth/2) / 2);
+	auto firstPositionX = screenCenter.x - ((4 * mouseWidth/2) / 2);
     for(int i=0;i<numberOfPlayers;i++){
 		//Vector<SpriteFrame*> animFrames;
 		//animFrames.reserve(3);
