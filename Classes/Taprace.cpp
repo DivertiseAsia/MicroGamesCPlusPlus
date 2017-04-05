@@ -41,9 +41,11 @@ bool Taprace::init()
 	Shared::instance()->setBackground("bg/BG_TapRace.png", this);
     
 	// Draw the finish line
-	_drawNode = DrawNode::create(5);
-	_drawNode->drawLine(Vec2(screenCenter.x - ((winSize.width / 3) / 2), OFFSET_Y_SCREEN),
-		Vec2(screenCenter.x + ((winSize.width / 3) / 2), OFFSET_Y_SCREEN), Color4F::RED);
+	_drawNode = DrawNode::create();
+	auto lineImg = Sprite::create("item/Item_Tap Race_Goal.png");
+	lineImg->setScale((screenSize.width / 3) / lineImg->getContentSize().width);
+	lineImg->setPosition(Vec2(screenCenter.x, OFFSET_Y_SCREEN));
+	_drawNode->addChild(lineImg);
 	this->addChild(_drawNode);
 
     auto ballspeed = (screenSize.height - OFFSET_Y_SCREEN * 2) / TR_TAPS_REQUIRED;
