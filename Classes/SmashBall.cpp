@@ -34,9 +34,9 @@ bool SmashBall::init()
 	Shared::instance()->setBackground("bg/BG_Smashball.png", this);
 
 	//Create drawNode and draw the center line
-	_drawNode = DrawNode::create(10);    //Default line width
-	_drawNode->drawLine(Vec2(screenOrigin.x, screenCenter.y), Vec2(screenOrigin.x + screenSize.width, screenCenter.y), Color4F::GRAY);
-	this->addChild(_drawNode);
+	//_drawNode = DrawNode::create(10);    //Default line width
+	//_drawNode->drawLine(Vec2(screenOrigin.x, screenCenter.y), Vec2(screenOrigin.x + screenSize.width, screenCenter.y), Color4F::GRAY);
+	//this->addChild(_drawNode);
 
 	setupScore(0, Vec2(screenOrigin.x + SB_SCORE_OFFSET_X, screenCenter.y - SB_SCORE_OFFSET_Y), Vec2(screenOrigin.x + SB_SCORE_OFFSET_X, screenCenter.y + SB_SCORE_OFFSET_Y));
 
