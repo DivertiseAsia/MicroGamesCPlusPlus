@@ -321,7 +321,7 @@ void Airhockey::drawBoard(){
     //Draw Board frame
     _drawNode->drawRect(_screenOrigin+Vec2(2,2), Vec2(_screenSize)+_screenOrigin-Vec2(4,4), Color4F::GRAY);
 
-    _drawNode->drawLine(Vec2(_screenOrigin.x, _screenCenter.y), Vec2(_screenSize.width+_screenOrigin.x, _screenCenter.y), Color4F::GRAY);   //Add center line
+    //_drawNode->drawLine(Vec2(_screenOrigin.x, _screenCenter.y), Vec2(_screenSize.width+_screenOrigin.x, _screenCenter.y), Color4F::GRAY);   //Add center line
     
     auto goal_size = AR_GOAL_SIZE;// respect to visibleWidth
     auto left = (1-goal_size)/2*_screenSize.width;
