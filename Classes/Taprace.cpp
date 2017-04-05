@@ -12,7 +12,7 @@
 
 USING_NS_CC;
 
-#define START_POINT_Y 45
+#define OFFSET_Y_SCREEN 45
 #define MOUSE_OFFSET_X 20
 #define MAX_NUMBER_PLAYER 4
 
@@ -40,8 +40,13 @@ bool Taprace::init()
 	// Add object to the scene here.
 	Shared::instance()->setBackground("bg/BG_TapRace.png", this);
     
-    auto ballspeed = screenSize.height / TR_TAPS_REQUIRED;
-    
+	// Draw the finish line
+	_drawNode = DrawNode::create(5);
+	_drawNode->drawLine(Vec2(screenCenter.x - ((winSize.width / 3) / 2), OFFSET_Y_SCREEN),
+		Vec2(screenCenter.x + ((winSize.width / 3) / 2), OFFSET_Y_SCREEN), Color4F::RED);
+	this->addChild(_drawNode);
+
+    auto ballspeed = (screenSize.height - OFFSET_Y_SCREEN * 2) / TR_TAPS_REQUIRED;
     
     // Create balls
 	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
@@ -50,7 +55,7 @@ bool Taprace::init()
 	auto mouseHeight = sheetSize.height / 4;
 	auto firstPositionX = screenCenter.x - ((MAX_NUMBER_PLAYER * mouseWidth / 2) / 2);
     for(int i=0;i<numberOfPlayers;i++){
-		auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - START_POINT_Y);
+		auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - OFFSET_Y_SCREEN);
 		_ball[i] = Ball::create();
 		_ball[i]->setBallImage("item/Animate_Mouse_120x180.png", Rect(0, mouseHeight * i, mouseWidth, mouseHeight));
 		_ball[i]->setRotation(180);
