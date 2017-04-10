@@ -30,6 +30,7 @@ public:
 	static std::string intToString(int);
 	cocos2d::Color4F getPlayerColor(int);
 	cocos2d::Vec2 getPlayerPosition(int);
+	cocos2d::Vec2 getPlayerAnchor(int);
 	void setBackground(std::string, Layer*);
 
 private:
@@ -37,6 +38,7 @@ private:
 	static Shared* minstance;
 	std::vector<cocos2d::Color4F> colors;
 	std::vector<cocos2d::Vec2> buttonPositions;
+	std::vector<cocos2d::Vec2> buttonAnchor;
 	bool debug;
 };
 

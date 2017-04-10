@@ -17,7 +17,7 @@ void SharedBall::createBall(Vec2 p, float radius, std::string fname) {
 	//_ball->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	_ball->setPosition(p);
 	auto ballImg = Sprite::create(fname);
-	ballImg->setScale(0.4);
+	ballImg->setScale(0.4f);
 	_ball->addChild(ballImg);
 	this->addChild(_ball);
 
@@ -63,18 +63,20 @@ void SharedBall::onGameStart() {
 
 GameButton* SharedBall::addButtonForPlayer(int player) {
 	auto button = GameButton::create();
-	if (numberOfPlayers < 3 && player == SHARED_PLAYER3) {
-		button->changeColor(Shared::instance()->getPlayerColor(SHARED_PLAYER2));
+	button->setPlayer(player);
+	if (numberOfPlayers == 2 && player > SHARED_PLAYER2) {
+		button->changeFormat("2Blank");
 	}
-	else if (numberOfPlayers < 4 && player == SHARED_PLAYER4) {
-		button->changeColor(Shared::instance()->getPlayerColor(SHARED_PLAYER1));
+	else if (numberOfPlayers == 3 && player > SHARED_PLAYER3) {
+		button->changeFormat("3Blank");
 	}
 	else {
-		button->changeColor(Shared::instance()->getPlayerColor(player));
+		button->changeFormat("Blank");
 	}
-	button->setPlayer(player);
-	auto currentPosition = Shared::instance()->getPlayerPosition(player);
-	button->setPosition(currentPosition);
+	button->setScale(0.5);
+
+	button->setPosition(Shared::instance()->getPlayerPosition(player));
+	button->setAnchorPoint(Shared::instance()->getPlayerAnchor(player));
 	button->setTag(player);  //Set the number to indicate button order.
 	button->addTouchEventListener(CC_CALLBACK_2(SharedBall::onPress, this));
 	this->addChild(button);

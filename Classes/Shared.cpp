@@ -18,6 +18,13 @@ Shared * Shared::instance() {
 			Vec2(screenOrigin.x+screenSize.width,screenOrigin.y),  //1
 			screenOrigin, //2
 			(screenOrigin+screenSize) }; //3
+
+		minstance->buttonAnchor = {
+			Vec2(0, 1),  //0
+			Vec2(1, 0),  //1
+			screenOrigin, //2
+			Vec2(1, 1) }; //3
+
 	}
 	return minstance;
 }
@@ -25,6 +32,14 @@ Shared * Shared::instance() {
 Vec2 Shared::getPlayerPosition(int player) {
 	if (player >= 0 && player < SHARED_MAX_PLAYERS) {
 		return buttonPositions[player];
+	}
+
+	return Vec2::ZERO;
+}
+
+Vec2 Shared::getPlayerAnchor(int player) {
+	if (player >= 0 && player < SHARED_MAX_PLAYERS) {
+		return buttonAnchor[player];
 	}
 
 	return Vec2::ZERO;

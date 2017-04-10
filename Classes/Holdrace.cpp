@@ -64,11 +64,13 @@ bool Holdrace::init()
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
-        _button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
-        _button[i]->changeColor(Shared::instance()->getPlayerColor(i));
+		_button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
+		_button[i]->setAnchorPoint(Shared::instance()->getPlayerAnchor(i));
+		_button[i]->setScale(0.5);
         _button[i]->setTag(i);  //Set the number to indicate button order.
         _button[i]->addTouchEventListener(CC_CALLBACK_2(Holdrace::onPress, this));
         _button[i]->setBall(_ball[i]);
+		_button[i]->setPlayer(i);
         this->addChild(_button[i]);
     }
     

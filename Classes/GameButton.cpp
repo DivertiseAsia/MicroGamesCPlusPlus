@@ -9,10 +9,12 @@
 #include "GameButton.hpp"
 
 
-GameButton::GameButton(float radius, Color4F color)
+GameButton::GameButton(float radius, Color4F color, int player, std::string format)
 {
     _radius = radius;
     _color = color;
+	_player = player;
+	_format = format;
 }
 
 bool GameButton::init(){
@@ -22,7 +24,7 @@ bool GameButton::init(){
         return false;
     }
     
-    this->loadTextureNormal(createSpriteFrame());
+	updateButton();
     
     this->setName("GameButton");
 
@@ -31,7 +33,19 @@ bool GameButton::init(){
 
 void GameButton::changeColor(Color4F color){
     _color = color;
-    this->loadTextureNormal(createSpriteFrame());
+	updateButton();
+}
+
+void GameButton::changeFormat(std::string format){
+	_format = format;
+	updateButton();
+}
+
+void GameButton::updateButton()
+{
+	this->loadTextureNormal("button/Button_" + _format + std::to_string(_player + 1) + ".png");
+	if(_format.compare("Hockey") != 0)
+		this->loadTexturePressed("button/Button_" + _format + std::to_string(_player + 1) + "Pressed.png");
 }
 
 void GameButton::setRadius(float r){
@@ -41,7 +55,6 @@ void GameButton::setRadius(float r){
 void GameButton::setPlayer(int player)
 {
 	_player = player;
-    this->loadTextureNormal(createSpriteFrame());
 }
 
 int GameButton::getPlayer()
@@ -66,4 +79,5 @@ SpriteFrame* GameButton::createSpriteFrame() const{
     
     return renderTexture->getSprite()->getSpriteFrame();
 }
+
 

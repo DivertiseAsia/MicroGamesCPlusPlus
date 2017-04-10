@@ -388,10 +388,11 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     _button[playerNo] = GameButton::create();
     auto m = _button[playerNo];
     
-    m->changeColor(color);
     m->setRadius(50);
     m->setPlayer(playerNo);
     m->setPosition(pos);
+	m->changeFormat("Hockey");
+	m->setScale(0.5);
     m->setTag(playerNo);  //Set the number to indicate button order.
     m->setActionTag(AR_PADDLE_DROP);
     m->setPressedActionEnabled(false); // Disable zoom action on pressed
