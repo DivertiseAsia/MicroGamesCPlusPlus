@@ -50,6 +50,40 @@ bool Taprace::init()
 
     auto ballspeed = (screenSize.height - OFFSET_Y_SCREEN * 2) / TR_TAPS_REQUIRED;
     
+	/*
+	// Create animate mices
+	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
+	auto sheetSize = mouseSprite->getContentSize();
+	auto mouseWidth = sheetSize.width / 3;
+	auto mouseHeight = sheetSize.height / 4;
+	auto firstPositionX = screenCenter.x - ((MAX_NUMBER_PLAYER * mouseWidth / 2) / 2);
+	for (int i = 0; i < numberOfPlayers; i++) {
+		auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - OFFSET_Y_SCREEN);
+		auto frames = getAnimation("item/Animate_Mouse_120x180.png", 2, i, mouseWidth, mouseHeight);
+		auto sprite = Sprite::createWithSpriteFrame(frames.front());
+		_ball[i] = Ball::create();
+		_ball[i]->setBallImage(sprite);
+		_ball[i]->setVelocity(Vec2(0, -1 * ballspeed));
+		this->addChild(_ball[i]);
+
+		auto animation = Animation::createWithSpriteFrames(frames, 1.0f / 2);
+		sprite->runAction(RepeatForever::create(Animate::create(animation)));
+
+		_button[i] = GameButton::create();
+		_button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
+		_button[i]->setAnchorPoint(Shared::instance()->getPlayerAnchor(i));
+		_button[i]->setScale(0.5);
+		_button[i]->setTag(i);  //Set the number to indicate button order.
+		_button[i]->addTouchEventListener(CC_CALLBACK_2(Taprace::onPress, this));
+		_button[i]->setBall(_ball[i]);
+		_button[i]->setPlayer(i);
+		_button[i]->changeFormat("Paw");
+		_score[i] = 0;
+
+		this->addChild(_button[i]);
+	}
+	*/
+	
     // Create balls
 	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
 	auto sheetSize = mouseSprite->getContentSize();
@@ -66,17 +100,19 @@ bool Taprace::init()
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
-        _button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
+		_button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
 		_button[i]->setAnchorPoint(Shared::instance()->getPlayerAnchor(i));
 		_button[i]->setScale(0.5);
-        _button[i]->setTag(i);  //Set the number to indicate button order.
-        _button[i]->addTouchEventListener(CC_CALLBACK_2(Taprace::onPress,this));
-        _button[i]->setBall(_ball[i]);
+		_button[i]->setTag(i);  //Set the number to indicate button order.
+		_button[i]->addTouchEventListener(CC_CALLBACK_2(Taprace::onPress, this));
+		_button[i]->setBall(_ball[i]);
 		_button[i]->setPlayer(i);
+		_button[i]->changeFormat("Paw");
 		_score[i] = 0;
         
         this->addChild(_button[i]);
     }
+	
     
     //Debug Layer
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
@@ -127,4 +163,17 @@ void Taprace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
         default:
             break;
     }
+}
+
+cocos2d::Vector<SpriteFrame*> Taprace::getAnimation(std::string imgscr, int count, int player, float width, float height)
+{
+	auto spritecache = SpriteFrameCache::getInstance();
+	cocos2d::Vector<SpriteFrame*> animFrames;
+	for (int i = 1; i <= count; i++)
+	{
+		auto spriteImg = Sprite::create(imgscr, Rect(width * i, height * player, width, height));
+		spriteImg->setRotation(180);
+		animFrames.pushBack(spriteImg->getSpriteFrame());
+	}
+	return animFrames;
 }

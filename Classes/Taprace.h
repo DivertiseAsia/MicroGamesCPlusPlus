@@ -28,6 +28,9 @@ public:
     //Event handling
     void onPress(cocos2d::Ref*, GameButton::Widget::TouchEventType);
 	using GameScene::GameScene;
+
+	//Animate mices
+	cocos2d::Vector<SpriteFrame*> getAnimation(std::string imgscr, int count, int player, float width, float height);
     
 private:
     Ball* _ball[4];

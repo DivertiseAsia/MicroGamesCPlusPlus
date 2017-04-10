@@ -36,7 +36,8 @@ public:
 	// for customize ball style
 	void setBallImage(std::string);
 	void setBallImage(std::string, Rect);
-    
+	void setBallImage(Sprite*);
+
     CC_SYNTHESIZE(Vec2, _velocity, Velocity); //create getter and setter
     CC_SYNTHESIZE(Vec2, _friction, Fricition);
     CC_SYNTHESIZE(Vec2, _acceleration, Acceleration);

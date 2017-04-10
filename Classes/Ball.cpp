@@ -103,3 +103,9 @@ void Ball::setBallImage(std::string fname, Rect area)
 	ballImg->setScale(0.5);
 	this->addChild(ballImg);
 }
+
+void Ball::setBallImage(Sprite* sprite)
+{
+	sprite->setScale(0.5);
+	this->addChild(sprite);
+}

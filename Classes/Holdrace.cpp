@@ -71,6 +71,7 @@ bool Holdrace::init()
         _button[i]->addTouchEventListener(CC_CALLBACK_2(Holdrace::onPress, this));
         _button[i]->setBall(_ball[i]);
 		_button[i]->setPlayer(i);
+		_button[i]->changeFormat("Paw");
         this->addChild(_button[i]);
     }
     
