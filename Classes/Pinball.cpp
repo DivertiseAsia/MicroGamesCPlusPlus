@@ -66,7 +66,7 @@ bool Pinball::init()
 
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
-		_button[i] = addButtonForPlayer(i);
+		_button[i] = addButtonForPlayer(i, gameType);
 		_paddle[i] = addPaddleForPlayer(i,screenSize,screenCenter);
 	}
 

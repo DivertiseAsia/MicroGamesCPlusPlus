@@ -65,7 +65,7 @@ protected:
 	void createWall(Vec2, float);
 	void onShake(cocos2d::Acceleration *, cocos2d::Event *);
 	void updatePhysics(float dt);
-	GameButton* addButtonForPlayer(int);
+	GameButton* addButtonForPlayer(int, int);
 	void createBall(Vec2, float, std::string);
 	void setupScore(int,Vec2,Vec2);
 	void updateScore();

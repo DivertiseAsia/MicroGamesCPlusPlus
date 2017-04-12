@@ -7,6 +7,7 @@
 //
 
 #include "SharedBall.h"
+#include "GameList.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
 
 USING_NS_CC;
@@ -61,17 +62,20 @@ void SharedBall::onGameStart() {
 	this->scheduleUpdate();
 }
 
-GameButton* SharedBall::addButtonForPlayer(int player) {
+GameButton* SharedBall::addButtonForPlayer(int player, int game) {
 	auto button = GameButton::create();
+	std::string format = "Paw";
+	if(game == GameType::PINBALL)
+		format = "Blank";
 	button->setPlayer(player);
 	if (numberOfPlayers == 2 && player > SHARED_PLAYER2) {
-		button->changeFormat("2Blank");
+		button->changeFormat("2" + format);
 	}
 	else if (numberOfPlayers == 3 && player > SHARED_PLAYER3) {
-		button->changeFormat("3Blank");
+		button->changeFormat("3" + format);
 	}
 	else {
-		button->changeFormat("Blank");
+		button->changeFormat(format);
 	}
 	button->setScale(0.5);
 
