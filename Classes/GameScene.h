@@ -42,6 +42,8 @@ public:
 	Menu* menu;
 	void backButtonCallback(cocos2d::Ref* pSender);
 	void pauseButtonCallback(cocos2d::Ref* pSender);
+	void replayButtonCallback(cocos2d::Ref* pSender);
+	void homeButtonCallback(cocos2d::Ref* pSender);
 	DrawNode* rectOverlay;
 
 

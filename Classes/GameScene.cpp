@@ -10,6 +10,7 @@
 #include "PlayerMenuScene.h"
 
 USING_NS_CC;
+#define PERCENT_PANEL_MARGIN .2f
 
 template <class T>
 Scene* GameScene::createScene(int numberOfPlayers)
@@ -81,25 +82,58 @@ void GameScene::endGame(int winners[], int totalWinners)
 {
 	if (gameStatus == GAME_INPROGRESS) {
 		gameStatus = GAME_OVER;
+		menu->setVisible(FALSE);
 
 		Vec2 origin = Director::getInstance()->getVisibleOrigin();
 		auto visibleSize = Director::getInstance()->getVisibleSize();
+		Vec2 centerPosition = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+		float panelMarginX = visibleSize.width * PERCENT_PANEL_MARGIN / 3;
+		float panelMarginY = visibleSize.height * PERCENT_PANEL_MARGIN;
 
-		auto label = Label::createWithBMFont(SHARED_FONT_FILE, GS_WINNER_TEXT);
+		// create winner box label
+		auto box = Sprite::create("item/Item_Win_Box.png");
+		auto label = Sprite::create("item/Item_Win_Text.png");
 
 		// position the label on the center of the screen
-		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height - label->getContentSize().height - GS_WINNER_TEXT_OFFSET_Y));
+		box->setPosition(centerPosition + Vec2(0, panelMarginY / 2));
+		label->setPosition(centerPosition + Vec2(0, panelMarginY));
 
-		auto currentScale = label->getContentSize().width / visibleSize.width;
+		auto currentScale = box->getContentSize().width / visibleSize.width;
 
+		box->setScale(GS_WINNER_TEXT_WIDTH_PERCENT / currentScale);
 		label->setScale(GS_WINNER_TEXT_WIDTH_PERCENT / currentScale);
 
 		// add the label as a child to this layer
-		this->addChild(label, 1);
+		this->addChild(box, 1);
+		this->addChild(label, 2);
+
+		// create replay and home buttons
+		auto replayBtn = MenuItemImage::create(
+			"button/Button_Win_Replay.png",
+			"button/Button_Win_Replay.png",
+			CC_CALLBACK_1(GameScene::replayButtonCallback, this));
+		replayBtn->setScale(replayBtn->getContentSize().width / visibleSize.width * 3);
+
+		auto homeBtn = MenuItemImage::create(
+			"button/Button_Win_Home.png",
+			"button/Button_Win_Home.png",
+			CC_CALLBACK_1(GameScene::homeButtonCallback, this));
+		homeBtn->setScale(homeBtn->getContentSize().width / visibleSize.width * 3);
+
+		auto panelWidth = replayBtn->getContentSize().width / 2 + homeBtn->getContentSize().width / 2 + panelMarginX;
+		replayBtn->setPosition(Vec2::ZERO - Vec2(panelWidth / 2, 0));
+		homeBtn->setPosition(Vec2::ZERO + Vec2(panelWidth / 2, 0));
+		Vector<MenuItem*> MenuItems;
+		MenuItems.pushBack(replayBtn);
+		MenuItems.pushBack(homeBtn);
+
+		// create menu, it's an autorelease object
+		this->menu = Menu::createWithArray(MenuItems);
+		menu->setPosition(centerPosition - Vec2(0, panelMarginY));
+		this->addChild(menu);
 
 		//draw winner circles
-		for (int i = 0; i < totalWinners; i++) {
+		/*for (int i = 0; i < totalWinners; i++) {
 			
 			auto dNode = DrawNode::create();
 			int radius = visibleSize.width / 6;
@@ -115,9 +149,9 @@ void GameScene::endGame(int winners[], int totalWinners)
 			}
 			
 			this->addChild(dNode);
-		}
+		}*/
 
-		this->scheduleOnce(schedule_selector(GameScene::showReturnMenu), 1.0f);
+		//this->scheduleOnce(schedule_selector(GameScene::showReturnMenu), 1.0f);
 	}
 }
 
@@ -289,6 +323,14 @@ void GameScene::backButtonCallback(cocos2d::Ref * pSender)
 void GameScene::pauseButtonCallback(cocos2d::Ref * pSender)
 {
 	pauseGame();
+}
+
+void GameScene::replayButtonCallback(cocos2d::Ref * pSender)
+{
+}
+
+void GameScene::homeButtonCallback(cocos2d::Ref * pSender)
+{
 }
 
 template Scene* GameScene::createScene<Taprace>(int);
