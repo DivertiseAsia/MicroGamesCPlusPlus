@@ -135,13 +135,19 @@ void SharedBall::createWall(Vec2 position, float height) {
 	this->addChild(drawNode);
 }
 
-void SharedBall::createBox(Vec2 position) {
+void SharedBall::createBox(Vec2 position, std::string fname) {
+	float boxPicOffset = 0.1;
+	auto spriteBox = Sprite::create(fname);
+	spriteBox->setScale(SB_BOX_SIZE / spriteBox->getContentSize().width + boxPicOffset);
+	spriteBox->setPosition(SB_BOX_SIZE / 2, SB_BOX_SIZE / 2);
+
 	auto drawNode = DrawNode::create();
 	drawNode->setContentSize(cocos2d::Size(SB_BOX_SIZE, SB_BOX_SIZE));
-	drawNode->drawSolidRect(Vec2::ZERO, Vec2(SB_BOX_SIZE, SB_BOX_SIZE), Color4F::GRAY);;
+	//drawNode->drawSolidRect(Vec2::ZERO, Vec2(SB_BOX_SIZE, SB_BOX_SIZE), Color4F::GRAY);;
 	drawNode->setPosition(position);
 	drawNode->setRotation(45);
 	drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	drawNode->addChild(spriteBox);
 
 	b2FixtureDef boxFixture;
 	boxFixture.density = SB_DEFAULT_DENSITY;

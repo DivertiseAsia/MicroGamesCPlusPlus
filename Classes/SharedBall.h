@@ -60,7 +60,7 @@ public:
     
     
 protected:
-	void createBox(Vec2);
+	void createBox(Vec2, std::string);
 	void addScore(int team, int amount);
 	void createWall(Vec2, float);
 	void onShake(cocos2d::Acceleration *, cocos2d::Event *);

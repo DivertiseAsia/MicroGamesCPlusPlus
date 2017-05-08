@@ -45,8 +45,8 @@ bool SmashBall::init()
 	createWall(Vec2(screenOrigin.x + screenSize.width - SB_WALL_WIDTH, screenOrigin.y), screenSize.height);
 
 	//boxes of fun
-	createBox(Vec2(screenCenter.x, screenCenter.y - SB_BOX_YOFFSET));
-	createBox(Vec2(screenCenter.x, screenCenter.y + SB_BOX_YOFFSET));
+	createBox(Vec2(screenCenter.x, screenCenter.y - SB_BOX_YOFFSET), "item/Item_BlockUpper.png");
+	createBox(Vec2(screenCenter.x, screenCenter.y + SB_BOX_YOFFSET), "item/Item_BlockLower.png");
 
 	//create the ball
 	float offset = SB_BALL_RESET_OFFSET_Y;
