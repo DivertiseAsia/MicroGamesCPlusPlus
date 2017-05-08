@@ -388,7 +388,6 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     _button[playerNo] = GameButton::create();
     auto m = _button[playerNo];
     
-    m->setRadius(50);
     m->setPlayer(playerNo);
     m->setPosition(pos);
 	m->changeFormat("Hockey");
@@ -413,7 +412,7 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     
     // Define a shape for the _ballBody(tangible)
     b2CircleShape circle;
-    circle.m_radius = m->getContentSize().width/2/AR_PTM_RATIO;
+    circle.m_radius = m->getContentSize().width/4/AR_PTM_RATIO;
     
     // Create shape definition and add to body
     b2FixtureDef btnShapeDef;
