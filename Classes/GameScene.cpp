@@ -341,10 +341,13 @@ void GameScene::pauseButtonCallback(cocos2d::Ref * pSender)
 
 void GameScene::replayButtonCallback(cocos2d::Ref * pSender)
 {
+	auto scene = GameList::instance()->getScene(GameType(GameList::instance()->AVAILABLE_GAMES[gameType]), numberOfPlayers);
+	Director::getInstance()->replaceScene(TransitionCrossFade::create(1, scene));
 }
 
 void GameScene::homeButtonCallback(cocos2d::Ref * pSender)
 {
+	Director::getInstance()->replaceScene(TransitionCrossFade::create(1, MainMenu::createScene()));
 }
 
 template Scene* GameScene::createScene<Taprace>(int);
