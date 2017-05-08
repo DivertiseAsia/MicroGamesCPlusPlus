@@ -78,10 +78,20 @@ bool SmashBall::init()
 }
 
 DrawNode* SmashBall::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCenter) {
+	float paddlePicOffset = 0.05;
+
+	std::string fname = "item/Item_Smashball_Spinner" + std::to_string(player + 1) + ".png";
+	auto spritePaddle = Sprite::create(fname);
+	spritePaddle->setScale(screenSize.width * SMB_PADDLE_LENGTH_PERCENT / spritePaddle->getContentSize().height - paddlePicOffset);
+
 	auto paddle = DrawNode::create();
-	auto paddleLength = screenSize.width* SMB_PADDLE_LENGTH_PERCENT;
+	auto paddleLength = screenSize.width * SMB_PADDLE_LENGTH_PERCENT;
+
+	spritePaddle->setPositionY(paddleLength / 2);
+
 	paddle->setContentSize(cocos2d::Size(SB_PADDLE_WIDTH_PX, paddleLength));
-	paddle->drawSolidRect(Vec2(0, 0), Vec2(SB_PADDLE_WIDTH_PX, paddleLength), Color4F::GRAY);
+	paddle->addChild(spritePaddle);
+	//paddle->drawSolidRect(Vec2(0, 0), Vec2(SB_PADDLE_WIDTH_PX, paddleLength), Color4F::GRAY);
 
 	int yfix = 1;
 	int xfix = 1;
@@ -117,7 +127,7 @@ DrawNode* SmashBall::addPaddleForPlayer(int player, Size screenSize, Vec2 screen
 
 	auto padControl = DrawNode::create();
 	padControl->setContentSize(cocos2d::Size(SB_PADDLE_CONTROL_RAD * 2, SB_PADDLE_CONTROL_RAD * 2));
-	padControl->drawSolidCircle(Vec2(SB_PADDLE_CONTROL_RAD, SB_PADDLE_CONTROL_RAD), SB_PADDLE_CONTROL_RAD, 360, 100, Shared::instance()->getPlayerColor(player));
+	//padControl->drawSolidCircle(Vec2(SB_PADDLE_CONTROL_RAD, SB_PADDLE_CONTROL_RAD), SB_PADDLE_CONTROL_RAD, 360, 100, Shared::instance()->getPlayerColor(player));
 	padControl->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	padControl->setPosition(_positions[player]);
 	this->addChild(padControl);

@@ -137,6 +137,7 @@ void SharedBall::createWall(Vec2 position, float height) {
 
 void SharedBall::createBox(Vec2 position, std::string fname) {
 	float boxPicOffset = 0.1;
+
 	auto spriteBox = Sprite::create(fname);
 	spriteBox->setScale(SB_BOX_SIZE / spriteBox->getContentSize().width + boxPicOffset);
 	spriteBox->setPosition(SB_BOX_SIZE / 2, SB_BOX_SIZE / 2);
