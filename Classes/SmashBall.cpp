@@ -93,7 +93,8 @@ DrawNode* SmashBall::addPaddleForPlayer(int player, Size screenSize, Vec2 screen
 		yfix = -1;
 	}
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (SMB_PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
+	_positions[player] = Vec2(Shared::instance()->getPlayerPosition(player).x + (SMB_PADDLE_OFFSET_X_PERCENT*screenSize.width)*xfix, 
+		Shared::instance()->getPlayerPosition(player).y + (DEFAULT_BUTTON_RADIUS)*yfix);
 	paddle->setPosition(_positions[player]);
 	this->addChild(paddle);
 	paddle->setAnchorPoint(Vec2::ANCHOR_MIDDLE);

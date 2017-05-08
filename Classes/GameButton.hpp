@@ -14,7 +14,7 @@
 #include "Ball.hpp"
 #include <Box2D/Box2D.h>
 
-#define DEFAULT_BUTTON_RADIUS 120
+#define DEFAULT_BUTTON_RADIUS 150
 #define DEFAULT_BUTTON_COLOR Color4F(1,0.5f,0.5f,0.8f)
 
 USING_NS_CC;
