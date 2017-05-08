@@ -136,14 +136,17 @@ void GameScene::endGame(int winners[], int totalWinners)
 		for (int i = 0; i < totalWinners; i++) {
 			auto spriteWinner = Sprite::create("item/Item_Win_Winner" + std::to_string(winners[i] + 1) + ".png");
 			spriteWinner->setScale(spriteWinner->getContentSize().width / visibleSize.width * 3);
+			auto winnerOffsetSize = spriteWinner->getContentSize().width * (1 - PERCENT_PANEL_MARGIN);
 			if (totalWinners == 1) {
 				spriteWinner->setPosition(centerPosition + Vec2(0, winnerYoffset - spriteWinner->getContentSize().height / 5));
 			}
 			else {
-				spriteWinner->setPosition(centerPosition + Vec2(-(spriteWinner->getContentSize().width / totalWinners - getContentSize().width * i), winnerYoffset - spriteWinner->getContentSize().height / 5));
+				spriteWinner->setPosition(centerPosition + 
+					Vec2(-(winnerOffsetSize / totalWinners - winnerOffsetSize * i),
+						winnerYoffset - spriteWinner->getContentSize().height / 5));
 			}
 
-			this->addChild(spriteWinner, 3 + i);
+			this->addChild(spriteWinner, 3);
 		}
 
 		//draw winner circles
