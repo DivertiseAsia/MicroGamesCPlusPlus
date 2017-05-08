@@ -318,6 +318,11 @@ void Airhockey::createWall() {
 }
 
 void Airhockey::drawBoard(){
+	auto bar0 = Sprite::create("item/Item_Hockey_BlockUpperLeft.png");
+	auto bar1 = Sprite::create("item/Item_Hockey_BlockUpperRight.png");
+	auto bar2 = Sprite::create("item/Item_Hockey_BlockLowerLeft.png");
+	auto bar3 = Sprite::create("item/Item_Hockey_BlockLowerRight.png");
+
     //Draw Board frame
     _drawNode->drawRect(_screenOrigin+Vec2(2,2), Vec2(_screenSize)+_screenOrigin-Vec2(4,4), Color4F::GRAY);
 
