@@ -318,22 +318,44 @@ void Airhockey::createWall() {
 }
 
 void Airhockey::drawBoard(){
+	auto goal_size = AR_GOAL_SIZE;// respect to visibleWidth
+	auto left = (1 - goal_size) / 2 * _screenSize.width;
+	auto right = (1 - (1 - goal_size) / 2)*_screenSize.width;
+
 	auto bar0 = Sprite::create("item/Item_Hockey_BlockUpperLeft.png");
 	auto bar1 = Sprite::create("item/Item_Hockey_BlockUpperRight.png");
 	auto bar2 = Sprite::create("item/Item_Hockey_BlockLowerLeft.png");
 	auto bar3 = Sprite::create("item/Item_Hockey_BlockLowerRight.png");
 
+	auto barscale = (_screenOrigin.x + left) / bar0->getContentSize().width;
+
+	bar0->setScale(barscale);
+	bar1->setScale(barscale);
+	bar2->setScale(barscale);
+	bar3->setScale(barscale);
+	
+	bar0->setPosition((bar0->getContentSize().width * barscale) / 2, 
+		_screenSize.height - (bar0->getContentSize().height * barscale) / 2);
+	bar1->setPosition(_screenSize.width - (bar1->getContentSize().width * barscale) / 2, 
+		_screenSize.height - (bar1->getContentSize().height * barscale) / 2);
+	bar2->setPosition((bar2->getContentSize().width * barscale) / 2, 
+		(bar2->getContentSize().height * barscale) / 2);
+	bar3->setPosition(_screenSize.width - (bar3->getContentSize().width * barscale) / 2, 
+		(bar2->getContentSize().height * barscale) / 2);
+
+	_drawNode->setContentSize(_screenSize);
+	_drawNode->addChild(bar0);
+	_drawNode->addChild(bar1);
+	_drawNode->addChild(bar2);
+	_drawNode->addChild(bar3);
+
     //Draw Board frame
-    _drawNode->drawRect(_screenOrigin+Vec2(2,2), Vec2(_screenSize)+_screenOrigin-Vec2(4,4), Color4F::GRAY);
+    //_drawNode->drawRect(_screenOrigin+Vec2(2,2), Vec2(_screenSize)+_screenOrigin-Vec2(4,4), Color4F::GRAY);
 
     //_drawNode->drawLine(Vec2(_screenOrigin.x, _screenCenter.y), Vec2(_screenSize.width+_screenOrigin.x, _screenCenter.y), Color4F::GRAY);   //Add center line
     
-    auto goal_size = AR_GOAL_SIZE;// respect to visibleWidth
-    auto left = (1-goal_size)/2*_screenSize.width;
-    auto right = (1-(1-goal_size)/2)*_screenSize.width;
-    
-    _drawNode->drawLine(_screenOrigin+Vec2(left,2), _screenOrigin+Vec2(right,2), Color4F::BLACK);
-    _drawNode->drawLine(_screenOrigin+Vec2(left,_screenSize.height-4), _screenOrigin+Vec2(right,_screenSize.height-4), Color4F::BLACK);
+    //_drawNode->drawLine(_screenOrigin+Vec2(left,2), _screenOrigin+Vec2(right,2), Color4F::BLACK);
+    //_drawNode->drawLine(_screenOrigin+Vec2(left,_screenSize.height-4), _screenOrigin+Vec2(right,_screenSize.height-4), Color4F::BLACK);
     
     
     addScores();
