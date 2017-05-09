@@ -40,8 +40,8 @@ bool Holdrace::init()
     // Create flags, balls and buttons
 	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
 	auto sheetSize = mouseSprite->getContentSize();
-	auto mouseWidth = sheetSize.width / 3;
-	auto mouseHeight = sheetSize.height / 4;
+	mouseWidth = sheetSize.width / 3;
+	mouseHeight = sheetSize.height / 4;
 	auto firstPositionX = screenCenter.x - ((4 * mouseWidth/2) / 2);
     for(int i=0;i<numberOfPlayers;i++){
 		_drawNode = DrawNode::create();
@@ -49,11 +49,6 @@ bool Holdrace::init()
 		flagImg->setPosition(Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), OFFSET_Y_SCREEN));
 		_drawNode->addChild(flagImg);
 		this->addChild(_drawNode);
-		//Vector<SpriteFrame*> animFrames;
-		//animFrames.reserve(3);
-		//animFrames.pushBack(SpriteFrame::create("Animate_Mouse_120x180.png", Rect(0, 120 * i, 120, 180)));
-		//animFrames.pushBack(SpriteFrame::create("Animate_Mouse_120x180.png", Rect(120, 120 * i, 120, 180)));
-		//animFrames.pushBack(SpriteFrame::create("Animate_Mouse_120x180.png", Rect(240, 120 * i, 120, 180)));
         auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - OFFSET_Y_SCREEN);
         _ball[i] = Ball::create();
 		_ball[i]->setBallImage("item/Animate_Mouse_120x180.png", Rect(0, mouseHeight * i, mouseWidth, mouseHeight));
@@ -139,7 +134,10 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
         case ui::Widget::TouchEventType::ENDED:{
 			if (button->getActionTag() != 5) { break; }//was never primed properly eg pressed before game start
             button->setActionTag(10);
-            button->getBall()->setAcceleration(Vec2(0,0));
+			auto ball = button->getBall();
+            ball->setAcceleration(Vec2(0,0));
+			auto player = ball->getTag();
+			ball->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * 2, mouseHeight * player, mouseWidth, mouseHeight));
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
             break;
         }

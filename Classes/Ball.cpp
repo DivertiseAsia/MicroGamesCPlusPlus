@@ -101,6 +101,7 @@ void Ball::setBallImage(std::string fname, Rect area)
 {
 	auto ballImg = Sprite::create(fname, area);
 	ballImg->setScale(0.5);
+	this->removeAllChildrenWithCleanup(true);
 	this->addChild(ballImg);
 }
 

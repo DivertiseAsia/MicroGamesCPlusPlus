@@ -37,6 +37,8 @@ private:
     Ball* _ball[4];
     GameButton* _button[4];
     DrawNode* _drawNode;
+	float mouseWidth;
+	float mouseHeight;
 };
 
 #endif // __HOLDRACE_SCENE_H__
