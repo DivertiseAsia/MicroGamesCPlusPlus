@@ -48,20 +48,19 @@ bool SmashBall::init()
 	createBox(Vec2(screenCenter.x, screenCenter.y - SB_BOX_YOFFSET), "item/Item_BlockUpper.png");
 	createBox(Vec2(screenCenter.x, screenCenter.y + SB_BOX_YOFFSET), "item/Item_BlockLower.png");
 
-	//create the ball
-	float offset = SB_BALL_RESET_OFFSET_Y;
-	if (cocos2d::rand_0_1() > 0.5) {
-		offset = -SB_BALL_RESET_OFFSET_Y;
-	}
-	auto p = Vec2(screenCenter.x+cocos2d::random(-SB_BALL_RESET_OFFSET_X, SB_BALL_RESET_OFFSET_X), screenCenter.y+offset);
-	createBall(p, DEFAULT_BALL_RADIUS, "item/Item_Ball.png");
-
 	//create the controls and paddles
 	for (int i = 0; i < SHARED_MAX_PLAYERS; i++) {
 		_button[i] = addButtonForPlayer(i, gameType);
 		_paddle[i] = addPaddleForPlayer(i,screenSize,screenCenter);
 	}
 
+	//create the ball
+	float offset = SB_BALL_RESET_OFFSET_Y;
+	if (cocos2d::rand_0_1() > 0.5) {
+		offset = -SB_BALL_RESET_OFFSET_Y;
+	}
+	auto p = Vec2(screenCenter.x + cocos2d::random(-SB_BALL_RESET_OFFSET_X, SB_BALL_RESET_OFFSET_X), screenCenter.y + offset);
+	createBall(p, DEFAULT_BALL_RADIUS, "item/Item_Ball.png");
 	
 #ifdef DEBUG_MODE
 	//Debug Layer
