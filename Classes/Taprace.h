@@ -37,6 +37,9 @@ private:
     GameButton* _button[4];
 	int _score[4];
     DrawNode* _drawNode;
+	float mouseWidth;
+	float mouseHeight;
+	std::vector<int> miceStep;
 };
 
 #endif // __Taprace_SCENE_H__

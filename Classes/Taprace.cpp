@@ -9,6 +9,7 @@
 #include "Taprace.h"
 #include "GameList.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
+#include <vector>
 
 USING_NS_CC;
 
@@ -87,9 +88,11 @@ bool Taprace::init()
     // Create balls
 	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
 	auto sheetSize = mouseSprite->getContentSize();
-	auto mouseWidth = sheetSize.width / 3;
-	auto mouseHeight = sheetSize.height / 4;
+	mouseWidth = sheetSize.width / 3;
+	mouseHeight = sheetSize.height / 4;
 	auto firstPositionX = screenCenter.x - ((MAX_NUMBER_PLAYER * mouseWidth / 2) / 2);
+	miceStep = std::vector<int>(numberOfPlayers, 1);
+
     for(int i=0;i<numberOfPlayers;i++){
 		auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - OFFSET_Y_SCREEN);
 		_ball[i] = Ball::create();
@@ -104,6 +107,7 @@ bool Taprace::init()
 		_button[i]->setAnchorPoint(Shared::instance()->getPlayerAnchor(i));
 		_button[i]->setScale(0.5);
 		_button[i]->setTag(i);  //Set the number to indicate button order.
+		_button[i]->setUserData(&miceStep[i]);
 		_button[i]->addTouchEventListener(CC_CALLBACK_2(Taprace::onPress, this));
 		_button[i]->setBall(_ball[i]);
 		_button[i]->setPlayer(i);
@@ -153,7 +157,12 @@ void Taprace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
             auto button = static_cast<GameButton*>(sender);
             button->getBall()->moveNext();
 			_score[button->getPlayer()] ++;
-            SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+
+			auto player = button->getPlayer();
+			int* step = (int*)button->getUserData();
+			button->getBall()->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * *step, mouseHeight * player, mouseWidth, mouseHeight));
+			miceStep[player] = -*step + 1;
+			SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
 
 			if (_score[button->getPlayer()] > TR_TAPS_REQUIRED) {
 				endGame(button->getPlayer());

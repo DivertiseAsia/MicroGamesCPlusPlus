@@ -134,10 +134,9 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
         case ui::Widget::TouchEventType::ENDED:{
 			if (button->getActionTag() != 5) { break; }//was never primed properly eg pressed before game start
             button->setActionTag(10);
-			auto ball = button->getBall();
-            ball->setAcceleration(Vec2(0,0));
-			auto player = ball->getTag();
-			ball->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * 2, mouseHeight * player, mouseWidth, mouseHeight));
+			button->getBall()->setAcceleration(Vec2(0,0));
+			auto player = button->getPlayer();
+			button->getBall()->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * 2, mouseHeight * player, mouseWidth, mouseHeight));
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
             break;
         }
