@@ -46,8 +46,9 @@ public:
     // Our game custom functions
     void startGame(float);
     void initTouchHandling();
-    void createWall();
-    void drawBoard();
+	void drawBoard();
+	void createBumper(cocos2d::Sprite*, float width, float height);
+	void createWall();
     void addScores();
     void placePuck();
     void addMallet(int playerNo, Vec2 pos, Color4F color);
@@ -77,6 +78,8 @@ private:
     Label* _scoreTop;
     Label* _scoreBottom;
     
+	b2Body* _bumperBody;
+	b2Fixture* _bumperFixture;
     b2Body* _boxBody;
     b2Body* _ballBody;
     b2Fixture* _ballFixture;

@@ -266,57 +266,6 @@ void Airhockey::startGame(float s){
     GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
 
-void Airhockey::createWall() {
-    Vec2 origin = Director::getInstance()->getVisibleOrigin() * 1.0/AR_PTM_RATIO;
-    Size visibleSize = Director::getInstance()->getVisibleSize() * 1.0/AR_PTM_RATIO;
-    
-    auto margin = 0.1;
-    
-    origin += Vec2(+margin,+margin);
-    visibleSize = visibleSize - Size(margin*2,margin*2);
-    
-    // Create edges around the entire screen
-    b2BodyDef boxBodyDef;
-    boxBodyDef.position.Set(origin.x,origin.y);
-    _boxBody = _world->CreateBody(&boxBodyDef);
-    
-    b2EdgeShape groundBox;
-    b2FixtureDef groundBoxDef;
-    groundBoxDef.shape = &groundBox;
-    
-    groundBox.Set(b2Vec2(0,0), b2Vec2(visibleSize.width, 0));    //bottom
-    _boxBody->CreateFixture(&groundBoxDef);
-    
-    groundBox.Set(b2Vec2(0,0), b2Vec2(0, visibleSize.height));   //left
-    _boxBody->CreateFixture(&groundBoxDef);
-    
-    groundBox.Set(b2Vec2(0, visibleSize.height), b2Vec2(visibleSize.width,visibleSize.height));//top
-    _boxBody->CreateFixture(&groundBoxDef);
-    
-    groundBox.Set(b2Vec2(visibleSize.width, visibleSize.height), b2Vec2(visibleSize.width, 0)); //right
-    _boxBody->CreateFixture(&groundBoxDef);
-    
-    
-    //Create goal lines
-    auto goal_size = AR_GOAL_SIZE;// respect to visibleWidth
-    auto left = (1-goal_size)/2*visibleSize.width;
-    auto right = (1-(1-goal_size)/2)*visibleSize.width;
-    groundBoxDef.userData = (void*)123;
-    groundBox.Set(b2Vec2(left, 0.1f), b2Vec2(right, 0.1f)); //bottom goal
-    _bottomGoal = _boxBody->CreateFixture(&groundBoxDef);
-    
-    groundBoxDef.userData = (void*)321;
-    groundBox.Set(b2Vec2(left, visibleSize.height-0.1f), b2Vec2(right, visibleSize.height-0.1f)); //top goal
-    _topGoal = _boxBody->CreateFixture(&groundBoxDef);
-    
-    
-    //Draw center line
-    groundBox.Set(b2Vec2(0, visibleSize.height/2), b2Vec2(visibleSize.width, visibleSize.height/2)); //center line
-    groundBoxDef.filter.maskBits = ~AR_BIT_MASK_PUCK;  //Allow PUCK to pass
-    
-    _boxBody->CreateFixture(&groundBoxDef);
-}
-
 void Airhockey::drawBoard(){
 	auto goal_size = AR_GOAL_SIZE;// respect to visibleWidth
 	auto left = (1 - goal_size) / 2 * _screenSize.width;
@@ -349,16 +298,86 @@ void Airhockey::drawBoard(){
 	_drawNode->addChild(bar2);
 	_drawNode->addChild(bar3);
 
-    //Draw Board frame
-    //_drawNode->drawRect(_screenOrigin+Vec2(2,2), Vec2(_screenSize)+_screenOrigin-Vec2(4,4), Color4F::GRAY);
+	createBumper(bar0, (bar0->getContentSize().width * barscale), (bar0->getContentSize().height * barscale));
+	createBumper(bar1, (bar1->getContentSize().width * barscale), (bar1->getContentSize().height * barscale));
+	createBumper(bar2, (bar2->getContentSize().width * barscale), (bar2->getContentSize().height * barscale));
+	createBumper(bar3, (bar3->getContentSize().width * barscale), (bar3->getContentSize().height * barscale));
 
-    //_drawNode->drawLine(Vec2(_screenOrigin.x, _screenCenter.y), Vec2(_screenSize.width+_screenOrigin.x, _screenCenter.y), Color4F::GRAY);   //Add center line
-    
-    //_drawNode->drawLine(_screenOrigin+Vec2(left,2), _screenOrigin+Vec2(right,2), Color4F::BLACK);
-    //_drawNode->drawLine(_screenOrigin+Vec2(left,_screenSize.height-4), _screenOrigin+Vec2(right,_screenSize.height-4), Color4F::BLACK);
-    
-    
     addScores();
+}
+
+void Airhockey::createBumper(cocos2d::Sprite* sprite, float width, float height)
+{
+	b2BodyDef bumperBodyDef;
+	bumperBodyDef.type = b2BodyType::b2_staticBody;
+	bumperBodyDef.userData = sprite;
+	bumperBodyDef.position.Set(sprite->getPosition().x / AR_PTM_RATIO, sprite->getPosition().y / AR_PTM_RATIO);
+
+	_bumperBody = _world->CreateBody(&bumperBodyDef);
+
+	b2PolygonShape bumperShape;
+	bumperShape.SetAsBox(width / 2 / AR_PTM_RATIO, height / 2 / AR_PTM_RATIO);
+	bumperShape.m_centroid = b2Vec2(0, 0);
+
+	b2FixtureDef bumperFixtureDef;
+	bumperFixtureDef.shape = &bumperShape;
+	bumperFixtureDef.density = 10.0f;
+	bumperFixtureDef.friction = 0.8f;
+	bumperFixtureDef.restitution = 0.6f;
+	bumperFixtureDef.filter.categoryBits = AR_BIT_MASK_PUCK;   //Set the shape to belong to PUCK cat
+
+	_bumperFixture = _bumperBody->CreateFixture(&bumperFixtureDef);
+}
+
+void Airhockey::createWall() {
+	Vec2 origin = Director::getInstance()->getVisibleOrigin() * 1.0 / AR_PTM_RATIO;
+	Size visibleSize = Director::getInstance()->getVisibleSize() * 1.0 / AR_PTM_RATIO;
+
+	auto margin = 0.1;
+
+	origin += Vec2(+margin, +margin);
+	visibleSize = visibleSize - Size(margin * 2, margin * 2);
+
+	// Create edges around the entire screen
+	b2BodyDef boxBodyDef;
+	boxBodyDef.position.Set(origin.x, origin.y);
+	_boxBody = _world->CreateBody(&boxBodyDef);
+
+	b2EdgeShape groundBox;
+	b2FixtureDef groundBoxDef;
+	groundBoxDef.shape = &groundBox;
+
+	groundBox.Set(b2Vec2(0, 0), b2Vec2(visibleSize.width, 0));    //bottom
+	_boxBody->CreateFixture(&groundBoxDef);
+
+	groundBox.Set(b2Vec2(0, 0), b2Vec2(0, visibleSize.height));   //left
+	_boxBody->CreateFixture(&groundBoxDef);
+
+	groundBox.Set(b2Vec2(0, visibleSize.height), b2Vec2(visibleSize.width, visibleSize.height));//top
+	_boxBody->CreateFixture(&groundBoxDef);
+
+	groundBox.Set(b2Vec2(visibleSize.width, visibleSize.height), b2Vec2(visibleSize.width, 0)); //right
+	_boxBody->CreateFixture(&groundBoxDef);
+
+
+	//Create goal lines
+	auto goal_size = AR_GOAL_SIZE;// respect to visibleWidth
+	auto left = (1 - goal_size) / 2 * visibleSize.width;
+	auto right = (1 - (1 - goal_size) / 2)*visibleSize.width;
+	groundBoxDef.userData = (void*)123;
+	groundBox.Set(b2Vec2(left, 0.1f), b2Vec2(right, 0.1f)); //bottom goal
+	_bottomGoal = _boxBody->CreateFixture(&groundBoxDef);
+
+	groundBoxDef.userData = (void*)321;
+	groundBox.Set(b2Vec2(left, visibleSize.height - 0.1f), b2Vec2(right, visibleSize.height - 0.1f)); //top goal
+	_topGoal = _boxBody->CreateFixture(&groundBoxDef);
+
+
+	//Draw center line
+	groundBox.Set(b2Vec2(0, visibleSize.height / 2), b2Vec2(visibleSize.width, visibleSize.height / 2)); //center line
+	groundBoxDef.filter.maskBits = ~AR_BIT_MASK_PUCK;  //Allow PUCK to pass
+
+	_boxBody->CreateFixture(&groundBoxDef);
 }
 
 void Airhockey::addScores(){
