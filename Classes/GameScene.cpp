@@ -41,6 +41,7 @@ GameScene* GameScene::create(int numberOfPlayers) {
 	if (pRet && pRet->init())
 	{
 		pRet->autorelease();
+		log("Set gameType %d", pRet->gameType);
 		return pRet;
 	}
 	else
@@ -344,6 +345,7 @@ void GameScene::pauseButtonCallback(cocos2d::Ref * pSender)
 
 void GameScene::replayButtonCallback(cocos2d::Ref * pSender)
 {
+	log("Replay gameType %d", gameType);
 	auto scene = GameList::instance()->getScene(GameType(GameList::instance()->AVAILABLE_GAMES[gameType]), numberOfPlayers);
 	Director::getInstance()->replaceScene(TransitionCrossFade::create(1, scene));
 }
