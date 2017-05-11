@@ -59,3 +59,4 @@ proj.win32/game.aps
 # others
 *.suo
 *.db
+*.idea
