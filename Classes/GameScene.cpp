@@ -135,7 +135,7 @@ void GameScene::endGame(int winners[], int totalWinners)
 
 		float winnerYoffset = panelMarginY - label->getContentSize().height;
 		for (int i = 0; i < totalWinners; i++) {
-			auto spriteWinner = Sprite::create("item/Item_Win_Winner" + std::to_string(winners[i] + 1) + ".png");
+			auto spriteWinner = Sprite::create("item/Item_Win_Winner" + Shared::intToString(winners[i] + 1) + ".png");
 			spriteWinner->setScale(spriteWinner->getContentSize().width / visibleSize.width * 3);
 			auto winnerOffsetSize = spriteWinner->getContentSize().width * (1 - PERCENT_PANEL_MARGIN);
 			if (totalWinners == 1) {
@@ -320,7 +320,7 @@ void GameScene::createBtnPanel() {
 		"button/Button_Pause.png",
 		"button/Button_Pause.png",
 		CC_CALLBACK_1(GameScene::pauseButtonCallback, this));
-	auto diffSize = backBtn->getContentSize().width - pauseBtn->getContentSize().width;
+	float diffSize = backBtn->getContentSize().width - pauseBtn->getContentSize().width;
 	pauseBtn->setPosition((screenSize.width - pauseBtn->getContentSize().width / 2) - abs(diffSize) / 2,
 		screenCenter.y - pauseBtn->getContentSize().height);
 	float scaleFromBackBtn = pauseBtn->getContentSize().width / backBtn->getContentSize().width;

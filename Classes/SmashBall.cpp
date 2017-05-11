@@ -79,7 +79,7 @@ bool SmashBall::init()
 DrawNode* SmashBall::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCenter) {
 	float paddlePicOffset = 0.05;
 
-	std::string fname = "item/Item_Smashball_Spinner" + std::to_string(player + 1) + ".png";
+	std::string fname = "item/Item_Smashball_Spinner" + Shared::intToString(player + 1) + ".png";
 	auto spritePaddle = Sprite::create(fname);
 	spritePaddle->setScale(screenSize.width * SMB_PADDLE_LENGTH_PERCENT / spritePaddle->getContentSize().height - paddlePicOffset);
 

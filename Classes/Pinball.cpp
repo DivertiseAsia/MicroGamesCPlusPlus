@@ -88,7 +88,7 @@ DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCe
 	float paddleScaleOffset = 0.15;
 	int paddleOffset = 20;
 
-	std::string fname = "item/Item_Pawball_Hand" + std::to_string(player + 1) + ".png";
+	std::string fname = "item/Item_Pawball_Hand" + Shared::intToString(player + 1) + ".png";
 	auto spritePaddle = Sprite::create(fname);
 	spritePaddle->setScale(screenSize.width * PB_PADDLE_LENGTH_PERCENT / spritePaddle->getContentSize().height + paddleScaleOffset);
 	if (player == 2 || player == 3)

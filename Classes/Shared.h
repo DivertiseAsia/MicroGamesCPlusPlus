@@ -19,6 +19,14 @@
 
 #define SHARED_GAME_NAME "MicroGames"
 
+#ifndef FALSE
+#define FALSE               0
+#endif
+
+#ifndef TRUE
+#define TRUE                1
+#endif
+
 USING_NS_CC;
 
 //#define DEBUG_MODE

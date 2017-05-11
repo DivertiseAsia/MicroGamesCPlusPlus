@@ -7,6 +7,7 @@
 //
 
 #include "GameButton.hpp"
+#include "Shared.h"
 
 
 GameButton::GameButton(float radius, Color4F color, int player, std::string format)
@@ -43,9 +44,9 @@ void GameButton::changeFormat(std::string format){
 
 void GameButton::updateButton()
 {
-	this->loadTextureNormal("button/Button_" + _format + std::to_string(_player + 1) + ".png");
+	this->loadTextureNormal("button/Button_" + _format + Shared::intToString(_player + 1) + ".png");
 	if(_format.compare("Hockey") != 0)
-		this->loadTexturePressed("button/Button_" + _format + std::to_string(_player + 1) + "Pressed.png");
+		this->loadTexturePressed("button/Button_" + _format + Shared::intToString(_player + 1) + "Pressed.png");
 }
 
 void GameButton::setRadius(float r){
