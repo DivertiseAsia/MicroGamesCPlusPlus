@@ -45,6 +45,8 @@ bool Holdrace::init()
 	mouseWidth = sheetSize.width / 3;
 	mouseHeight = sheetSize.height / 4;
 	auto firstPositionX = screenCenter.x - ((4 * mouseWidth/2) / 2);
+	miceStep = std::vector<int>(numberOfPlayers, 1);
+
     for(int i=0;i<numberOfPlayers;i++){
 		_drawNode = DrawNode::create();
 		auto flagImg = Sprite::create("item/Item_Jumpy Mice_Flag.png");
@@ -58,6 +60,7 @@ bool Holdrace::init()
         _ball[i]->setPosition(p);
         _ball[i]->setFricition(Vec2(0,HR_BALL_FRICTION));
         _ball[i]->setTag(i);
+		_ball[i]->setUserData(&miceStep[i]);
         this->addChild(_ball[i]);
         
         _button[i] = GameButton::create();
@@ -117,8 +120,17 @@ void Holdrace::update(float dt){
 				scale = std::max<float>(1, scale);
 				_ball[i]->setScale(scale);
 			}
+			else if (running[i] > 0){
+				running[i] += 1;
+				if (running[i] % 10 == 0) {
+					int* step = (int*)_ball[i]->getUserData();
+					_ball[i]->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * *step, mouseHeight * i, mouseWidth, mouseHeight));
+					miceStep[i] = -*step + 1;
+				}
+			}
 		}
 	}
+
 }
 
 //This method will be called on the Node entered.
@@ -142,6 +154,8 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
     switch (type)
     {
         case ui::Widget::TouchEventType::BEGAN:{
+			auto player = button->getPlayer();
+			running[player] = 1;
             button->getBall()->setAcceleration(Vec2(0,-HR_BALL_ACCELERATION));
 			button->setActionTag(5);//prime the button 
             break;

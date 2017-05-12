@@ -39,7 +39,9 @@ private:
     DrawNode* _drawNode;
 	float mouseWidth;
 	float mouseHeight;
+	std::vector<int> miceStep;
 	bool jumped[4] = { false, false, false, false };
+	int running[4] = { 0, 0, 0, 0 };
 	float vmax[4] = { .0f, .0f, .0f, .0f };
 	float t[4] = { .0f, .0f, .0f, .0f };
 };
