@@ -32,13 +32,16 @@ public:
     
 	using GameScene::GameScene;
 private:
-    bool _moved[4] = {false, false, false, false};
+	bool _moved[4] = { false, false, false, false };
     int _moveCount = 0;
     Ball* _ball[4];
     GameButton* _button[4];
     DrawNode* _drawNode;
 	float mouseWidth;
 	float mouseHeight;
+	bool jumped[4] = { false, false, false, false };
+	float vmax[4] = { .0f, .0f, .0f, .0f };
+	float t[4] = { .0f, .0f, .0f, .0f };
 };
 
 #endif // __HOLDRACE_SCENE_H__

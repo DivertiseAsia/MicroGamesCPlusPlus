@@ -9,12 +9,14 @@
 #include "Holdrace.h"
 #include "GameList.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
+#include <math.h>
 
 USING_NS_CC;
 
 #define OFFSET_Y_SCREEN 45
 #define MOUSE_OFFSET_X 20
 #define MAX_NUMBER_PLAYER 4
+#define TIME_OFFSET 0.002
 
 // on "init" you need to initialize your instance
 bool Holdrace::init()
@@ -100,10 +102,23 @@ void Holdrace::draw(Renderer* renderer, const Mat4& transform, bool transformUpd
 
 void Holdrace::update(float dt){
 
-    for(int i=0;i<numberOfPlayers;i++){
-        if (!_moved[i])
-            _ball[i]->moveNext();
-    }
+	for (int i = 0; i < numberOfPlayers; i++) {
+		if (!_moved[i]) {
+			_ball[i]->moveNext();
+			if (jumped[i]) {
+				auto v = -_ball[i]->getVelocity().y;
+
+				if (v < vmax[i] / 3)
+					t[i] -= TIME_OFFSET;
+				else
+					t[i] += TIME_OFFSET;
+
+				auto scale = 1 + vmax[i] * t[i] - 0.5 * pow(t[i], 2);
+				scale = std::max<float>(1, scale);
+				_ball[i]->setScale(scale);
+			}
+		}
+	}
 }
 
 //This method will be called on the Node entered.
@@ -136,6 +151,8 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
             button->setActionTag(10);
 			button->getBall()->setAcceleration(Vec2(0,0));
 			auto player = button->getPlayer();
+			jumped[player] = true;
+			vmax[player] = -button->getBall()->getVelocity().y;
 			button->getBall()->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * 2, mouseHeight * player, mouseWidth, mouseHeight));
             SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
             break;
