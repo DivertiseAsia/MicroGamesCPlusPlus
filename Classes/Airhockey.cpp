@@ -38,9 +38,11 @@ bool Airhockey::init()
     _world = new b2World(b2Vec2(0.0f, 0.0f));  //Create a physic world.
     _world->SetContactListener(this);
     
-    //Create drawNode and draw the center line
-    _drawNode = DrawNode::create(10);    //Default line width
-    this->addChild(_drawNode);
+    //Create drawNode
+    //_drawNode = DrawNode::create();
+	//_drawNode->setPosition(_screenOrigin);
+	//_drawNode->setContentSize(_screenSize);
+    //this->addChild(_drawNode);
     
     drawBoard();
     createWall();
@@ -271,37 +273,37 @@ void Airhockey::drawBoard(){
 	auto left = (1 - goal_size) / 2 * _screenSize.width;
 	auto right = (1 - (1 - goal_size) / 2)*_screenSize.width;
 
-	auto bar0 = Sprite::create("item/Item_Hockey_BlockUpperLeft.png");
-	auto bar1 = Sprite::create("item/Item_Hockey_BlockUpperRight.png");
-	auto bar2 = Sprite::create("item/Item_Hockey_BlockLowerLeft.png");
-	auto bar3 = Sprite::create("item/Item_Hockey_BlockLowerRight.png");
+	auto barUpLeft = Sprite::create("item/Item_Hockey_BlockUpperLeft.png");
+	auto barUpRight = Sprite::create("item/Item_Hockey_BlockUpperRight.png");
+	auto barLowLeft = Sprite::create("item/Item_Hockey_BlockLowerLeft.png");
+	auto barLowRight = Sprite::create("item/Item_Hockey_BlockLowerRight.png");
 
-	auto barscale = (_screenOrigin.x + left) / bar0->getContentSize().width;
+	auto barscale = left / barUpLeft->getContentSize().width;
 
-	bar0->setScale(barscale);
-	bar1->setScale(barscale);
-	bar2->setScale(barscale);
-	bar3->setScale(barscale);
+	barUpLeft->setScale(barscale);
+	barUpRight->setScale(barscale);
+	barLowLeft->setScale(barscale);
+	barLowRight->setScale(barscale);
 	
-	bar0->setPosition((bar0->getContentSize().width * barscale) / 2, 
-		_screenSize.height - (bar0->getContentSize().height * barscale) / 2);
-	bar1->setPosition(_screenSize.width - (bar1->getContentSize().width * barscale) / 2, 
-		_screenSize.height - (bar1->getContentSize().height * barscale) / 2);
-	bar2->setPosition((bar2->getContentSize().width * barscale) / 2, 
-		(bar2->getContentSize().height * barscale) / 2);
-	bar3->setPosition(_screenSize.width - (bar3->getContentSize().width * barscale) / 2, 
-		(bar2->getContentSize().height * barscale) / 2);
+	barUpLeft->setAnchorPoint(Vec2(0, 1));
+	barUpRight->setAnchorPoint(Vec2::ONE);
+	barLowLeft->setAnchorPoint(Vec2::ZERO);
+	barLowRight->setAnchorPoint(Vec2(1, 0));
 
-	_drawNode->setContentSize(_screenSize);
-	_drawNode->addChild(bar0);
-	_drawNode->addChild(bar1);
-	_drawNode->addChild(bar2);
-	_drawNode->addChild(bar3);
+	barUpLeft->setPosition(Vec2(_screenOrigin.x, _screenSize.height));
+	barUpRight->setPosition(_screenSize);
+	barLowLeft->setPosition(_screenOrigin);
+	barLowRight->setPosition(Vec2(_screenSize.width, _screenOrigin.y));
 
-	createBumper(bar0, (bar0->getContentSize().width * barscale), (bar0->getContentSize().height * barscale));
-	createBumper(bar1, (bar1->getContentSize().width * barscale), (bar1->getContentSize().height * barscale));
-	createBumper(bar2, (bar2->getContentSize().width * barscale), (bar2->getContentSize().height * barscale));
-	createBumper(bar3, (bar3->getContentSize().width * barscale), (bar3->getContentSize().height * barscale));
+	this->addChild(barUpLeft);
+	this->addChild(barUpRight);
+	this->addChild(barLowLeft);
+	this->addChild(barLowRight);
+
+	createBumper(barUpLeft, (barUpLeft->getContentSize().width * barscale), (barUpLeft->getContentSize().height * barscale));
+	createBumper(barUpRight, (barUpRight->getContentSize().width * barscale), (barUpRight->getContentSize().height * barscale));
+	createBumper(barLowLeft, (barLowLeft->getContentSize().width * barscale), (barLowLeft->getContentSize().height * barscale));
+	createBumper(barLowRight, (barLowRight->getContentSize().width * barscale), (barLowRight->getContentSize().height * barscale));
 
     addScores();
 }
@@ -315,9 +317,14 @@ void Airhockey::createBumper(cocos2d::Sprite* sprite, float width, float height)
 
 	_bumperBody = _world->CreateBody(&bumperBodyDef);
 
+	auto positionOffset = Vec2(width, height) * 0.5;
+	auto anchorConstantX = sprite->getAnchorPoint().x;
+	anchorConstantX = (anchorConstantX == 0) ? 1 : -1;
+	auto anchorConstantY = sprite->getAnchorPoint().y;
+	anchorConstantY = (anchorConstantY == 0) ? 1 : -1;
+	const b2Vec2 btAnchor = CC_VEC_TO_B2(positionOffset.x * anchorConstantX, positionOffset.y * anchorConstantY);
 	b2PolygonShape bumperShape;
-	bumperShape.SetAsBox(width / 2 / AR_PTM_RATIO, height / 2 / AR_PTM_RATIO);
-	bumperShape.m_centroid = b2Vec2(0, 0);
+	bumperShape.SetAsBox(width / 2 / AR_PTM_RATIO, height / 2 / AR_PTM_RATIO, btAnchor, .0);
 
 	b2FixtureDef bumperFixtureDef;
 	bumperFixtureDef.shape = &bumperShape;

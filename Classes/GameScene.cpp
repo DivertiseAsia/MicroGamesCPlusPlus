@@ -239,22 +239,25 @@ void GameScene::createListenerTabOverlay()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	this->rectOverlay = DrawNode::create();
+	rectOverlay->setContentSize(visibleSize);
 	Vec2 rectangle[4];
-	rectangle[0] = origin;
-	rectangle[1] = Vec2(origin.x, visibleSize.height);
+	rectangle[0] = Vec2::ZERO;
+	rectangle[1] = Vec2(0, visibleSize.height);
 	rectangle[2] = visibleSize;
-	rectangle[3] = Vec2(visibleSize.width, origin.y);
+	rectangle[3] = Vec2(visibleSize.width, 0);
 
 	Color4F halfblack(0, 0, 0, 0.7f);
 	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
 
+	auto overlaySize = rectOverlay->getContentSize();
+
 	auto pauseIcon = Sprite::create("item/Item_Pause_Icon.png");
-	pauseIcon->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + (visibleSize.height / 2) + (pauseIcon->getContentSize().height / 2)));
+	pauseIcon->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 + pauseIcon->getContentSize().height / 2));
 	pauseIcon->setScale(3 * pauseIcon->getContentSize().width / visibleSize.width);
 
 	auto label = Label::createWithBMFont(SHARED_FONT_FILE, GS_RESUME_TEXT);
 	// position the label on the center of the screen
-	label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + (visibleSize.height / 2) - (label->getContentSize().height / 2)));
+	label->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 - label->getContentSize().height / 2));
 
 	auto currentScale = label->getContentSize().width / visibleSize.width;
 
@@ -263,6 +266,7 @@ void GameScene::createListenerTabOverlay()
 	// add the label as a child to overlay layer
 	rectOverlay->addChild(pauseIcon);
 	rectOverlay->addChild(label);
+	rectOverlay->setPosition(origin);
 	this->addChild(rectOverlay);
 
 	auto tabScreenLtn = EventListenerTouchOneByOne::create();
@@ -301,7 +305,7 @@ void GameScene::resumeGame()
 void GameScene::onGameStart(){}
 
 void GameScene::createBtnPanel() {
-	auto screenSize = Director::getInstance()->getVisibleSize();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto winSize = Director::getInstance()->getWinSize();
 	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
 
@@ -311,9 +315,9 @@ void GameScene::createBtnPanel() {
 		"button/Button_Back.png",
 		"button/Button_Back.png",
 		CC_CALLBACK_1(GameScene::backButtonCallback, this));
-	backBtn->setPosition(screenSize.width - backBtn->getContentSize().width / 2,
+	backBtn->setPosition(visibleSize.width - backBtn->getContentSize().width / 2,
 		screenCenter.y + backBtn->getContentSize().height);
-	backBtn->setScale(backBtn->getContentSize().width / screenSize.width * 3);
+	backBtn->setScale(backBtn->getContentSize().width / visibleSize.width * 3);
 	MenuItems.pushBack(backBtn);
 
 	auto pauseBtn = MenuItemImage::create(
@@ -321,7 +325,7 @@ void GameScene::createBtnPanel() {
 		"button/Button_Pause.png",
 		CC_CALLBACK_1(GameScene::pauseButtonCallback, this));
 	float diffSize = backBtn->getContentSize().width - pauseBtn->getContentSize().width;
-	pauseBtn->setPosition((screenSize.width - pauseBtn->getContentSize().width / 2) - abs(diffSize) / 2,
+	pauseBtn->setPosition((visibleSize.width - pauseBtn->getContentSize().width / 2) - abs(diffSize) / 2,
 		screenCenter.y - pauseBtn->getContentSize().height);
 	float scaleFromBackBtn = pauseBtn->getContentSize().width / backBtn->getContentSize().width;
 	pauseBtn->setScale(scaleFromBackBtn);
@@ -329,6 +333,7 @@ void GameScene::createBtnPanel() {
 
 	// create menu, it's an autorelease object
 	this->menu = Menu::createWithArray(MenuItems);
+	menu->setContentSize(visibleSize);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
 }

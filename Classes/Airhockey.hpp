@@ -32,6 +32,7 @@ USING_NS_CC;
 #define AH_TEAM_TOP_PLAYERS {SHARED_PLAYER1, SHARED_PLAYER4}
 #define AH_TEAM_BOT_PLAYERS {SHARED_PLAYER2, SHARED_PLAYER3}
 
+#define CC_VEC_TO_B2(X,Y) b2Vec2(X / AR_PTM_RATIO, Y / AR_PTM_RATIO)
 
 class Airhockey : public GameScene, public b2ContactListener
 {
@@ -74,7 +75,7 @@ private:
     Ball* _ball;
     GameButton* _button[4];
     
-    DrawNode* _drawNode;
+    //DrawNode* _drawNode;
     Label* _scoreTop;
     Label* _scoreBottom;
     
