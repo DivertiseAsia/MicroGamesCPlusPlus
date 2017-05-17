@@ -14,7 +14,7 @@
 
 USING_NS_CC; //Alias to declare using cocos namespace
 
-#define DEFAULT_BALL_RADIUS 20
+#define DEFAULT_BALL_RADIUS 25
 #define DEFAULT_BALL_COLOR Color4F::BLUE
 #define DEFAULT_BALL_INITIAL_VELOCITY Vec2(0,0)
 
@@ -33,8 +33,11 @@ public:
     
     void moveNext();
 
+	float getRadius();
+
 	// for customize ball style
 	void setBallImage(std::string);
+	void setBallImage(std::string, float);
 	void setBallImage(std::string, Rect);
 	void setBallImage(Sprite*);
 
@@ -43,8 +46,10 @@ public:
     CC_SYNTHESIZE(Vec2, _acceleration, Acceleration);
     
 private:
+	float _ballscale = 0.5;
     float _radius;
     bool _moved = false;
+	float _screenRatio;
 };
 
 #endif /* Ball_hpp */

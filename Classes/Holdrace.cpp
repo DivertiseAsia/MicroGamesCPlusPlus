@@ -47,6 +47,8 @@ bool Holdrace::init()
 	auto firstPositionX = screenCenter.x - ((4 * mouseWidth/2) / 2);
 	miceStep = std::vector<int>(numberOfPlayers, 1);
 
+	float buttonScale = 0.5;
+
     for(int i=0;i<numberOfPlayers;i++){
 		_drawNode = DrawNode::create();
 		auto flagImg = Sprite::create("item/Item_Jumpy Mice_Flag.png");
@@ -66,7 +68,9 @@ bool Holdrace::init()
         _button[i] = GameButton::create();
 		_button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
 		_button[i]->setAnchorPoint(Shared::instance()->getPlayerAnchor(i));
-		_button[i]->setScale(0.5);
+		if (screenSize.width / screenSize.height < 0.75 && buttonScale == 0.5)
+			buttonScale = SHARED_BUTTON_WIDTH_PERCENT * screenSize.width / _button[i]->getContentSize().width;
+		_button[i]->setScale(buttonScale);
         _button[i]->setTag(i);  //Set the number to indicate button order.
         _button[i]->addTouchEventListener(CC_CALLBACK_2(Holdrace::onPress, this));
         _button[i]->setBall(_ball[i]);

@@ -93,6 +93,8 @@ bool Taprace::init()
 	auto firstPositionX = screenCenter.x - ((MAX_NUMBER_PLAYER * mouseWidth / 2) / 2);
 	miceStep = std::vector<int>(numberOfPlayers, 1);
 
+	float buttonScale = 0.5;
+
     for(int i=0;i<numberOfPlayers;i++){
 		auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - OFFSET_Y_SCREEN);
 		_ball[i] = Ball::create();
@@ -105,7 +107,9 @@ bool Taprace::init()
         _button[i] = GameButton::create();
 		_button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
 		_button[i]->setAnchorPoint(Shared::instance()->getPlayerAnchor(i));
-		_button[i]->setScale(0.5);
+		if (screenSize.width / screenSize.height < 0.75 && buttonScale == 0.5)
+			buttonScale = SHARED_BUTTON_WIDTH_PERCENT * screenSize.width / _button[i]->getContentSize().width;
+		_button[i]->setScale(buttonScale);
 		_button[i]->setTag(i);  //Set the number to indicate button order.
 		_button[i]->setUserData(&miceStep[i]);
 		_button[i]->addTouchEventListener(CC_CALLBACK_2(Taprace::onPress, this));

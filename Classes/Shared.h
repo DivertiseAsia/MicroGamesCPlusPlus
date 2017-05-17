@@ -5,6 +5,8 @@
 
 #define SHARED_FONT_FILE "fonts/font.fnt"
 
+#define SHARED_BUTTON_WIDTH_PERCENT	.20f
+
 #define SHARED_COLOR_BACKGROUND Color4F(.357f,.259f,.451f,1)
 
 #define SHARED_COLOR_PLAYERS {Color4F(.322f,.580f,.949f,1),Color4F(.949f,.894f,.086f,1),Color4F(.851f,.282f,.314f,1),Color4F(.302f,.949f,.741f,1)}//Blue, Yellow, Red, Teal

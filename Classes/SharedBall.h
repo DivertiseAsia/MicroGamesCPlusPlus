@@ -79,6 +79,7 @@ protected:
     DrawNode* _drawNode;
 	Label* scoreTop;
 	Label* scoreBottom;
+	float buttonScale = 0.5;
 };
 
 #endif // __SHARED_BALL_H__

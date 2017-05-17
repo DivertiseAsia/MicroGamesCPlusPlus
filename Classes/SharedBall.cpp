@@ -18,7 +18,7 @@ void SharedBall::createBall(Vec2 p, float radius, std::string fname) {
 	//_ball->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	_ball->setPosition(p);
 	auto ballImg = Sprite::create(fname);
-	ballImg->setScale(0.4f);
+	ballImg->setScale(radius * 2 / ballImg->getContentSize().width);
 	_ball->addChild(ballImg);
 	this->addChild(_ball);
 
@@ -63,6 +63,8 @@ void SharedBall::onGameStart() {
 }
 
 GameButton* SharedBall::addButtonForPlayer(int player, int game) {
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
 	auto button = GameButton::create();
 	std::string format = "Paw";
 	if(game == GameType::PINBALL)
@@ -77,8 +79,9 @@ GameButton* SharedBall::addButtonForPlayer(int player, int game) {
 	else {
 		button->changeFormat(format);
 	}
-	button->setScale(0.5);
-
+	if (visibleSize.width / visibleSize.height < 0.75 && buttonScale == 0.5)
+		buttonScale = SHARED_BUTTON_WIDTH_PERCENT * visibleSize.width / button->getContentSize().width;
+	button->setScale(buttonScale);
 	button->setPosition(Shared::instance()->getPlayerPosition(player));
 	button->setAnchorPoint(Shared::instance()->getPlayerAnchor(player));
 	button->setTag(player);  //Set the number to indicate button order.
@@ -91,7 +94,7 @@ GameButton* SharedBall::addButtonForPlayer(int player, int game) {
 	circleFixture.restitution = SB_DEFAULT_RESTITUTION;
     circleFixture.filter.categoryBits = SB_BITMASK_BUTTON;  //Assign the fixture to button category.
     b2CircleShape circleShape;
-	circleShape.m_radius = DEFAULT_BUTTON_RADIUS / SB_SCALE_RATIO;
+	circleShape.m_radius = button->getContentSize().width * buttonScale / SB_SCALE_RATIO;
 	circleFixture.shape = &circleShape;
 	b2BodyDef buttonBodyDef;
 	buttonBodyDef.type = b2BodyType::b2_staticBody;

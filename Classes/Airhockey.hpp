@@ -92,6 +92,7 @@ private:
     Vec2 _screenOrigin;
     Size _screenSize;
     Vec2 _screenCenter;
+	float buttonScale = 0.5;
 };
 
 

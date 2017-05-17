@@ -42,7 +42,10 @@ bool Ball::init(){
         return false;
     }
     
-    this->setContentSize(Size(_radius*2, _radius*2));
+	Size screenSize = Director::getInstance()->getVisibleSize();
+	_screenRatio = screenSize.width / screenSize.height;
+	if (_screenRatio < 0.75)
+		_ballscale = 0.7;
     
     
     auto rect = this->getBoundingBox();
@@ -90,23 +93,40 @@ void Ball::moveNext(){
         _moved = true;
 }
 
+float Ball::getRadius()
+{
+	return _radius;
+}
+
 void Ball::setBallImage(std::string fname)
 {
 	auto ballImg = Sprite::create(fname);
-	ballImg->setScale(0.5);
+	ballImg->setScale(_ballscale);
+	_radius = ballImg->getContentSize().width * _ballscale / 2;
+	this->addChild(ballImg);
+}
+
+void Ball::setBallImage(std::string fname, float scale)
+{
+	auto ballImg = Sprite::create(fname);
+	_ballscale = _screenRatio < 0.75 ? scale : _ballscale;
+	ballImg->setScale(_ballscale);
+	_radius = ballImg->getContentSize().width * _ballscale / 2;
 	this->addChild(ballImg);
 }
 
 void Ball::setBallImage(std::string fname, Rect area)
 {
 	auto ballImg = Sprite::create(fname, area);
-	ballImg->setScale(0.5);
+	ballImg->setScale(_ballscale);
 	this->removeAllChildrenWithCleanup(true);
+	_radius = ballImg->getContentSize().width * _ballscale / 2;
 	this->addChild(ballImg);
 }
 
 void Ball::setBallImage(Sprite* sprite)
 {
-	sprite->setScale(0.5);
+	sprite->setScale(_ballscale);
+	_radius = sprite->getContentSize().width * _ballscale / 2;
 	this->addChild(sprite);
 }

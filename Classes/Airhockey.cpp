@@ -407,7 +407,7 @@ void Airhockey::addScores(){
 void Airhockey::placePuck(){
     //create the ball
     _ball = Ball::create();
-	_ball->setBallImage("item/Item_Cat Hockey_Hockey.png");
+	_ball->setBallImage("item/Item_Cat Hockey_Hockey.png", 0.9);
     _ball->setPosition(Vec2(_screenCenter.x, _screenCenter.y));
     this->addChild(_ball);
     
@@ -422,7 +422,7 @@ void Airhockey::placePuck(){
     
     // Define a shape for the _ballBody(tangible)
     b2CircleShape circle;
-    circle.m_radius = _ball->getContentSize().width/2/AR_PTM_RATIO;
+	circle.m_radius = _ball->getRadius() / AR_PTM_RATIO;
     
     // Create shape definition and add to body
     b2FixtureDef ballShapeDef;
@@ -444,7 +444,9 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     m->setPlayer(playerNo);
     m->setPosition(pos);
 	m->changeFormat("Hockey");
-	m->setScale(0.5);
+	if (_screenSize.width / _screenSize.height < 0.75 && buttonScale)
+		buttonScale = SHARED_BUTTON_WIDTH_PERCENT * _screenSize.width / m->getContentSize().width;
+	m->setScale(buttonScale);
     m->setTag(playerNo);  //Set the number to indicate button order.
     m->setActionTag(AR_PADDLE_DROP);
     m->setPressedActionEnabled(false); // Disable zoom action on pressed
@@ -463,9 +465,9 @@ void Airhockey::addMallet(int playerNo, Vec2 pos, Color4F color){
     btnBodyDef.bullet = true; //Enable CCD
     auto btnBody = _world->CreateBody(&btnBodyDef);
     
-    // Define a shape for the _ballBody(tangible)
+    // Define a shape for the _buttonBody(tangible)
     b2CircleShape circle;
-    circle.m_radius = m->getContentSize().width/4/AR_PTM_RATIO;
+	circle.m_radius = m->getContentSize().width / 4 / AR_PTM_RATIO;
     
     // Create shape definition and add to body
     b2FixtureDef btnShapeDef;
