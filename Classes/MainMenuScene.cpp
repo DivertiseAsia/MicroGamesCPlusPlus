@@ -32,7 +32,9 @@ bool MainMenu::init()
     }
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto center = visibleSize / 2;
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	float offsetY = visibleSize.height * MMS_Y_OFFSET_PERCENT;
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -58,45 +60,49 @@ bool MainMenu::init()
 
 	Shared::instance()->setBackground("bg/BG_Home.png", this);
 
+	// define title sprite
 	auto title = Sprite::create("item/Item_Home_Logo.png");
-	// position the title on the center of the screen
-	title->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height - title->getContentSize().height / 2 - MMS_TITLE_Y_OFFSET));
+	float titleScale = MMS_TITLE_WIDTH_PERCENT * visibleSize.width / title->getContentSize().width;
+	title->setScale(titleScale);
 
-	float currentScale = title->getContentSize().width / visibleSize.width;
-	title->setScale(MMS_TITLE_WIDTH_PERCENT / (currentScale * 1.5));
-	// add the title as a child to this layer
-	this->addChild(title, 1);
+	float startY = center.height - offsetY;
+	float menuScale = 0;
+	MenuItemImage* button;
 
-	currentScale = 0;
-
-	float startY = origin.y + visibleSize.height * MMS_MENU_HEIGHT_PERCENT - title->getContentSize().height * 1.5;
-	float availableArea = visibleSize.height * MMS_MENU_HEIGHT_PERCENT - title->getContentSize().height / 2;
-
+	// add game menu buttons
 	float rad = 3.141 / 2;
 	for (int i = 0; i < GameList::instance()->numberOfAvailableGames(); i++) {
 		auto fname = "button/Button_Home_" + GameList::getGameName(GameList::instance()->AVAILABLE_GAMES[i]) + ".png";
 		auto fname2 = "button/Button_Home_" + GameList::getGameName(GameList::instance()->AVAILABLE_GAMES[i]) + "_Pressed.png";
 		log("Create button %s", fname.c_str());
-		auto button = MenuItemImage::create(fname.c_str(), fname2.c_str(), CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
-		auto xPosition = cos(rad) * visibleSize.width * 0.3;
-		auto yPosition = sin(rad) * visibleSize.width * 0.3;
+		button = MenuItemImage::create(fname.c_str(), fname2.c_str(), CC_CALLBACK_1(MainMenu::pickPlayers, this, GameList::instance()->AVAILABLE_GAMES[i]));
+		auto xPosition = cos(rad) * visibleSize.width * MMS_MENU_RADIUS_CONSTANT;
+		auto yPosition = sin(rad) * visibleSize.width * MMS_MENU_RADIUS_CONSTANT;
 		log("x = %.4f : y = %.4f", xPosition, yPosition);
 		button->setPosition(Vec2(origin.x + visibleSize.width / 2 + xPosition,
 			startY + yPosition));
 		rad += (3.141 * 2) / 5;
-		if (currentScale == 0) {
-			currentScale = button->getContentSize().width / visibleSize.width;
+		if (menuScale == 0) {
+			menuScale = button->getContentSize().width / visibleSize.width;
 		}
-		button->setScale(MMS_MENU_WIDTH_PERCENT / currentScale);
+		button->setScale(MMS_MENU_WIDTH_PERCENT / menuScale);
 		MenuItems.pushBack(button);
 	}
+	
+	// position the title on the center of the screen
+	if (visibleSize.width / visibleSize.height < 0.75)
+		offsetY *= 2; // 2x offset if height of screen is more than width ~ 2 times
+	title->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		center.height + (offsetY + (title->getContentSize().height * titleScale / 2) + (button->getContentSize().height * menuScale))));
+
+	// add the title as a child to this layer
+	this->addChild(title, 1);
 
     this->setKeyboardEnabled(true);
     // create menu, it's an autorelease object
 	auto menu = Menu::createWithArray(MenuItems);
     menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+	this->addChild(menu, 1);
     
     return true;
 }

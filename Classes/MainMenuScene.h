@@ -4,11 +4,10 @@
 #include "cocos2d.h"
 #include "GameList.h"
 
-#define MMS_TITLE_Y_OFFSET	20
-#define MMS_TITLE_WIDTH_PERCENT .9f
+#define MMS_Y_OFFSET_PERCENT	.1f
+#define MMS_TITLE_WIDTH_PERCENT .7f
 #define MMS_MENU_WIDTH_PERCENT .3f
-
-#define MMS_MENU_HEIGHT_PERCENT .8f
+#define MMS_MENU_RADIUS_CONSTANT .3f
 
 USING_NS_CC;
 
