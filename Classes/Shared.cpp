@@ -22,7 +22,7 @@ Shared * Shared::instance() {
 		minstance->buttonAnchor = {
 			Vec2(0, 1),  //0
 			Vec2(1, 0),  //1
-			screenOrigin, //2
+			Vec2(0, 0), //2
 			Vec2(1, 1) }; //3
 
 	}
