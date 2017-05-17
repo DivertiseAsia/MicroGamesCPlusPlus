@@ -75,9 +75,9 @@ bool PlayerMenu::init()
 		button->setPosition(Vec2(origin.x + visibleSize.width / 2,
 			startY - availableArea / 3.5 * (i - 2)));
 		if (currentScale == 0) {
-			currentScale = button->getContentSize().width / visibleSize.width;
+			currentScale = PMS_MENU_WIDTH_PERCENT * visibleSize.width / button->getContentSize().width;
 		}
-		button->setScale(currentScale / 1.5);
+		button->setScale(currentScale);
 		MenuItems.pushBack(button);
 	}
 	
