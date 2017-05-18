@@ -291,9 +291,9 @@ void Airhockey::drawBoard(){
 	barLowRight->setAnchorPoint(Vec2(1, 0));
 
 	barUpLeft->setPosition(Vec2(_screenOrigin.x, _screenSize.height));
-	barUpRight->setPosition(_screenSize);
+	barUpRight->setPosition(_screenOrigin + _screenSize);
 	barLowLeft->setPosition(_screenOrigin);
-	barLowRight->setPosition(Vec2(_screenSize.width, _screenOrigin.y));
+	barLowRight->setPosition(_screenOrigin + Vec2(_screenSize.width, _screenOrigin.y));
 
 	this->addChild(barUpLeft);
 	this->addChild(barUpRight);
