@@ -10,7 +10,6 @@
 #include "PlayerMenuScene.h"
 
 USING_NS_CC;
-#define PERCENT_PANEL_MARGIN .2f
 
 template <class T>
 Scene* GameScene::createScene(int numberOfPlayers)
@@ -88,21 +87,21 @@ void GameScene::endGame(int winners[], int totalWinners)
 		Vec2 origin = Director::getInstance()->getVisibleOrigin();
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 		Vec2 centerPosition = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
-		float panelMarginX = visibleSize.width * PERCENT_PANEL_MARGIN / 3;
-		float panelMarginY = visibleSize.height * PERCENT_PANEL_MARGIN;
+		float panelMarginX = visibleSize.width * GS_PERCENT_PANEL_MARGIN / 3;
+		float panelMarginY = visibleSize.height * GS_PERCENT_PANEL_MARGIN;
 
 		// create winner box label
 		auto box = Sprite::create("item/Item_Win_Box.png");
 		auto label = Sprite::create("item/Item_Win_Text.png");
 
-		// position the label on the center of the screen
-		box->setPosition(centerPosition + Vec2(0, panelMarginY / 2));
-		label->setPosition(centerPosition + Vec2(0, panelMarginY));
-
 		auto currentScale = box->getContentSize().width / visibleSize.width;
 
 		box->setScale(GS_WINNER_TEXT_WIDTH_PERCENT / currentScale);
 		label->setScale(GS_WINNER_TEXT_WIDTH_PERCENT / currentScale);
+
+		// position the label on the center of the screen
+		box->setPosition(centerPosition + Vec2(0, panelMarginY / 2));
+		label->setPosition(box->getPosition() + Vec2(0, box->getContentSize().height * box->getScale() / 4));
 
 		// add the label as a child to this layer
 		this->addChild(box, 1);
@@ -113,13 +112,13 @@ void GameScene::endGame(int winners[], int totalWinners)
 			"button/Button_Win_Replay.png",
 			"button/Button_Win_Replay.png",
 			CC_CALLBACK_1(GameScene::replayButtonCallback, this));
-		replayBtn->setScale(replayBtn->getContentSize().width / visibleSize.width * 3);
+		replayBtn->setScale(GS_PERCENT_WIN_MENU_ITEM * visibleSize.width / replayBtn->getContentSize().width);
 
 		auto homeBtn = MenuItemImage::create(
 			"button/Button_Win_Home.png",
 			"button/Button_Win_Home.png",
 			CC_CALLBACK_1(GameScene::homeButtonCallback, this));
-		homeBtn->setScale(homeBtn->getContentSize().width / visibleSize.width * 3);
+		homeBtn->setScale(GS_PERCENT_WIN_MENU_ITEM * visibleSize.width / homeBtn->getContentSize().width);
 
 		auto panelWidth = replayBtn->getContentSize().width / 2 + homeBtn->getContentSize().width / 2 + panelMarginX;
 		replayBtn->setPosition(Vec2::ZERO - Vec2(panelWidth / 2, 0));
@@ -133,18 +132,18 @@ void GameScene::endGame(int winners[], int totalWinners)
 		menu->setPosition(centerPosition - Vec2(0, panelMarginY));
 		this->addChild(menu);
 
-		float winnerYoffset = panelMarginY - label->getContentSize().height;
+		float scaleWinner = 1;
 		for (int i = 0; i < totalWinners; i++) {
 			auto spriteWinner = Sprite::create("item/Item_Win_Winner" + Shared::intToString(winners[i] + 1) + ".png");
-			spriteWinner->setScale(spriteWinner->getContentSize().width / visibleSize.width * 3);
-			auto winnerOffsetSize = spriteWinner->getContentSize().width * (1 - PERCENT_PANEL_MARGIN);
+			if(scaleWinner == 1)
+				scaleWinner = GS_PERCENT_WIN_WINNER_ITEM * visibleSize.width / spriteWinner->getContentSize().width;
+			spriteWinner->setScale(scaleWinner);
+			auto winnerOffsetSize = spriteWinner->getContentSize().width * scaleWinner;
 			if (totalWinners == 1) {
-				spriteWinner->setPosition(centerPosition + Vec2(0, winnerYoffset - spriteWinner->getContentSize().height / 5));
+				spriteWinner->setPosition(Vec2(centerPosition.x, box->getPosition().y));
 			}
 			else {
-				spriteWinner->setPosition(centerPosition + 
-					Vec2(-(winnerOffsetSize / totalWinners - winnerOffsetSize * i),
-						winnerYoffset - spriteWinner->getContentSize().height / 5));
+				spriteWinner->setPosition(Vec2(centerPosition.x - (winnerOffsetSize / totalWinners - winnerOffsetSize * i), box->getPosition().y));
 			}
 
 			this->addChild(spriteWinner, 3);

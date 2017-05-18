@@ -1,6 +1,9 @@
 #ifndef __GameScene_SCENE_H__
 #define __GameScene_SCENE_H__
 
+#define GS_PERCENT_WIN_WINNER_ITEM .2f
+#define GS_PERCENT_WIN_MENU_ITEM .125f
+#define GS_PERCENT_PANEL_MARGIN .2f
 #define GS_WINNER_TEXT_OFFSET_Y 20
 #define GS_GO_TEXT_WIDTH_PERCENT .3f
 #define GS_COUNTDOWN_TEXT_WIDTH_PERCENT .08f
