@@ -14,7 +14,6 @@
 USING_NS_CC;
 
 #define OFFSET_Y_SCREEN 45
-#define MOUSE_OFFSET_X 20
 #define MAX_NUMBER_PLAYER 4
 
 // on "init" you need to initialize your instance
@@ -34,7 +33,6 @@ bool Taprace::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     auto screenSize = Director::getInstance()->getVisibleSize();
     
-    
     Size winSize = Director::getInstance()->getWinSize();
     auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
     
@@ -44,59 +42,26 @@ bool Taprace::init()
 	// Draw the finish line
 	_drawNode = DrawNode::create();
 	auto lineImg = Sprite::create("item/Item_Tap Race_Goal.png");
-	lineImg->setScale((screenSize.width / 3) / lineImg->getContentSize().width);
+	lineImg->setScale((winSize.width / 3) / lineImg->getContentSize().width);
 	lineImg->setPosition(Vec2(screenCenter.x, OFFSET_Y_SCREEN));
 	_drawNode->addChild(lineImg);
 	this->addChild(_drawNode);
 
     auto ballspeed = (screenSize.height - OFFSET_Y_SCREEN * 2) / TR_TAPS_REQUIRED;
-    
-	/*
-	// Create animate mices
-	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
-	auto sheetSize = mouseSprite->getContentSize();
-	auto mouseWidth = sheetSize.width / 3;
-	auto mouseHeight = sheetSize.height / 4;
-	auto firstPositionX = screenCenter.x - ((MAX_NUMBER_PLAYER * mouseWidth / 2) / 2);
-	for (int i = 0; i < numberOfPlayers; i++) {
-		auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - OFFSET_Y_SCREEN);
-		auto frames = getAnimation("item/Animate_Mouse_120x180.png", 2, i, mouseWidth, mouseHeight);
-		auto sprite = Sprite::createWithSpriteFrame(frames.front());
-		_ball[i] = Ball::create();
-		_ball[i]->setBallImage(sprite);
-		_ball[i]->setVelocity(Vec2(0, -1 * ballspeed));
-		this->addChild(_ball[i]);
-
-		auto animation = Animation::createWithSpriteFrames(frames, 1.0f / 2);
-		sprite->runAction(RepeatForever::create(Animate::create(animation)));
-
-		_button[i] = GameButton::create();
-		_button[i]->setPosition(Shared::instance()->getPlayerPosition(i));
-		_button[i]->setAnchorPoint(Shared::instance()->getPlayerAnchor(i));
-		_button[i]->setScale(0.5);
-		_button[i]->setTag(i);  //Set the number to indicate button order.
-		_button[i]->addTouchEventListener(CC_CALLBACK_2(Taprace::onPress, this));
-		_button[i]->setBall(_ball[i]);
-		_button[i]->setPlayer(i);
-		_button[i]->changeFormat("Paw");
-		_score[i] = 0;
-
-		this->addChild(_button[i]);
-	}
-	*/
 	
     // Create balls
+	auto mouseDistance = winSize.width * 0.1;
 	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
 	auto sheetSize = mouseSprite->getContentSize();
 	mouseWidth = sheetSize.width / 3;
 	mouseHeight = sheetSize.height / 4;
-	auto firstPositionX = screenCenter.x - ((MAX_NUMBER_PLAYER * mouseWidth / 2) / 2);
+	auto firstPositionX = winSize.width * 0.35;
 	miceStep = std::vector<int>(numberOfPlayers, 1);
 
 	float buttonScale = 0.5;
 
     for(int i=0;i<numberOfPlayers;i++){
-		auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - OFFSET_Y_SCREEN);
+		auto p = Vec2(firstPositionX + (i * mouseDistance), screenSize.height - OFFSET_Y_SCREEN);
 		_ball[i] = Ball::create();
 		_ball[i]->setBallImage("item/Animate_Mouse_120x180.png", Rect(0, mouseHeight * i, mouseWidth, mouseHeight));
 		_ball[i]->setRotation(180);

@@ -14,7 +14,6 @@
 USING_NS_CC;
 
 #define OFFSET_Y_SCREEN 45
-#define MOUSE_OFFSET_X 20
 #define MAX_NUMBER_PLAYER 4
 #define TIME_OFFSET 0.002
 
@@ -30,21 +29,19 @@ bool Holdrace::init()
 	GameScene::gameType = GameType::OVERSHOOT;
 
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    auto screenSize = Director::getInstance()->getVisibleSize();
-    
-    
+    auto screenSize = Director::getInstance()->getVisibleSize();    
     Size winSize = Director::getInstance()->getWinSize();
-    auto screenCenter = Vec2(winSize.width/2, winSize.height/2);
     
     // Add object to the scene here.
 	Shared::instance()->setBackground("bg/BG_JumpyMouse.png",this);
 
     // Create flags, balls and buttons
+	auto mouseDistance = winSize.width * 0.1;
 	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
 	auto sheetSize = mouseSprite->getContentSize();
 	mouseWidth = sheetSize.width / 3;
 	mouseHeight = sheetSize.height / 4;
-	auto firstPositionX = screenCenter.x - ((4 * mouseWidth/2) / 2);
+	auto firstPositionX = winSize.width * 0.35;
 	miceStep = std::vector<int>(numberOfPlayers, 1);
 
 	float buttonScale = 0.5;
@@ -52,10 +49,10 @@ bool Holdrace::init()
     for(int i=0;i<numberOfPlayers;i++){
 		_drawNode = DrawNode::create();
 		auto flagImg = Sprite::create("item/Item_Jumpy Mice_Flag.png");
-		flagImg->setPosition(Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), OFFSET_Y_SCREEN));
+		flagImg->setPosition(Vec2(firstPositionX + (i * mouseDistance), OFFSET_Y_SCREEN));
 		_drawNode->addChild(flagImg);
 		this->addChild(_drawNode);
-        auto p = Vec2(firstPositionX + (i * ((mouseWidth / 2) + MOUSE_OFFSET_X)), screenSize.height - OFFSET_Y_SCREEN);
+        auto p = Vec2(firstPositionX + (i * mouseDistance), screenSize.height - OFFSET_Y_SCREEN);
         _ball[i] = Ball::create();
 		_ball[i]->setBallImage("item/Animate_Mouse_120x180.png", Rect(0, mouseHeight * i, mouseWidth, mouseHeight));
 		_ball[i]->setRotation(180);
