@@ -305,9 +305,11 @@ void GameScene::resumeGame()
 void GameScene::onGameStart(){}
 
 void GameScene::createBtnPanel() {
+	auto screenOrigin = Director::getInstance()->getVisibleOrigin();
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto winSize = Director::getInstance()->getWinSize();
-	auto screenCenter = Vec2(winSize.width / 2, winSize.height / 2);
+	auto screenCenter = Vec2(visibleSize.width / 2, visibleSize.height / 2);
+	auto offsetY = GS_MENU_OFFSET_Y * visibleSize.height;
+	float scale = 1;
 
 	Vector<MenuItem*> MenuItems;
 	// Create pause and back buttons
@@ -315,26 +317,26 @@ void GameScene::createBtnPanel() {
 		"button/Button_Back.png",
 		"button/Button_Back.png",
 		CC_CALLBACK_1(GameScene::backButtonCallback, this));
-	backBtn->setPosition(visibleSize.width - backBtn->getContentSize().width / 2,
-		screenCenter.y + backBtn->getContentSize().height);
-	backBtn->setScale(backBtn->getContentSize().width / visibleSize.width * 3);
+	scale = GS_MENU_WIDTH_PERCENT * visibleSize.width / backBtn->getContentSize().width;
+	backBtn->setScale(scale);
+	backBtn->setPosition(visibleSize.width - backBtn->getContentSize().width * scale,
+		screenCenter.y + backBtn->getContentSize().height / 2 * scale + offsetY);
 	MenuItems.pushBack(backBtn);
 
 	auto pauseBtn = MenuItemImage::create(
 		"button/Button_Pause.png",
 		"button/Button_Pause.png",
 		CC_CALLBACK_1(GameScene::pauseButtonCallback, this));
-	float diffSize = backBtn->getContentSize().width - pauseBtn->getContentSize().width;
-	pauseBtn->setPosition((visibleSize.width - pauseBtn->getContentSize().width / 2) - abs(diffSize) / 2,
-		screenCenter.y - pauseBtn->getContentSize().height);
-	float scaleFromBackBtn = pauseBtn->getContentSize().width / backBtn->getContentSize().width;
-	pauseBtn->setScale(scaleFromBackBtn);
+	float diffCenter = (backBtn->getContentSize().width - pauseBtn->getContentSize().width) / 2;
+	scale = (GS_MENU_WIDTH_PERCENT - diffCenter / visibleSize.width) * visibleSize.width / pauseBtn->getContentSize().width;
+	pauseBtn->setScale(scale);
+	pauseBtn->setPosition(visibleSize.width - (pauseBtn->getContentSize().width + diffCenter) * scale,
+		screenCenter.y - pauseBtn->getContentSize().height / 2 * scale - offsetY);
 	MenuItems.pushBack(pauseBtn);
 
 	// create menu, it's an autorelease object
 	this->menu = Menu::createWithArray(MenuItems);
-	menu->setContentSize(visibleSize);
-	menu->setPosition(Vec2::ZERO);
+	menu->setPosition(screenOrigin);
 	this->addChild(menu);
 }
 
