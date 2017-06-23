@@ -341,6 +341,7 @@ void GameScene::createBtnPanel() {
 
 void GameScene::backButtonCallback(cocos2d::Ref * pSender)
 {
+	SoundManager::instance()->playEffect(SOUND_FILE_BACK);
 	Director::getInstance()->replaceScene(TransitionSlideInL::create(1, PlayerMenu::createScene(GameType(GameList::instance()->AVAILABLE_GAMES[gameType]))));
 }
 
@@ -358,6 +359,7 @@ void GameScene::replayButtonCallback(cocos2d::Ref * pSender)
 
 void GameScene::homeButtonCallback(cocos2d::Ref * pSender)
 {
+	SoundManager::instance()->playEffect(SOUND_FILE_MENU_TRANS);
 	Director::getInstance()->replaceScene(TransitionCrossFade::create(1, MainMenu::createScene()));
 }
 

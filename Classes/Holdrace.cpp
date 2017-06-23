@@ -126,7 +126,7 @@ void Holdrace::update(float dt){
 				if (running[i] % 10 == 0) {
 					int* step = (int*)_ball[i]->getUserData();
 					_ball[i]->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * *step, mouseHeight * i, mouseWidth, mouseHeight));
-					SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+					SoundManager::instance()->playEffect(SOUND_FILE_TAPRACE_STEP);
 					miceStep[i] = -*step + 1;
 				}
 			}
@@ -170,7 +170,7 @@ void Holdrace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
 			jumped[player] = true;
 			vmax[player] = -button->getBall()->getVelocity().y;
 			button->getBall()->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * 2, mouseHeight * player, mouseWidth, mouseHeight));
-            SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+            SoundManager::instance()->playEffect(SOUND_FILE_HOLDRACE_JUMP);
             break;
         }
         default:

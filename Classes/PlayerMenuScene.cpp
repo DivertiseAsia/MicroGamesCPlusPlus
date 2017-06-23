@@ -103,6 +103,7 @@ void PlayerMenu::startGame(Ref* pSender, int players) {
 
 void PlayerMenu::backButtonCallback(Ref* pSender)
 {
+	SoundManager::instance()->playEffect(SOUND_FILE_BACK);
 	Director::getInstance()->replaceScene(TransitionSlideInL::create(1, MainMenu::createScene()));
 }
 

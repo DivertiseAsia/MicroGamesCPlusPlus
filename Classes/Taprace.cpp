@@ -131,7 +131,7 @@ void Taprace::onPress(Ref* sender, GameButton::Widget::TouchEventType type){
 			int* step = (int*)button->getUserData();
 			button->getBall()->setBallImage("item/Animate_Mouse_120x180.png", Rect(mouseWidth * *step, mouseHeight * player, mouseWidth, mouseHeight));
 			miceStep[player] = -*step + 1;
-			SoundManager::instance()->playEffect(SOUND_FILE_INGAME_PRESS);
+			SoundManager::instance()->playEffect(SOUND_FILE_TAPRACE_STEP);
 
 			if (_score[button->getPlayer()] > TR_TAPS_REQUIRED) {
 				endGame(button->getPlayer());
