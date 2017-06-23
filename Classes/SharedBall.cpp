@@ -58,10 +58,6 @@ void SharedBall::setupScore(int startScore, Vec2 position1, Vec2 position2) {
 	updateScore();
 }
 
-void SharedBall::onGameStart() {
-	this->scheduleUpdate();
-}
-
 GameButton* SharedBall::addButtonForPlayer(int player, int game) {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -182,12 +178,6 @@ void SharedBall::draw(Renderer* renderer, const Mat4& transform, bool transformU
 void SharedBall::update(float dt) {
 	//this does nothing
 	
-}
-
-//This method will be called on the Node entered.
-void SharedBall::onEnter() {
-	Node::onEnter();
-	startGame();
 }
 
 void SharedBall::startGame() {

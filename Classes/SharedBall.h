@@ -43,8 +43,6 @@ public:
     //Function members from the based class
     void draw(Renderer* renderer, const Mat4& transform, bool transformUpdated);
     void update(float dt) override;
-    void onEnter() override;
-	void onGameStart() override;
     
     // Our game custom functions
     void startGame();

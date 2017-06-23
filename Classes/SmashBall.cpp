@@ -124,6 +124,8 @@ void SmashBall::showInstruction() {
 	tabScreenLtn->onTouchEnded = [=](Touch* touch, Event* event) {
 		rectOverlay->removeAllChildren();
 		rectOverlay->clear();
+		this->scheduleUpdate();
+		GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tabScreenLtn, this);
