@@ -53,6 +53,7 @@ GameScene* GameScene::create(int numberOfPlayers) {
 
 //Reduce countdown Counter
 void GameScene::updateCounter(float dt){
+	gameStatus = GAME_ONCOUNT;
     _counter -= dt;
     if (_counter<=0){
         this->unschedule(schedule_selector(GameScene::updateCounter));
@@ -68,7 +69,7 @@ void GameScene::updateCounter(float dt){
 
 //Start game with the given time dt(seconds)
 void GameScene::startGame(float dt){
-    if (gameStatus == GAME_START){
+    if (gameStatus == GAME_START && gameStatus != GAME_ONCOUNT){
         _counter = dt;
         this->schedule(schedule_selector(GameScene::updateCounter),1.0f);
 		createBtnPanel();
@@ -148,6 +149,8 @@ void GameScene::endGame(int winners[], int totalWinners)
 
 			this->addChild(spriteWinner, 3);
 		}
+
+		SoundManager::instance()->playEffect(SOUND_FILE_WIN);
 
 		//draw winner circles
 		/*for (int i = 0; i < totalWinners; i++) {
@@ -343,6 +346,8 @@ void GameScene::backButtonCallback(cocos2d::Ref * pSender)
 {
 	SoundManager::instance()->playEffect(SOUND_FILE_BACK);
 	Director::getInstance()->replaceScene(TransitionSlideInL::create(1, PlayerMenu::createScene(GameType(GameList::instance()->AVAILABLE_GAMES[gameType]))));
+	if (!SoundManager::instance()->isMuted())
+		SoundManager::instance()->playBackgroundSound();
 }
 
 void GameScene::pauseButtonCallback(cocos2d::Ref * pSender)

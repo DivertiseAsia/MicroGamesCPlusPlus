@@ -36,6 +36,10 @@ bool MainMenu::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	float offsetY = visibleSize.height * MMS_Y_OFFSET_PERCENT;
 
+	// play background sound
+	if(!SoundManager::instance()->isMuted())
+		SoundManager::instance()->playBackgroundSound();
+
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
