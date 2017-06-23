@@ -27,6 +27,9 @@ public:
 	static SoundManager* instance();
 
 	static void playEffect(const char* filePath);
+	static void playBackgroundSound();
+	static void stopBackgroundSound();
+
 private:
 	SoundManager() {};
 	static SoundManager* minstance;

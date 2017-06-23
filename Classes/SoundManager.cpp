@@ -20,6 +20,8 @@ void SoundManager::muteAll() {
 
 	SimpleAudioEngine::getInstance()->setEffectsVolume(SOUND_VOLUME_MUTE);
 	SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(SOUND_VOLUME_MUTE);
+
+	stopBackgroundSound();
 }
 
 void SoundManager::unmuteAll() {
@@ -38,4 +40,14 @@ void SoundManager::playEffect(const char* filePath) {
 
 bool SoundManager::isMuted() {
 	return SoundManager::instance()->muted;
+}
+
+void SoundManager::playBackgroundSound()
+{
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(SOUND_FILE_MENU_BACKGROUND);
+}
+
+void SoundManager::stopBackgroundSound()
+{
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 }
