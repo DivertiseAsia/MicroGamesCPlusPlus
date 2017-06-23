@@ -44,6 +44,8 @@ private:
 	int running[4] = { 0, 0, 0, 0 };
 	float vmax[4] = { .0f, .0f, .0f, .0f };
 	float t[4] = { .0f, .0f, .0f, .0f };
+	void showInstruction();
+	DrawNode* rectOverlay;
 };
 
 #endif // __HOLDRACE_SCENE_H__

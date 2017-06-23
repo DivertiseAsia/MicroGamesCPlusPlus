@@ -91,9 +91,58 @@ bool Taprace::init()
     //this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
     
     this->setName("TapraceSceneRoot");
-    this->scheduleUpdate();
+    this->showInstruction();
     
     return true;
+}
+
+void Taprace::showInstruction() {
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	this->rectOverlay = DrawNode::create();
+	rectOverlay->setContentSize(visibleSize);
+	Vec2 rectangle[4];
+	rectangle[0] = Vec2::ZERO;
+	rectangle[1] = Vec2(0, visibleSize.height);
+	rectangle[2] = visibleSize;
+	rectangle[3] = Vec2(visibleSize.width, 0);
+
+	Color4F halfblack(0, 0, 0, 0.7f);
+	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
+
+	auto overlaySize = rectOverlay->getContentSize();
+	auto margin = visibleSize.height * 0.1;
+
+	auto ins1 = Sprite::create("instructions/TapRace_1.png");
+	auto ins2 = Sprite::create("instructions/TapRace_2.png");
+
+	auto scale = 0.4 * visibleSize.width / ins1->getContentSize().width;
+
+	ins1->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 + ((ins1->getContentSize().height * scale / 2) + margin)));
+	ins1->setScale(scale);
+	ins2->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 - ((ins2->getContentSize().height * scale / 2) + margin)));
+	ins2->setScale(scale);
+
+	rectOverlay->addChild(ins1);
+	rectOverlay->addChild(ins2);
+	rectOverlay->setPosition(origin);
+	this->addChild(rectOverlay);
+
+	auto tabScreenLtn = EventListenerTouchOneByOne::create();
+
+	tabScreenLtn->onTouchBegan = [](Touch* touch, Event* event) {
+		return true;
+	};
+
+	tabScreenLtn->onTouchEnded = [=](Touch* touch, Event* event) {
+		rectOverlay->removeAllChildren();
+		rectOverlay->clear();
+		this->scheduleUpdate();
+		this->startGame();
+	};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(tabScreenLtn, this);
 }
 
 void Taprace::draw(Renderer* renderer, const Mat4& transform, bool transformUpdated){
@@ -107,7 +156,6 @@ void Taprace::update(float dt){
 //This method will be called on the Node entered.
 void Taprace::onEnter(){
     Node::onEnter();
-	startGame();
 }
 
 void Taprace::startGame(){

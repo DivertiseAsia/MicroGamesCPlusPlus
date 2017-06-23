@@ -80,8 +80,56 @@ bool Pinball::init()
 
     this->world->SetContactListener(this);
 	this->setName("PinballSceneRoot");
+	this->showInstruction();
 
 	return true;
+}
+
+void Pinball::showInstruction() {
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	this->rectOverlay = DrawNode::create();
+	rectOverlay->setContentSize(visibleSize);
+	Vec2 rectangle[4];
+	rectangle[0] = Vec2::ZERO;
+	rectangle[1] = Vec2(0, visibleSize.height);
+	rectangle[2] = visibleSize;
+	rectangle[3] = Vec2(visibleSize.width, 0);
+
+	Color4F halfblack(0, 0, 0, 0.7f);
+	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
+
+	auto overlaySize = rectOverlay->getContentSize();
+	auto margin = visibleSize.height * 0.1;
+
+	auto ins1 = Sprite::create("instructions/PawBall_1.png");
+	auto ins2 = Sprite::create("instructions/PawBall_2.png");
+
+	auto scale = 0.4 * visibleSize.width / ins1->getContentSize().width;
+
+	ins1->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 + ((ins1->getContentSize().height * scale / 2) + margin)));
+	ins1->setScale(scale);
+	ins2->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 - ((ins2->getContentSize().height * scale / 2) + margin)));
+	ins2->setScale(scale);
+
+	rectOverlay->addChild(ins1);
+	rectOverlay->addChild(ins2);
+	rectOverlay->setPosition(origin);
+	this->addChild(rectOverlay);
+
+	auto tabScreenLtn = EventListenerTouchOneByOne::create();
+
+	tabScreenLtn->onTouchBegan = [](Touch* touch, Event* event) {
+		return true;
+	};
+
+	tabScreenLtn->onTouchEnded = [=](Touch* touch, Event* event) {
+		rectOverlay->removeAllChildren();
+		rectOverlay->clear();
+	};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(tabScreenLtn, this);
 }
 
 DrawNode* Pinball::addPaddleForPlayer(int player, Size screenSize, Vec2 screenCenter) {

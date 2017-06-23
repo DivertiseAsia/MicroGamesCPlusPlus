@@ -85,10 +85,58 @@ bool Airhockey::init()
 #endif
     
     this->setName("AirhockeySceneRoot");
-    this->scheduleUpdate();
-    this->startGame(SHARED_COUNTDOWN_LENGTH);
-    
+	this->showInstruction();
+
     return true;
+}
+
+void Airhockey::showInstruction(){
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	this->rectOverlay = DrawNode::create();
+	rectOverlay->setContentSize(visibleSize);
+	Vec2 rectangle[4];
+	rectangle[0] = Vec2::ZERO;
+	rectangle[1] = Vec2(0, visibleSize.height);
+	rectangle[2] = visibleSize;
+	rectangle[3] = Vec2(visibleSize.width, 0);
+
+	Color4F halfblack(0, 0, 0, 0.7f);
+	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
+
+	auto overlaySize = rectOverlay->getContentSize();
+	auto margin = visibleSize.height * 0.1;
+
+	auto ins1 = Sprite::create("instructions/Hockey_1.png");
+	auto ins2 = Sprite::create("instructions/Hockey_2.png");
+
+	auto scale = 0.3 * visibleSize.width / ins1->getContentSize().width;
+	
+	ins1->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 + ((ins1->getContentSize().height * scale / 2) + margin)));
+	ins1->setScale(scale);
+	ins2->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 - ((ins2->getContentSize().height * scale / 2) + margin)));
+	ins2->setScale(scale);
+
+	rectOverlay->addChild(ins1);
+	rectOverlay->addChild(ins2);
+	rectOverlay->setPosition(origin);
+	this->addChild(rectOverlay);
+
+	auto tabScreenLtn = EventListenerTouchOneByOne::create();
+
+	tabScreenLtn->onTouchBegan = [](Touch* touch, Event* event) {
+		return true;
+	};
+
+	tabScreenLtn->onTouchEnded = [=](Touch* touch, Event* event) {
+		rectOverlay->removeAllChildren();
+		rectOverlay->clear();
+		this->scheduleUpdate();
+		this->startGame(SHARED_COUNTDOWN_LENGTH);
+	};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(tabScreenLtn, this);
 }
 
 void Airhockey::updateScore(){

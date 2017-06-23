@@ -68,6 +68,7 @@ private:
     void updateScore();
     void resetGame(float);
     void checkForGoal();
+	void showInstruction();
     
     bool _gamePause = false;
     bool _needReset = false;
@@ -75,7 +76,7 @@ private:
     Ball* _ball;
     GameButton* _button[4];
     
-    //DrawNode* _drawNode;
+	DrawNode* rectOverlay;
     Label* _scoreTop;
     Label* _scoreBottom;
     

@@ -95,13 +95,63 @@ bool Holdrace::init()
     });
     
     this->setName("HoldraceSceneRoot");
-    this->scheduleUpdate();
+    this->showInstruction();
     
     return true;
 }
 
-void Holdrace::draw(Renderer* renderer, const Mat4& transform, bool transformUpdated){
-    
+void Holdrace::showInstruction() {
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	this->rectOverlay = DrawNode::create();
+	rectOverlay->setContentSize(visibleSize);
+	Vec2 rectangle[4];
+	rectangle[0] = Vec2::ZERO;
+	rectangle[1] = Vec2(0, visibleSize.height);
+	rectangle[2] = visibleSize;
+	rectangle[3] = Vec2(visibleSize.width, 0);
+
+	Color4F halfblack(0, 0, 0, 0.7f);
+	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
+
+	auto overlaySize = rectOverlay->getContentSize();
+	auto margin = visibleSize.height * 0.01;
+
+	auto ins1 = Sprite::create("instructions/JumpyMouse_1.png");
+	auto ins2 = Sprite::create("instructions/JumpyMouse_2.png");
+	auto ins3 = Sprite::create("instructions/JumpyMouse_3.png");
+
+	auto scale = 0.3 * visibleSize.width / ins1->getContentSize().width;
+	auto cenInsHeight = ins2->getContentSize().height * scale / 2;
+
+	ins1->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 + ((ins1->getContentSize().height * scale / 2) + margin * 10 + cenInsHeight)));
+	ins1->setScale(scale);
+	ins2->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2));
+	ins2->setScale(scale);
+	ins3->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 - ((ins3->getContentSize().height * scale / 2) + margin + cenInsHeight)));
+	ins3->setScale(scale);
+
+	rectOverlay->addChild(ins1);
+	rectOverlay->addChild(ins2);
+	rectOverlay->addChild(ins3);
+	rectOverlay->setPosition(origin);
+	this->addChild(rectOverlay);
+
+	auto tabScreenLtn = EventListenerTouchOneByOne::create();
+
+	tabScreenLtn->onTouchBegan = [](Touch* touch, Event* event) {
+		return true;
+	};
+
+	tabScreenLtn->onTouchEnded = [=](Touch* touch, Event* event) {
+		rectOverlay->removeAllChildren();
+		rectOverlay->clear();
+		this->scheduleUpdate();
+		this->startGame();
+	};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(tabScreenLtn, this);
 }
 
 void Holdrace::update(float dt){
@@ -138,7 +188,6 @@ void Holdrace::update(float dt){
 //This method will be called on the Node entered.
 void Holdrace::onEnter(){
     Node::onEnter();
-    startGame();
 }
 
 void Holdrace::startGame(){

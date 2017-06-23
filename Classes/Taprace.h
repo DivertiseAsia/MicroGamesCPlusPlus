@@ -40,6 +40,8 @@ private:
 	float mouseWidth;
 	float mouseHeight;
 	std::vector<int> miceStep;
+	void showInstruction();
+	DrawNode* rectOverlay;
 };
 
 #endif // __Taprace_SCENE_H__
