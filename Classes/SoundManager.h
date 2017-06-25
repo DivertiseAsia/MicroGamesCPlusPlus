@@ -24,6 +24,7 @@ public:
     static void unmuteAll();
 	static void muteAll();
 	static bool isMuted();
+	static bool isBackgroundMuted();
 	static SoundManager* instance();
 
 	static void playEffect(const char* filePath);
@@ -34,6 +35,7 @@ private:
 	SoundManager() {};
 	static SoundManager* minstance;
 	bool muted = false;
+	bool backgroundMuted = true;
 };
 
 #endif // __SOUND_MANAGER_H__

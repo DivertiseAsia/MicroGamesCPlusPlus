@@ -44,10 +44,17 @@ bool SoundManager::isMuted() {
 
 void SoundManager::playBackgroundSound()
 {
+	SoundManager::instance()->backgroundMuted = false;
 	SimpleAudioEngine::getInstance()->playBackgroundMusic(SOUND_FILE_MENU_BACKGROUND);
 }
 
 void SoundManager::stopBackgroundSound()
 {
+	SoundManager::instance()->backgroundMuted = true;
 	SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+}
+
+bool SoundManager::isBackgroundMuted()
+{
+	return SoundManager::instance()->backgroundMuted;
 }

@@ -37,7 +37,7 @@ bool MainMenu::init()
 	float offsetY = visibleSize.height * MMS_Y_OFFSET_PERCENT;
 
 	// play background sound
-	if(!SoundManager::instance()->isMuted())
+	if(SoundManager::instance()->isBackgroundMuted() && !SoundManager::instance()->isMuted())
 		SoundManager::instance()->playBackgroundSound();
 
     /////////////////////////////
@@ -121,6 +121,7 @@ void MainMenu::muteButtonCallback(Ref* pSender)
     //Mute or unmute the sound effects of the game
 	if (SoundManager::instance()->isMuted()) {
 		SoundManager::instance()->unmuteAll();
+		SoundManager::instance()->playBackgroundSound();
         _soundMuteItem->setNormalImage(Sprite::create("button/Buttom_Home_SoundOn.png"));
 	}
 	else {
