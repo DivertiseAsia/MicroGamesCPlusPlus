@@ -53,24 +53,27 @@ GameScene* GameScene::create(int numberOfPlayers) {
 
 //Reduce countdown Counter
 void GameScene::updateCounter(float dt){
-	gameStatus = GAME_ONCOUNT;
-    _counter -= dt;
-    if (_counter<=0){
-        this->unschedule(schedule_selector(GameScene::updateCounter));
-        _counter = 0;
-        gameStatus = GAME_INPROGRESS;
-        log("Game started!");
-        showText(GS_GO_TEXT, 1.0f);
-        onGameStart();
-    } else{
-        showText(Shared::intToString(_counter), 1.0f, 10.0f);
-    }
+	if (gameStatus == GAME_ONCOUNT) {
+		_counter -= dt;
+		if (_counter <= 0) {
+			this->unschedule(schedule_selector(GameScene::updateCounter));
+			_counter = 0;
+			gameStatus = GAME_INPROGRESS;
+			log("Game started!");
+			showText(GS_GO_TEXT, 1.0f);
+			onGameStart();
+		}
+		else {
+			showText(Shared::intToString(_counter), 1.0f, 10.0f);
+		}
+	}
 }
 
 //Start game with the given time dt(seconds)
 void GameScene::startGame(float dt){
-    if (gameStatus == GAME_START && gameStatus != GAME_ONCOUNT){
+    if (gameStatus == GAME_START){
         _counter = dt;
+		gameStatus = GAME_ONCOUNT;
         this->schedule(schedule_selector(GameScene::updateCounter),1.0f);
 		createBtnPanel();
     }
@@ -296,6 +299,7 @@ void GameScene::pauseGame()
 void GameScene::resumeGame()
 {
 	if (gameStatus == GAME_PAUSE) {
+		gameStatus = GAME_ONCOUNT;
 		_counter = SHARED_COUNTDOWN_LENGTH;
 		this->schedule(schedule_selector(GameScene::updateCounter), 1.0f);
 		menu->setVisible(TRUE);
