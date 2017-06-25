@@ -45,7 +45,6 @@ public:
     void onEnter() override;
     
     // Our game custom functions
-    void startGame(float);
     void initTouchHandling();
 	void drawBoard();
 	void createBumper(cocos2d::Sprite*, float width, float height);
@@ -72,6 +71,7 @@ private:
     
     bool _gamePause = false;
     bool _needReset = false;
+	bool _initedTouch = false;
     
     Ball* _ball;
     GameButton* _button[4];

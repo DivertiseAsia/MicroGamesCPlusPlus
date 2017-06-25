@@ -133,7 +133,7 @@ void Airhockey::showInstruction(){
 		rectOverlay->removeAllChildren();
 		rectOverlay->clear();
 		this->scheduleUpdate();
-		this->startGame(SHARED_COUNTDOWN_LENGTH);
+		GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tabScreenLtn, this);
@@ -166,6 +166,9 @@ void Airhockey::updateScore(){
 
 
 void Airhockey::update(float dt){
+	if (gameStatus != GAME_INPROGRESS) {
+		return;
+	}
     int positionIterations = 10;
     int velocityIterations = 10;
     
@@ -206,7 +209,11 @@ void Airhockey::onPress(cocos2d::Ref* sender, GameButton::Widget::TouchEventType
 }
 
 void Airhockey::onGameStart(){
-    this->initTouchHandling();
+	if (!_initedTouch) {
+		_initedTouch = true;
+		log("ongameStartActive - status:%d", gameStatus);
+		this->initTouchHandling();
+	}
 }
 
 void Airhockey::initTouchHandling(){
@@ -214,9 +221,9 @@ void Airhockey::initTouchHandling(){
 
     touchListener->onTouchesBegan = [this](const std::vector<Touch *> & 	touches,
                                            Event * 	event){
-		//if (gameStatus != GAME_INPROGRESS) {
-		//	return;
-		//}
+		if (gameStatus != GAME_INPROGRESS) {
+			return;
+		}
         auto touchSurface = static_cast<Airhockey*>(event->getCurrentTarget());
         auto objects = touchSurface->getChildren();    //all objects in the SceneRoot
         
@@ -310,10 +317,6 @@ void Airhockey::initTouchHandling(){
 
 void Airhockey::onEnter(){
     Node::onEnter();  //If you forgot this touch won't work.
-}
-
-void Airhockey::startGame(float s){
-    GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 }
 
 void Airhockey::drawBoard(){
