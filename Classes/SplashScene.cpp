@@ -33,7 +33,10 @@ bool Splash::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("splash.png");
+    auto sprite = Sprite::create("BG_Splash.png");
+
+	// set scale depend on width of screen
+	sprite->setScale(visibleSize.width / sprite->getContentSize().width);
 
     // position the sprite on the center of the screen
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
