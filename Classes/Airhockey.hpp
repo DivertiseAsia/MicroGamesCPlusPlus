@@ -76,7 +76,6 @@ private:
     Ball* _ball;
     GameButton* _button[4];
     
-	DrawNode* rectOverlay;
     Label* _scoreTop;
     Label* _scoreBottom;
     

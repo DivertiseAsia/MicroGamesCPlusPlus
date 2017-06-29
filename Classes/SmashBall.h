@@ -28,7 +28,6 @@ public:
 	using SharedBall::SharedBall;
 private:
 	void showInstruction();
-	DrawNode* rectOverlay;
 	DrawNode* addPaddleForPlayer(int, cocos2d::Size, cocos2d::Vec2);
 };
 

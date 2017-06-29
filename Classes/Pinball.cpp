@@ -89,7 +89,7 @@ void Pinball::showInstruction() {
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	this->rectOverlay = DrawNode::create();
+	GameScene::rectOverlay = DrawNode::create();
 	rectOverlay->setContentSize(visibleSize);
 	Vec2 rectangle[4];
 	rectangle[0] = Vec2::ZERO;
@@ -97,8 +97,7 @@ void Pinball::showInstruction() {
 	rectangle[2] = visibleSize;
 	rectangle[3] = Vec2(visibleSize.width, 0);
 
-	Color4F halfblack(0, 0, 0, 0.7f);
-	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
+	rectOverlay->drawPolygon(rectangle, 4, GameScene::halfblack, 1, GameScene::halfblack);
 
 	auto overlaySize = rectOverlay->getContentSize();
 	auto margin = visibleSize.height * 0.1;
@@ -126,7 +125,6 @@ void Pinball::showInstruction() {
 
 	tabScreenLtn->onTouchEnded = [=](Touch* touch, Event* event) {
 		rectOverlay->removeAllChildren();
-		rectOverlay->clear();
 		this->scheduleUpdate();
 		GameScene::startGame(SHARED_COUNTDOWN_LENGTH);
 	};

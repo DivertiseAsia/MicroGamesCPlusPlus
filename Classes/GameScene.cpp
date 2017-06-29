@@ -63,6 +63,7 @@ void GameScene::updateCounter(float dt){
 			showText(GS_GO_TEXT, 1.0f);
 			SoundManager::instance()->playEffect(SOUNF_FILE_GO);
 			onGameStart();
+			rectOverlay->clear();
 		}
 		else {
 			showText(Shared::intToString(_counter), 1.0f, 10.0f);
@@ -253,7 +254,6 @@ void GameScene::createListenerTabOverlay()
 	rectangle[2] = visibleSize;
 	rectangle[3] = Vec2(visibleSize.width, 0);
 
-	Color4F halfblack(0, 0, 0, 0.7f);
 	rectOverlay->drawPolygon(rectangle, 4, halfblack, 1, halfblack);
 
 	auto overlaySize = rectOverlay->getContentSize();
@@ -306,7 +306,6 @@ void GameScene::resumeGame()
 		this->schedule(schedule_selector(GameScene::updateCounter), 1.0f);
 		menu->setVisible(TRUE);
 		rectOverlay->removeAllChildren();
-		rectOverlay->clear();
 	}
 }
 

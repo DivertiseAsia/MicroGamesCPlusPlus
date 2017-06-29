@@ -36,7 +36,6 @@ private:
 	float getMinPaddleAngle(int);
 	void showInstruction();
 	DrawNode* addPaddleForPlayer(int, cocos2d::Size, cocos2d::Vec2);
-	DrawNode* rectOverlay;
 };
 
 #endif // __PINBALL_SCENE_H__

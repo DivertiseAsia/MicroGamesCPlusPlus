@@ -51,6 +51,7 @@ public:
 	void homeButtonCallback(cocos2d::Ref* pSender);
 	DrawNode* rectOverlay;
 
+	Color4F halfblack = Color4F(0, 0, 0, 0.6f);
 
 	int gameType;
 
