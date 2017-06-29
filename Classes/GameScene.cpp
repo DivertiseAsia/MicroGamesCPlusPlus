@@ -61,10 +61,12 @@ void GameScene::updateCounter(float dt){
 			gameStatus = GAME_INPROGRESS;
 			log("Game started!");
 			showText(GS_GO_TEXT, 1.0f);
+			SoundManager::instance()->playEffect(SOUNF_FILE_GO);
 			onGameStart();
 		}
 		else {
 			showText(Shared::intToString(_counter), 1.0f, 10.0f);
+			SoundManager::instance()->playEffect(SOUNF_FILE_COUNTDOWN);
 		}
 	}
 }
