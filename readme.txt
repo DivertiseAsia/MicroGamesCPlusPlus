@@ -15,16 +15,8 @@ use java sdk version 1.8.141
 use NDK version 14b
 use SDK tools version 26.0.0 rc2
 use SDK platfrom version 9 (version min of build)
-use SDK platfrom version 15 (version target of build)
+use SDK platfrom version 23 (version target of build)
 
-change version android target 
-  cd proj.android
-  open project.properties change target version to version 15
-  open AndroidManifest.xml change targetSdkVersion to version 15
-  command "cocos deploy -p android"
-finish 
-test run on API version 15 up work 
-(API 23 on my mobile , API 17,19,22 on visual studio emulator and nox emulator)
 
 
 
