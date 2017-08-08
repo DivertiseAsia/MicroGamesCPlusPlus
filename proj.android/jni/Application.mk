@@ -5,6 +5,7 @@ APP_LDFLAGS := -latomic
 
 APP_ABI := armeabi armeabi-v7a x86
 
+
 ifeq ($(NDK_DEBUG),1)
   APP_CPPFLAGS += -DCOCOS2D_DEBUG=1
   APP_OPTIM := debug
