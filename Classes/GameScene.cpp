@@ -7,6 +7,7 @@
 #include "MainMenuScene.h"
 #include "Shared.h"
 #include "Airhockey.hpp"
+#include "WetKitten.h"
 #include "PlayerMenuScene.h"
 
 USING_NS_CC;
@@ -378,3 +379,4 @@ template Scene* GameScene::createScene<Holdrace>(int);
 template Scene* GameScene::createScene<Airhockey>(int);
 template Scene* GameScene::createScene<Pinball>(int);
 template Scene* GameScene::createScene<SmashBall>(int);
+template Scene* GameScene::createScene<WetKitten>(int);

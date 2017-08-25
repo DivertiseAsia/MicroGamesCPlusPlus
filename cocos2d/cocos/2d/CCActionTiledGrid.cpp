@@ -85,23 +85,23 @@ void ShakyTiles3D::update(float time)
             Quad3 coords = getOriginalTile(Vec2(i, j));
 
             // X
-            coords.bl.x += ( rand() % (_randrange*2) ) - _randrange;
-            coords.br.x += ( rand() % (_randrange*2) ) - _randrange;
-            coords.tl.x += ( rand() % (_randrange*2) ) - _randrange;
-            coords.tr.x += ( rand() % (_randrange*2) ) - _randrange;
+            coords.bl.x += ( std::rand() % (_randrange*2) ) - _randrange;
+            coords.br.x += ( std::rand() % (_randrange*2) ) - _randrange;
+            coords.tl.x += ( std::rand() % (_randrange*2) ) - _randrange;
+            coords.tr.x += ( std::rand() % (_randrange*2) ) - _randrange;
 
             // Y
-            coords.bl.y += ( rand() % (_randrange*2) ) - _randrange;
-            coords.br.y += ( rand() % (_randrange*2) ) - _randrange;
-            coords.tl.y += ( rand() % (_randrange*2) ) - _randrange;
-            coords.tr.y += ( rand() % (_randrange*2) ) - _randrange;
+            coords.bl.y += ( std::rand() % (_randrange*2) ) - _randrange;
+            coords.br.y += ( std::rand() % (_randrange*2) ) - _randrange;
+            coords.tl.y += ( std::rand() % (_randrange*2) ) - _randrange;
+            coords.tr.y += ( std::rand() % (_randrange*2) ) - _randrange;
 
             if (_shakeZ)
             {
-                coords.bl.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.br.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tl.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tr.z += ( rand() % (_randrange*2) ) - _randrange;
+                coords.bl.z += ( std::rand() % (_randrange*2) ) - _randrange;
+                coords.br.z += ( std::rand() % (_randrange*2) ) - _randrange;
+                coords.tl.z += ( std::rand() % (_randrange*2) ) - _randrange;
+                coords.tr.z += ( std::rand() % (_randrange*2) ) - _randrange;
             }
                         
             setTile(Vec2(i, j), coords);

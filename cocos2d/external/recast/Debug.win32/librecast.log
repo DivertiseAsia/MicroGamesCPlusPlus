@@ -1,0 +1,4 @@
+﻿  DebugDraw.cpp
+  DetourDebugDraw.cpp
+  DetourCrowd.cpp
+  DetourLocalBoundary.cpp

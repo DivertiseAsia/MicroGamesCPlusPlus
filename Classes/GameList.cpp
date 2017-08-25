@@ -4,6 +4,7 @@
 #include "Pinball.h"
 #include "SmashBall.h"
 #include "Taprace.h"
+#include "WetKitten.h"
 #include "Airhockey.hpp"
 
 USING_NS_CC;
@@ -23,6 +24,8 @@ Scene* GameList::getScene(GameType listing, int numberOfPlayers) {
         return GameScene::createScene<Airhockey>(numberOfPlayers);
 	case SMASHBALL:
 		return GameScene::createScene<SmashBall>(numberOfPlayers);
+	case WETKITTEN:
+		return GameScene::createScene<WetKitten>(numberOfPlayers);
 	default:
 		return GameScene::createScene<Taprace>(numberOfPlayers);
 	}

@@ -591,7 +591,7 @@ void ParticleSystem::addParticles(int count)
 {
     if (_paused)
         return;
-    uint32_t RANDSEED = rand();
+    uint32_t RANDSEED = std::rand();
 
     int start = _particleCount;
     _particleCount += count;

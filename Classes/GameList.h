@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 
 
-enum GameType { TAPTAP, OVERSHOOT, PINBALL, AIRHOCKEY, SMASHBALL };
+enum GameType { TAPTAP, OVERSHOOT, PINBALL, AIRHOCKEY, SMASHBALL ,WETKITTEN };
 
 class GameList
 {
@@ -19,9 +19,10 @@ public:
 		{ PINBALL, "Pinball" },
 		{ AIRHOCKEY, "Airhockey" },
 		{ SMASHBALL, "SmashBall" },
+		{ WETKITTEN, "WetKitten" },
 	};
 
-	const GameType AVAILABLE_GAMES[5] = {TAPTAP,OVERSHOOT,PINBALL,AIRHOCKEY,SMASHBALL};
+	const GameType AVAILABLE_GAMES[6] = {TAPTAP,OVERSHOOT,PINBALL,AIRHOCKEY,SMASHBALL,WETKITTEN };
 private:
 	GameList() {};
 	static GameList* minstance;

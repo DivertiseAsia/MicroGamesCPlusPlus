@@ -31,8 +31,9 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/Shared.cpp \
                    ../../Classes/SoundManager.cpp \
 									 ../../Classes/SplashScene.cpp \
-                   ../../Classes/Taprace.cpp
-
+                   ../../Classes/Taprace.cpp\
+                   					 ../../Classes/WetKitten.cpp \
+                   					 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 
 # _COCOS_HEADER_ANDROID_BEGIN
