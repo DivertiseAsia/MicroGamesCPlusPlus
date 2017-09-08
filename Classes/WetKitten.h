@@ -9,6 +9,7 @@
 #include "GameScene.h"
 #include <vector>
 
+
 #define TR_TAPS_REQUIRED 30
 #define SB_BOX_SIZE	50.0f
 
@@ -61,7 +62,10 @@ private:
 	int boxTime = 80;
 	int boxPosition[4];
 	void showInstruction();
-	
+
+	bool isDie[4] = { false,false,false,false };
+	int countPlayer;
+	bool run = true;
 };
 
 #endif // __Taprace_SCENE_H__

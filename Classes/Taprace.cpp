@@ -53,6 +53,7 @@ bool Taprace::init()
 	auto mouseDistance = winSize.width * 0.1;
 	auto mouseSprite = Sprite::create("item/Animate_Mouse_120x180.png");
 	auto sheetSize = mouseSprite->getContentSize();
+	log("mouseSprite :::: ==> %d", sheetSize.width);
 	mouseWidth = sheetSize.width / 3;
 	mouseHeight = sheetSize.height / 4;
 	auto firstPositionX = winSize.width * 0.35;

@@ -39,6 +39,7 @@ bool MainMenu::init()
 	// play background sound
 	if (SoundManager::instance()->isBackgroundMuted() && !SoundManager::instance()->isMuted())
 		SoundManager::instance()->playBackgroundSound();
+	//SoundManager::instance()->muteAll();
 
 	/////////////////////////////
 	// 2. add a menu item with "X" image, which is clicked to quit the program

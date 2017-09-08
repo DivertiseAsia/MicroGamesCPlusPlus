@@ -1,0 +1,91 @@
+﻿  CCNode.cpp
+CCNode.cpp(259): warning C4996: 'cocos2d::Node::_setLocalZOrder': was declared deprecated
+  E:\microgames\cocos2d\cocos\2d/CCNode.h(168): note: see declaration of 'cocos2d::Node::_setLocalZOrder'
+CCNode.cpp(1136): warning C4996: 'cocos2d::Node::_setLocalZOrder': was declared deprecated
+  CCNode.cpp(270): note: see declaration of 'cocos2d::Node::_setLocalZOrder'
+CCNode.cpp(1144): warning C4996: 'cocos2d::Node::_setLocalZOrder': was declared deprecated
+  CCNode.cpp(270): note: see declaration of 'cocos2d::Node::_setLocalZOrder'
+  1 File(s) copied
+  2 File(s) copied
+  4 File(s) copied
+  2 File(s) copied
+  2 File(s) copied
+  3 File(s) copied
+  1 File(s) copied
+  1 File(s) copied
+  2 File(s) copied
+  2 File(s) copied
+  2 File(s) copied
+  2 File(s) copied
+  2 File(s) copied
+  6 File(s) copied
+  2 File(s) copied
+  2 File(s) copied
+libbullet.lib(btAlignedAllocator.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+  libchipmunk-2015.lib(chipmunk.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+libbullet.lib(btAlignedAllocator.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+     Creating library E:\microgames\proj.win32\Debug.win32\libcocos2d.lib and object E:\microgames\proj.win32\Debug.win32\libcocos2d.exp
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  Finished generating code
+websockets.lib(libwebsockets.obj) : warning LNK4049: locally defined symbol ___iob_func imported
+libchipmunk-2015.lib(chipmunk.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(chipmunk.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpBody.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpBody.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpShape.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpShape.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpConstraint.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpConstraint.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpPinJoint.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpPinJoint.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSlideJoint.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSlideJoint.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpPivotJoint.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpPivotJoint.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpGrooveJoint.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpGrooveJoint.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpDampedSpring.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpDampedSpring.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSpace.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSpace.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSpaceComponent.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSpaceComponent.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpArbiter.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpArbiter.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpDampedRotarySpring.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpDampedRotarySpring.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpRotaryLimitJoint.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpRotaryLimitJoint.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpRatchetJoint.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpRatchetJoint.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpGearJoint.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpGearJoint.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSimpleMotor.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSimpleMotor.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpPolyShape.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpPolyShape.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSpaceQuery.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSpaceQuery.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSpaceStep.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSpaceStep.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSpaceDebug.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSpaceDebug.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpArray.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpArray.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpCollision.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpCollision.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpHashSet.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpHashSet.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpBBTree.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpBBTree.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSpaceHash.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSpaceHash.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpSpatialIndex.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpSpatialIndex.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libchipmunk-2015.lib(cpRobust.obj) : warning LNK4099: PDB 'chipmunk.pdb' was not found with 'libchipmunk-2015.lib(cpRobust.obj)' or at 'E:\microgames\proj.win32\Debug.win32\chipmunk.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_aux.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_aux.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_close.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_close.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_codec.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_codec.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_color.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_color.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_compress.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_compress.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_dir.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_dir.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_dirinfo.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_dirinfo.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_dirread.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_dirread.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_dirwrite.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_dirwrite.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_dumpmode.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_dumpmode.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_error.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_error.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_fax3.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_fax3.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_fax3sm.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_fax3sm.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_getimage.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_getimage.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_flush.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_flush.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_luv.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_luv.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_lzw.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_lzw.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_next.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_next.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_open.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_open.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_packbits.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_packbits.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_predict.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_predict.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_read.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_read.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_swab.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_swab.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_strip.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_strip.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_thunder.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_thunder.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_tile.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_tile.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_warning.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_warning.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_write.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_write.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+libtiff-2015.lib(tif_win32.obj) : warning LNK4099: PDB 'vc140.pdb' was not found with 'libtiff-2015.lib(tif_win32.obj)' or at 'E:\microgames\proj.win32\Debug.win32\vc140.pdb'; linking object as if no debug info
+  libcocos2d.vcxproj -> E:\microgames\proj.win32\Debug.win32\libcocos2d.dll
+  libcocos2d.vcxproj -> E:\microgames\proj.win32\Debug.win32\libcocos2d.pdb (Full PDB)

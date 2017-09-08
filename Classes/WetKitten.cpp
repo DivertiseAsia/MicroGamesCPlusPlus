@@ -9,6 +9,7 @@
 #include "WetKitten.h"
 #include "GameList.h"
 #include "GLES-Render/B2DebugDrawLayer.h"
+#include <math.h>
 
 
 
@@ -62,38 +63,33 @@ bool WetKitten::init()
 	this->addChild(this->water2);
 
 	// Draw the finish line
-	_drawNode = DrawNode::create();
+	/*_drawNode = DrawNode::create();
 	auto lineImg = Sprite::create("item/Item_Tap Race_Goal.png");
 	lineImg->setScale((winSize.width / 3) / lineImg->getContentSize().width);
 	lineImg->setPosition(Vec2(screenCenter.x, OFFSET_Y_SCREEN));
 	_drawNode->addChild(lineImg);
-	this->addChild(_drawNode);
+	this->addChild(_drawNode);*/
 	auto ballspeed = (screenSize.height - OFFSET_Y_SCREEN * 2) / TR_TAPS_REQUIRED;
-
 	// Create balls
 	auto mouseDistance = winSize.width * 0.1;
 	auto mouseSprite = Sprite::create("item/WetKitten_Cat1-1.png");
+	//log("mouseSprite :::: ==> %f", mouseSprite->getContentSize().width);
+	mouseSprite->getContentSize().width;
 	auto sheetSize = mouseSprite->getContentSize();
 	mouseWidth = sheetSize.width;
 	mouseHeight = sheetSize.height;
-
 	miceStep = std::vector<int>(numberOfPlayers, 1);
-
-	const int ofsetY[] = {
-						 75 * 2,
-						 75 * 3 + 75,
-						 75 * 4 + 75 * 2 ,
-						 75 * 5 + 75 * 3,};
+	const int ofsetY[] = { 75 * 2, 75 * 3 + 75, 75 * 4 + 75 * 2 , 75 * 5 + 75 * 3, };
 	float buttonScale = 0.5;
 	int index = 0;
 	bool born[] = { false,false,false,false };
 	this->boxPosition[0] = winSize.width * 0.20;
-	this->boxPosition[1] = winSize.width * 0.40;
-	this->boxPosition[2] = winSize.width * 0.60;
-	this->boxPosition[3] = winSize.width * 0.80;
+	this->boxPosition[1] = winSize.width * 0.50;
+	this->boxPosition[2] = winSize.width * 0.80;
+
 	for (int i = 0; i < numberOfPlayers; i++) {
 		do {
-			 index = cocos2d::RandomHelper::random_int(0, numberOfPlayers);
+			index = cocos2d::RandomHelper::random_int(0, numberOfPlayers-1);
 		} while (born[index] != false);
 		born[index] = true;
 		Vec2 p;
@@ -103,6 +99,7 @@ bool WetKitten::init()
 		px[i] = p.x;
 		_ball[i] = Ball::create();
 		_ball[i]->setBallImage(this->frameName[i][0], Rect(0, 0, mouseWidth, mouseHeight));
+		_ball[i]->setContentSize(Size(mouseWidth, mouseHeight));
 		_ball[i]->setScale(1.75);
 		_ball[i]->setPosition(p);
 		this->addChild(_ball[i]);
@@ -123,14 +120,24 @@ bool WetKitten::init()
 		_score[i] = 0;
 		this->addChild(_button[i]);
 	}
-
-
-	//Debug Layer
-	//this->addChild(B2DebugDrawLayer::create(this->getScene(), 1), 1000);
+	for (int i = 0; i < 20; i++) {
+		auto box = Ball::create();
+		auto boxSprite = Sprite::create("item/Item_BlockUpper.png");
+		auto sheetSize = boxSprite->getContentSize();
+		box->setBallImage("item/Item_BlockUpper.png", Rect(0, 0, sheetSize.width, sheetSize.height));
+		box->setContentSize(Size(sheetSize.width, sheetSize.height));
+		int indexPos = cocos2d::RandomHelper::random_int(0, 2);
+		Vec2 p = Vec2(this->boxPosition[indexPos], Director::getInstance()->getVisibleSize().height + sheetSize.height*(i%10) * 3);
+		auto scale = 1.5;
+		box->setScale(scale);
+		box->setPosition(p);
+		box->setRotation(45);
+		this->addChild(box);
+		this->boxs.push_back(box);
+	}
 
 	this->setName("WetKittenSceneRoot");
 	this->showInstruction();
-	//this->scheduleUpdate();
 	return true;
 }
 
@@ -151,10 +158,9 @@ void WetKitten::showInstruction() {
 	auto overlaySize = rectOverlay->getContentSize();
 	auto margin = visibleSize.height * 0.1;
 
-	auto ins1 = Sprite::create("instructions/TapRace_1.png");
-	auto ins2 = Sprite::create("instructions/TapRace_2.png");
-
-	auto scale = 0.4 * visibleSize.width / ins1->getContentSize().width;
+	auto ins1 = Sprite::create("instructions/WetKitten_1.png");
+	auto ins2 = Sprite::create("instructions/WetKitten_2.png");
+	auto scale = 0.4 * visibleSize.width / ins1->getContentSize().width;	
 
 	ins1->setPosition(Vec2(overlaySize.width / 2, overlaySize.height / 2 + ((ins1->getContentSize().height * scale / 2) + margin)));
 	ins1->setScale(scale);
@@ -180,81 +186,77 @@ void WetKitten::showInstruction() {
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tabScreenLtn, this);
 }
-
-void WetKitten::draw(Renderer* renderer, const Mat4& transform, bool transformUpdated) {
-
-}
+void WetKitten::draw(Renderer* renderer, const Mat4& transform, bool transformUpdated) {}
 
 void WetKitten::update(float dt) {
 	if (gameStatus != GAME_INPROGRESS) {
 		return;
 	}
-	auto gameHeight = Director::getInstance()->getVisibleSize().height;
-	auto gameWidht = Director::getInstance()->getVisibleSize().width;
+	if (run) {
+		auto gameHeight = Director::getInstance()->getVisibleSize().height;
+		auto gameWidht = Director::getInstance()->getVisibleSize().width;
 
-	if (this->water1Position >gameHeight) this->water1Position = -gameHeight;
-	if (this->water2Position > Director::getInstance()->getVisibleSize().height)this->water2Position = -gameHeight;
+		if (this->water1Position > gameHeight) this->water1Position = -gameHeight;
+		if (this->water2Position > Director::getInstance()->getVisibleSize().height)this->water2Position = -gameHeight;
 
-	this->water1->setPosition(Vec2(0, -this->water1Position));
-	this->water2->setPosition(Vec2(0, -this->water2Position));
-	this->water1Position++;
-	this->water2Position++;
+		this->water1->setPosition(Vec2(0, -this->water1Position));
+		this->water2->setPosition(Vec2(0, -this->water2Position));
+		this->water1Position++;
+		this->water2Position++;
 
-
-
-	for (int i = 0; i < numberOfPlayers; i++) {
-		_ball[i]->setPositionX(px[i]);
-		//if(_ball[i]->)
-		if (px[i] < gameWidht + mouseWidth - 15) {
-			px[i]+=2;
+		for (int i = 0; i < numberOfPlayers; i++) {
+			if (isDie[i] != true) {
+				_ball[i]->setPositionX(px[i]);
+				if (px[i] < gameWidht + mouseWidth - 15) 
+					px[i] += 2;
+				for (auto b : boxs) {
+					if ((_ball[i]->getPositionX() < (b)->getPositionX() + (b)->getContentSize().width / (b)->getScale()) &&
+						((b)->getPositionX() < _ball[i]->getPositionX() + _ball[i]->getContentSize().width / _ball[i]->getScale()) &&
+						(_ball[i]->getPositionY() < (b)->getPositionY() + (b)->getContentSize().height / (b)->getScale()) &&
+						((b)->getPositionY() < _ball[i]->getPositionY() + _ball[i]->getContentSize().height / _ball[i]->getScale())
+						)
+					{
+						log("b = %f , ball = %f ", b->getPositionX(),_ball[i]->getPositionX());
+						isDie[i] = true;
+						_ball[i]->setVisible(false);
+					}
+				}
+			}
 		}
-	}
 
-	if (this->frameTime <= 0) {
-		this->frameTime = 10;
-		this->frameIndex++;
-		if (this->frameIndex >= 3) this->frameIndex = 0;
-		for (int i = 0; i < numberOfPlayers; i++)
-		_ball[i]->setBallImage(this->frameName[i][this->frameIndex], Rect(0, 0, mouseWidth,mouseHeight+(this->frameIndex == 1 ?5:0)));
-	}
-	this->frameTime--;
-
-
-	if (this->boxTime <= 0) {
-		this->boxTime = cocos2d::RandomHelper::random_int(20,25)*10;
-		int numBox = cocos2d::RandomHelper::random_int(0, 4);
-		bool *born = new bool[numBox];
-		for (int i = 0; i < numBox; i++) born[i] = false;
-		for (int i = 0; i < numBox; i++) {
-			auto box = Ball::create();
-			auto boxSprite = Sprite::create("item/Item_BlockUpper.png");
-			auto sheetSize = boxSprite->getContentSize();
-			box->setBallImage("item/Item_BlockUpper.png", Rect(0, 0, sheetSize.width, sheetSize.height));
-			int indexPos = 0;
-			//do {
-				indexPos = cocos2d::RandomHelper::random_int(0, 4);
-			//} while (born[indexPos] != false);
-			//born[indexPos] = true;
-			Vec2 p = Vec2(this->boxPosition[indexPos], gameHeight);
-			box->setPosition(p);
-			box->setRotation(45);
-			this->addChild(box);
-			this->boxs.push_back(box);
+		if (this->frameTime <= 0) {
+			this->frameTime = 10;
+			this->frameIndex++;
+			if (this->frameIndex >= 3) this->frameIndex = 0;
+			for (int i = 0; i < numberOfPlayers; i++) {
+				if (isDie[i] != true)
+					_ball[i]->setBallImage(this->frameName[i][this->frameIndex], Rect(0, 0, mouseWidth, mouseHeight + (this->frameIndex == 1 ? 5 : 0)));
+			}
 		}
-	}
-
-	this->boxTime--;
-	int i = 0; 
-	for (Ball* b : boxs) {
-		b->setPositionY(b->getPositionY() - 1);
-		if (b->getPositionY() < 0) {
-			this->removeChild(b);
-			b->release();
-			boxs.erase(boxs.begin() + i);
+		this->frameTime--;
+		int i = 20;
+		for (auto b : boxs) {
+			b->setPositionY(b->getPositionY() - 1);
+			if (b->getPositionY() < 0) {
+				int indexPos = cocos2d::RandomHelper::random_int(0, 2);
+				Vec2 p = Vec2(this->boxPosition[indexPos], Director::getInstance()->getVisibleSize().height + b->getContentSize().height*(i % 10) * 3);
+				b->setPosition(p);
+			}
 		}
-		i++;
+			int count = 0;
+			int pNumber = 0;
+			for (int i = 0; i < numberOfPlayers; i++) {
+				if (isDie[i] != true) {
+					count++;	
+					pNumber = i;
+				}
+			}
+			if (count == 1) {
+				run = false;
+				endGame(pNumber);
+			}
 	}
-}	
+}
 
 //This method will be called on the Node entered.
 void WetKitten::onEnter() {
@@ -274,20 +276,19 @@ void WetKitten::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 	case ui::Widget::TouchEventType::BEGAN:
 		break;
 	case ui::Widget::TouchEventType::ENDED: {
-		auto button = static_cast<GameButton*>(sender);
-		button->getBall()->moveNext();
-		if (px[button->getPlayer()] > mouseWidth*2) {
-			px[button->getPlayer()] -= 40;
-			_ball[button->getPlayer()]->setPositionX(px[button->getPlayer()]);
-		}
-		else {
-			 px[button->getPlayer()] = mouseWidth * 2;
-			_ball[button->getPlayer()]->setPositionX(px[button->getPlayer()]);
-		}
-		SoundManager::instance()->playEffect(SOUND_FILE_TAPRACE_STEP);
+		if (run) {
+			auto button = static_cast<GameButton*>(sender);
+			button->getBall()->moveNext();
+			if (px[button->getPlayer()] > mouseWidth * 2) {
+				px[button->getPlayer()] -= 40;
+				_ball[button->getPlayer()]->setPositionX(px[button->getPlayer()]);
+			}
+			else {
+				px[button->getPlayer()] = mouseWidth * 2;
+				_ball[button->getPlayer()]->setPositionX(px[button->getPlayer()]);
+			}
+			SoundManager::instance()->playEffect(SOUND_FILE_TAPRACE_STEP);
 
-		if (_score[button->getPlayer()] > TR_TAPS_REQUIRED) {
-			endGame(button->getPlayer());
 		}
 		break;
 	}
@@ -295,7 +296,6 @@ void WetKitten::onPress(Ref* sender, GameButton::Widget::TouchEventType type) {
 		break;
 	}
 }
-
 cocos2d::Vector<SpriteFrame*> WetKitten::getAnimation(std::string imgscr, int count, int player, float width, float height)
 {
 	auto spritecache = SpriteFrameCache::getInstance();

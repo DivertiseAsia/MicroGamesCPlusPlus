@@ -251,7 +251,7 @@ double atof(const char* str)
         dot[8] = '\0';
     }
     
-    return std::atof(buf);
+    return std::atof(buf); 
 }
 
 double gettime()
